@@ -8,7 +8,7 @@ namespace Game.Audio
     public sealed class AudioService : MonoBehaviour, IAudioService
     {
         [SerializeField] private AudioData[] _audioDatas;
-        
+
         private Dictionary<Sound, AudioData> _audioDataDictionary;
 
         public void PlaySound(Sound sound, Vector3 position)
@@ -21,7 +21,7 @@ namespace Game.Audio
                 }
 
                 SoundPlayer soundPlayer = GetSoundPlayerFromPool();
-                
+
                 soundPlayer.PlaySound(audioData, position);
 
                 audioData.IsPlaying = true;
@@ -46,14 +46,14 @@ namespace Game.Audio
         private SoundPlayer GetSoundPlayerFromPool()
         {
             IPoolingService poolingService = ServiceLocator.GetService<IPoolingService>();
-            
+
             GameObject soundPlayerGameObject = poolingService.GetObjectFromPool(PoolType.SoundPlayer);
 
             SoundPlayer soundPlayer = soundPlayerGameObject.GetComponent<SoundPlayer>();
 
             return soundPlayer;
         }
-        
+
         private void Awake()
         {
             _audioDataDictionary = new Dictionary<Sound, AudioData>();
@@ -61,12 +61,12 @@ namespace Game.Audio
             foreach (AudioData audioData in _audioDatas)
             {
                 audioData.IsPlaying = false;
-                
+
                 _audioDataDictionary.Add(audioData.Sound, audioData);
             }
-            
+
             ServiceLocator.RegisterService<IAudioService>(this);
-            
+
             DontDestroyOnLoad(gameObject);
         }
 

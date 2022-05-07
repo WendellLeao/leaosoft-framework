@@ -11,29 +11,29 @@ namespace Game.Events
         public void AddEventListener<T>(UnityAction<ServiceEvent> listener) where T : ServiceEvent
         {
             var type = typeof(T);
-            
+
             UnityEvent<ServiceEvent> thisEvent = null;
-            
+
             if (_eventDictionary.TryGetValue(type, out thisEvent))
             {
                 thisEvent.AddListener(listener);
 
                 return;
             }
-            
+
             thisEvent = new UnityEvent<ServiceEvent>();
-                
+
             thisEvent.AddListener(listener);
-               
+
             _eventDictionary.Add(type, thisEvent);
         }
-        
+
         public void RemoveEventListener<T>(UnityAction<ServiceEvent> listener) where T : ServiceEvent
         {
             var type = typeof(T);
-            
+
             UnityEvent<ServiceEvent> thisEvent = null;
-            
+
             if (_eventDictionary.TryGetValue(type, out thisEvent))
             {
                 thisEvent.RemoveListener(listener);
@@ -43,7 +43,7 @@ namespace Game.Events
         public void DispatchEvent(ServiceEvent serviceEvent)
         {
             var type = serviceEvent.GetType();
-            
+
             UnityEvent<ServiceEvent> thisEvent = null;
 
             if (_eventDictionary.TryGetValue(type, out thisEvent))
