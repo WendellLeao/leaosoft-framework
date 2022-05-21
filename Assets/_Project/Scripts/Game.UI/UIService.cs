@@ -8,6 +8,8 @@ namespace Game.UI
 {
     public sealed class UIService : MonoBehaviour, IUIService
     {
+        [SerializeField] private LoadingScreen _loadingScreen;
+        
         private readonly List<UIScreen> _openedScreens = new List<UIScreen>();
         private readonly List<UIScreen> _registeredScreens = new List<UIScreen>();
         private UIScreen _currentOpenedScreen;
@@ -59,6 +61,13 @@ namespace Game.UI
             return null;
         }
 
+        public void OpenLoadingScreen(AsyncOperation operation)
+        {
+            _loadingScreen.Initialize(operation);
+
+            OpenScreen(_loadingScreen);
+        }
+
         public void CloseTopScreen()
         {
             if (_currentOpenedScreen == null)
@@ -71,6 +80,16 @@ namespace Game.UI
             _openedScreens.Remove(_currentOpenedScreen);
                 
             OpenPreviousScreen();
+        }
+
+        public void CloseAllScreens()
+        {
+            foreach (UIScreen openedScreen in _openedScreens)
+            {
+                openedScreen.Close();
+            }
+            
+            _openedScreens.Clear();
         }
         
         public void RegisterScreen(UIScreen uiScreen)

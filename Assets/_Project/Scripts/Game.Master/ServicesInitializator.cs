@@ -4,75 +4,88 @@ using Game.Events;
 using UnityEngine;
 using Game.Audio;
 using Game.Input;
+using Game.Save;
 using Game.UI;
 
 namespace Game.Master
 {
     public static class ServicesInitializator
     {
-        private const string PoolingServicePrefabPath = "ServiceLocator/PoolingService/PoolingService";
-        private const string AudioServicePrefabPath = "ServiceLocator/AudioService/AudioService";
-        private const string UIServicePrefabPath = "ServiceLocator/UIService/UIService";
-        private const string InputServicePrefabPath = "ServiceLocator/InputService/InputService";
+        private const string PoolingServicePrefabPath = "GameServices/PoolingService/PoolingService";
+        private const string AudioServicePrefabPath = "GameServices/AudioService/AudioService";
+        private const string UIServicePrefabPath = "GameServices/UIService/UIService";
+        private const string InputServicePrefabPath = "GameServices/InputService/InputService";
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void InitializeServices()
         {
             if (ServiceLocator.GetService<IPoolingService>() == null)
             {
-                CheckAndInitializePoolingService();
+                InitializePoolingService();
             }
 
             if (ServiceLocator.GetService<IAudioService>() == null)
             {
-                CheckAndInitializeAudioService();
+                InitializeAudioService();
             }
 
             if (ServiceLocator.GetService<IUIService>() == null)
             {
-                CheckAndInitializeUIService();
+                InitializeUIService();
             }
 
             if (ServiceLocator.GetService<IInputService>() == null)
             {
-                CheckAndInitializeInputService();
+                InitializeInputService();
+            }
+            
+            if (ServiceLocator.GetService<ISaveService>() == null)
+            {
+                InitializeSaveService();
             }
             
             if (ServiceLocator.GetService<IEventService>() == null)
             {
-                CheckAndInitializeEventService();
+                InitializeEventService();
             }
         }
 
-        private static void CheckAndInitializePoolingService()
+        private static void InitializePoolingService()
         {
             GameObject poolingServicePrefab = Resources.Load(PoolingServicePrefabPath) as GameObject;
                 
             Object.Instantiate(poolingServicePrefab);
         }
         
-        private static void CheckAndInitializeAudioService()
+        private static void InitializeAudioService()
         {
             GameObject audioServicePrefab = Resources.Load(AudioServicePrefabPath) as GameObject;
                 
             Object.Instantiate(audioServicePrefab);
         }
 
-        private static void CheckAndInitializeUIService()
+        private static void InitializeUIService()
         {
             GameObject uiServicePrefab = Resources.Load(UIServicePrefabPath) as GameObject;
                 
             Object.Instantiate(uiServicePrefab);
         }
         
-        private static void CheckAndInitializeInputService()
+        private static void InitializeInputService()
         {
             GameObject inputServicePrefab = Resources.Load(InputServicePrefabPath) as GameObject;
                 
             Object.Instantiate(inputServicePrefab);
         }
         
-        private static void CheckAndInitializeEventService()
+        private static void InitializeSaveService()
+        { 
+            ISaveService newSaveService = new SaveService(); 
+            
+            ServiceLocator.RegisterService(newSaveService);
+        }
+        
+        private static void InitializeEventService()
         {
             IEventService newEventService = new EventService();
             

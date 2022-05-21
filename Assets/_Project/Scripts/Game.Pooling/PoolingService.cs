@@ -6,7 +6,7 @@ namespace Game.Pooling
 {
 	public sealed class PoolingService: MonoBehaviour, IPoolingService
 	{
-		private const string PoolsDataPath = "ServiceLocator/PoolingService/PoolDatas";
+		private const string PoolsDataPath = "GameServices/PoolingService/PoolsData";
 		
 		private Dictionary<PoolType, Queue<GameObject>> _poolDictionary;
 		private PoolData[] _poolsData;

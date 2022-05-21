@@ -9,12 +9,13 @@ namespace Game.Input
     {
         public event Action<PlayerInputsData> OnReadPlayerInputs;
 
-        [Header("Input System")] private PlayerInputs _playerInputs;
-
+        [Header("Input System")] 
+        private PlayerInputs _playerInputs;
         private PlayerInputs.LandControlsActions _landControls;
         private PlayerInputsData _playerInputsData;
 
-        [Header("Inputs")] private Vector2 _playerMovement;
+        [Header("Inputs")] 
+        private Vector2 _playerMovement;
         private bool _pressInteract;
 
         private void Awake()

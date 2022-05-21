@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine.UI;
+using DG.Tweening;
 using UnityEngine;
 using System;
 
@@ -7,7 +8,7 @@ namespace Game.UI.Screens
 {
     public sealed class LoadingBarController : MonoBehaviour
     {
-        public event Action OnOperationCompleted;
+        public event Action OnProgressBarFilled;
         
         [SerializeField] private Image _progressBar;
         [SerializeField] private float _fillDuration = 1f;
@@ -29,13 +30,12 @@ namespace Game.UI.Screens
             {
                 _sceneProgress = Mathf.Clamp01(operation.progress / 0.9f);
             
-                // _progressBar.DOFillAmount(_sceneProgress, _fillDuration);//TODO: Import DOTween
-                _progressBar.fillAmount = _sceneProgress;
+                _progressBar.DOFillAmount(_sceneProgress, _fillDuration);
 
                 yield return null;
             }
             
-            OnOperationCompleted?.Invoke();
+            OnProgressBarFilled?.Invoke();
         }
     }
 }

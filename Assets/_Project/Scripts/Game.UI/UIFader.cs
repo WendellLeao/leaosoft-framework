@@ -1,4 +1,4 @@
-﻿// using DG.Tweening;//TODO: Uncomment this
+﻿using DG.Tweening;
 using UnityEngine;
 using System;
 
@@ -12,11 +12,11 @@ namespace Game.UI
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private float _fadeDuration = 1f;
         
-        // private Tween _tween;
+        private Tween _tween;
         
         public void Fade(float endValue)
         {
-            // _tween = _canvasGroup.DOFade(endValue, _fadeDuration).OnComplete(HandleFadeComplete);//TODO: Import DOTween
+            _tween = _canvasGroup.DOFade(endValue, _fadeDuration).OnComplete(HandleFadeComplete);
         }
         
         public void SetCanvasGroupAlpha(float value)
@@ -31,7 +31,7 @@ namespace Game.UI
         
         private void OnDestroy()
         {
-            // _tween.Kill();//TODO: Uncomment this
+            _tween.Kill();
         }
     }
 }

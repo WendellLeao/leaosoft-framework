@@ -10,13 +10,20 @@ namespace Game.UI.Screens
         [Header("Loading Bar")] 
         [SerializeField] private LoadingBarController _loadingBarController;
 
+        private AsyncOperation _operation;
+
+        public void Initialize(AsyncOperation operation)
+        {
+            _operation = operation;
+        }
+        
         protected override void OnOpen()
         {
             base.OnOpen();
             
             _uiFader.SetCanvasGroupAlpha(1f);
 
-            _loadingBarController.Initialize(null);//TODO: Pass the operation
+            _loadingBarController.Initialize(_operation);
         }
 
         protected override void OnClose()
@@ -31,23 +38,23 @@ namespace Game.UI.Screens
         protected override void SubscribeEvents()
         {
             base.SubscribeEvents();
-
-            _loadingBarController.OnOperationCompleted += UIService.CloseTopScreen;
+            
+            _loadingBarController.OnProgressBarFilled += UIService.CloseTopScreen;
         }
 
         protected override void UnsubscribeEvents()
         {
             base.UnsubscribeEvents();
             
-            _loadingBarController.OnOperationCompleted -= UIService.CloseTopScreen;
+            _loadingBarController.OnProgressBarFilled -= UIService.CloseTopScreen;
         }
-
+        
         private void HandleFadeCompleted()
         {
             gameObject.SetActive(false);
             
             DispatchClosedEvent();
-            
+
             _uiFader.OnFadeCompleted -= HandleFadeCompleted;
         }
     }
