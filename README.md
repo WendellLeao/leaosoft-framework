@@ -6,7 +6,7 @@ A framework with many useful services and ready-to-use modular tools to make gam
 
 ## Via Git URL
 
-- Install the dependecy: `https://github.com/Cysharp/UniTask`
+- Install the dependecy: `https://github.com/Cysharp/UniTask.git`
 
 - Open the Unity Package Manager and add a new package from git URL using the link: `https://github.com/WendellLeao/leaosoft-framework.git`
 
