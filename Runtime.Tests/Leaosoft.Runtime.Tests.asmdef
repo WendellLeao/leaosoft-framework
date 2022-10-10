@@ -1,0 +1,26 @@
+{
+    "name": "Leaosoft.Runtime.Tests",
+    "rootNamespace": "Leaosoft.Runtime.Tests",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Leaosoft",
+        "Leaosoft.Input",
+        "Leaosoft.Pooling",
+        "Leaosoft.Save",
+        "Leaosoft.Audio"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
