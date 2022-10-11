@@ -1,5 +1,5 @@
 ﻿using Screen = Leaosoft.UI.Screens.Screen;
-using Leaosoft.Master;
+using Leaosoft.Services;
 
 namespace Leaosoft.UI
 {

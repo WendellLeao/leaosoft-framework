@@ -1,5 +1,5 @@
 using UnityEngine.Events;
-using Leaosoft.Master;
+using Leaosoft.Services;
 
 namespace Leaosoft.Events
 {

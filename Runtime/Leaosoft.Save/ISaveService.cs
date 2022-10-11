@@ -1,4 +1,4 @@
-﻿using Leaosoft.Master;
+﻿using Leaosoft.Services;
 
 namespace Leaosoft.Save
 {
