@@ -18,6 +18,11 @@ namespace Leaosoft
         /// </summary>
         public void Setup()
         {
+            if (_isEnabled)
+            {
+                return;
+            }
+            
             _isEnabled = true;
             
             OnSetup();
@@ -28,6 +33,11 @@ namespace Leaosoft
         /// </summary>
         public void Dispose()
         {
+            if (!_isEnabled)
+            {
+                return;
+            }
+            
             _isEnabled = false;
             
             OnDispose();

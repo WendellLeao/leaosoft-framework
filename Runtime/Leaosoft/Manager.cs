@@ -10,12 +10,19 @@ namespace Leaosoft
     public abstract class Manager : MonoBehaviour
     {
         private bool _hasInitialized;
+
+        public bool HasInitialized => _hasInitialized;
         
         /// <summary>
         /// Initializes the Manager.
         /// </summary>
         public void Initialize()
         {
+            if (_hasInitialized)
+            {
+                return;
+            }
+            
             _hasInitialized = true;
             
             OnInitialize();
@@ -26,6 +33,11 @@ namespace Leaosoft
         /// </summary>
         public void Dispose()
         {
+            if (!_hasInitialized)
+            {
+                return;
+            }
+            
             _hasInitialized = false;
             
             OnDispose();

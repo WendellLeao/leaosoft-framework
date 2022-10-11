@@ -8,7 +8,7 @@ namespace Leaosoft.Master
         public static string FirstLoadedSceneName;
         public static bool HasLoadStartupScene;
         
-        private const int StartupSceneIndex = 0;
+        private const string StartupSceneName = "StartupScene";
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void CheckActiveScene()
@@ -20,12 +20,12 @@ namespace Leaosoft.Master
             
             FirstLoadedSceneName = SceneManager.GetActiveScene().name;
             
-            if (SceneManager.GetActiveScene().buildIndex == StartupSceneIndex)
+            if (SceneManager.GetActiveScene().name == StartupSceneName)
             {
                 return;
             }
 
-            SceneManager.LoadScene(StartupSceneIndex);
+            SceneManager.LoadScene(StartupSceneName);
 
             HasLoadStartupScene = true;
         }

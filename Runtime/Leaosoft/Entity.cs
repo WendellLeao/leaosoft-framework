@@ -3,7 +3,7 @@
 namespace Leaosoft
 {
     /// <summary>
-    /// A Entity is a dynamic game object. It has components that change its behaviours.
+    /// A Entity is a dynamic game object, it can be composed by one or more <see cref="EntityComponent"/>.
     /// </summary>
 
     [DisallowMultipleComponent]
@@ -18,6 +18,11 @@ namespace Leaosoft
         /// </summary>
         public void Begin()
         {
+            if (_isEnabled)
+            {
+                return;
+            }
+            
             _isEnabled = true;
             
             OnBegin();
@@ -28,8 +33,13 @@ namespace Leaosoft
         /// </summary>
         public void Stop()
         {
-            _isEnabled = false;
+            if (!_isEnabled)
+            {
+                return;
+            }
             
+            _isEnabled = false;
+
             OnStop();
         }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Leaosoft.Audio
 {
+    [DisallowMultipleComponent, RequireComponent(typeof(AudioSource))]
     public sealed class SoundPlayer : MonoBehaviour
     {
         [SerializeField] private AudioSource _audioSource;

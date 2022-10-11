@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Leaosoft.Utils
+namespace Leaosoft.Utilities.Extensions
 {
-    public static class ExtensionMethods
+    public static class TransformExtensions
     {
         public static void ResetTransform(this Transform transform)
         {

@@ -1,6 +1,6 @@
-﻿namespace Leaosoft.Utils
+﻿namespace Leaosoft.Utilities
 {
-    public static class MathHelpers
+    public static class MathUtility
     {
         public static float ConvertFloatSignal(float value)
         {

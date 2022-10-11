@@ -18,6 +18,11 @@ namespace Leaosoft
         /// </summary>
         public void Begin()
         {
+            if (_isEnabled)
+            {
+                return;
+            }
+            
             _isEnabled = true;
             
             OnBegin();
@@ -28,6 +33,11 @@ namespace Leaosoft
         /// </summary>
         public void Stop()
         {
+            if (!_isEnabled)
+            {
+                return;
+            }
+            
             _isEnabled = false;
                 
             OnStop();
