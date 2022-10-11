@@ -20,8 +20,8 @@ The package can be found by clicking the button below:
 
 - UniTask: https://github.com/Cysharp/UniTask
 
-## Leaosoft Framework Sample
+## Example
 
-If you want to take a look at how to use this framework in addition to the documentation, feel free to download the Leaosoft Framework Sample project by clicking the link below:
+If you want to take a look at how to use this framework in addition to the documentation, feel free to download the **Leaosoft Framework Sample** project by clicking the link below:
 
 Leaosoft Framework Sample: https://github.com/WendellLeao/leaosoft-framework-sample
