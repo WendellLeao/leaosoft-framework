@@ -5,13 +5,11 @@ namespace Leaosoft.Master
 {
     public sealed class StartupHandler : MonoBehaviour
     {
-        [SerializeField] private AudiosManager _audiosManager;
-        [SerializeField] private PoolsManager _poolsManager;
+        [SerializeField] private ServicesManager _servicesManager;
         
         private void Awake()
         {
-            _audiosManager.Initialize();
-            _poolsManager.Initialize();
+            _servicesManager.Initialize();
             
             HandleInitialization();
             

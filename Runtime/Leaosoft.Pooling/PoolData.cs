@@ -5,7 +5,7 @@ namespace Leaosoft.Pooling
 	[CreateAssetMenu(menuName = "Leaosoft/PoolingService/PoolData", fileName = "NewPoolData")]
 	public sealed class PoolData : ScriptableObject
 	{
-		public PoolType PoolType;
+		public string Id;
 	
 		public GameObject ObjectToPool;
 	

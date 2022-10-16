@@ -13,9 +13,12 @@ namespace Leaosoft.Audio
     [DisallowMultipleComponent]
     public sealed class AudioService : MonoBehaviour, IAudioService
     {
-        private Dictionary<Sound, AudioData> _audioDataDictionary;
+        private Dictionary<string, AudioData> _audioDataDictionary;
         private AudioData[] _audiosData;
+        private PoolData _soundPlayerPool;
 
+        public PoolData SoundPlayerPool => _soundPlayerPool;
+        
         public void RegisterService()
         {
             ServiceLocator.RegisterService<IAudioService>(this);
@@ -26,30 +29,31 @@ namespace Leaosoft.Audio
             ServiceLocator.DeregisterService<IAudioService>();
         }
 
-        public void PopulateAudiosData(AudioData[] audiosData)
+        public void Initialize(AudioData[] audiosData, PoolData soundPlayerPool)
         {
             _audiosData = audiosData;
+            _soundPlayerPool = soundPlayerPool;
             
-            _audioDataDictionary = new Dictionary<Sound, AudioData>();
+            _audioDataDictionary = new Dictionary<string, AudioData>();
 
             foreach (AudioData audioData in _audiosData)
             {
                 audioData.IsPlaying = false;
 
-                _audioDataDictionary.Add(audioData.Sound, audioData);
+                _audioDataDictionary.Add(audioData.Id, audioData);
             }
         }
         
-        public void PlaySound(Sound sound, Vector3 position)
+        public void PlaySound(string audioId, Vector3 position)
         {
-            if (_audioDataDictionary.TryGetValue(sound, out AudioData audioData))
+            if (_audioDataDictionary.TryGetValue(audioId, out AudioData audioData))
             {
                 if (!CanPlaySound(audioData))
                 {
                     return;
                 }
 
-                SoundPlayer soundPlayer = GetSoundPlayerFromPool();
+                SoundPlayer soundPlayer = GetSoundPlayerFromPool(_soundPlayerPool.Id);
 
                 soundPlayer.PlaySound(audioData, position);
 
@@ -72,11 +76,11 @@ namespace Leaosoft.Audio
             return false;
         }
 
-        private SoundPlayer GetSoundPlayerFromPool()
+        private SoundPlayer GetSoundPlayerFromPool(string soundPlayerId)
         {
             IPoolingService poolingService = ServiceLocator.GetService<IPoolingService>();
 
-            GameObject soundPlayerGameObject = poolingService.GetObjectFromPool(PoolType.SoundPlayer);
+            GameObject soundPlayerGameObject = poolingService.GetObjectFromPool(soundPlayerId);
 
             SoundPlayer soundPlayer = soundPlayerGameObject.GetComponent<SoundPlayer>();
 

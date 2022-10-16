@@ -12,9 +12,8 @@ namespace Leaosoft.Pooling
 	[DisallowMultipleComponent]
 	public sealed class PoolingService: MonoBehaviour, IPoolingService
 	{
-		[SerializeField] private PoolData[] _poolsData;
-		
-		private Dictionary<PoolType, Queue<GameObject>> _poolDictionary;
+		private Dictionary<string, Queue<GameObject>> _poolDictionary;
+		private PoolData[] _poolsData;
 
 		public void RegisterService()
 		{
@@ -26,22 +25,22 @@ namespace Leaosoft.Pooling
 			ServiceLocator.DeregisterService<IPoolingService>();
 		}
 
-		public void PopulatePoolsData(PoolData[] poolsData)
+		public void Initialize(PoolData[] poolsData)
 		{
 			_poolsData = poolsData;
 			
-			_poolDictionary = new Dictionary<PoolType, Queue<GameObject>>();
+			_poolDictionary = new Dictionary<string, Queue<GameObject>>();
 			
 			PopulateDictionary();
 		}
 		
-		public GameObject GetObjectFromPool(PoolType poolType)
+		public GameObject GetObjectFromPool(string poolId)
 		{
-			if (_poolDictionary.TryGetValue(poolType, out Queue<GameObject> objectList))
+			if (_poolDictionary.TryGetValue(poolId, out Queue<GameObject> objectList))
 			{
 				if (objectList.Count == 0)
 				{
-					return CreateBackupObject(poolType);
+					return CreateBackupObject(poolId);
 				}
 
 				GameObject objectFromPool = objectList.Dequeue();
@@ -54,9 +53,9 @@ namespace Leaosoft.Pooling
 			return null;
 		}
 
-		public void ReturnObjectToPool(PoolType poolType, GameObject objectToReturn)
+		public void ReturnObjectToPool(string poolId, GameObject objectToReturn)
 		{
-			if (_poolDictionary.TryGetValue(poolType, out Queue<GameObject> objectList))
+			if (_poolDictionary.TryGetValue(poolId, out Queue<GameObject> objectList))
 			{
 				objectList.Enqueue(objectToReturn);
 			}
@@ -79,7 +78,7 @@ namespace Leaosoft.Pooling
 					newGameObject.transform.SetParent(transform);
 				}
 
-				_poolDictionary.Add(pool.PoolType, objectPool);
+				_poolDictionary.Add(pool.Id, objectPool);
 			}
 		}
 		
@@ -92,13 +91,13 @@ namespace Leaosoft.Pooling
 			return newGameObject;
 		}
 
-		private GameObject CreateBackupObject(PoolType poolType)
+		private GameObject CreateBackupObject(string poolId)
 		{
 			GameObject newBackupObject = null;
 
 			foreach (PoolData pool in _poolsData)
 			{
-				if (pool.PoolType == poolType)
+				if (pool.Id == poolId)
 				{
 					newBackupObject = Instantiate(pool.ObjectToPool);
 

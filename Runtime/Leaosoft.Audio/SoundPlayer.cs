@@ -1,7 +1,9 @@
-using System.Collections;
+using Random = UnityEngine.Random;
+using Cysharp.Threading.Tasks;
 using Leaosoft.Services;
 using Leaosoft.Pooling;
 using UnityEngine;
+using System;
 
 namespace Leaosoft.Audio
 {
@@ -22,11 +24,12 @@ namespace Leaosoft.Audio
         private void OnDisable()
         {
             IPoolingService poolingService = ServiceLocator.GetService<IPoolingService>();
+            
+            IAudioService audioService = ServiceLocator.GetService<IAudioService>();
 
-            if (poolingService != null)
-            {
-                poolingService.ReturnObjectToPool(PoolType.SoundPlayer, gameObject);
-            }
+            PoolData soundPlayerPool = audioService.SoundPlayerPool;
+            
+            poolingService.ReturnObjectToPool(soundPlayerPool.Id, gameObject);
 
             if (_audioData != null)
             {
@@ -40,17 +43,19 @@ namespace Leaosoft.Audio
 
             _audioSource.Play();
 
-            if (!_audioSource.loop)
+            if (_audioSource.loop)
             {
-                StartCoroutine(DeactivateSoundGameObject());
+                return;
             }
-        }
 
-        private IEnumerator DeactivateSoundGameObject()
-        {
-            yield return new WaitForSeconds(_audioSource.clip.length);
-
-            gameObject.SetActive(false);
+            DeactivateSoundGameObjectAsync();
+            
+            async void DeactivateSoundGameObjectAsync()
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(10));
+                
+                gameObject.SetActive(false);
+            }
         }
 
         private void SetAudioData(AudioData audioData)
