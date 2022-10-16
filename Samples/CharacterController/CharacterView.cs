@@ -1,4 +1,4 @@
-﻿namespace Leaosoft.Gameplay.Playing
+﻿namespace Leaosoft.Samples.CharacterController
 {
     public sealed class CharacterView : EntityView
     { }

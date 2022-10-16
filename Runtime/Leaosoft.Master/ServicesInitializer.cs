@@ -2,7 +2,6 @@ using Leaosoft.Services;
 using Leaosoft.Pooling;
 using Leaosoft.Events;
 using Leaosoft.Audio;
-using Leaosoft.Input;
 using Leaosoft.Save;
 using Leaosoft.UI;
 using UnityEngine;
@@ -41,11 +40,6 @@ namespace Leaosoft.Master
                 InitializeUIService();
             }
 
-            if (ServiceLocator.GetService<IInputService>() == null)
-            {
-                InitializeInputService();
-            }
-            
             if (ServiceLocator.GetService<ISaveService>() == null)
             {
                 InitializeSaveService();
@@ -82,15 +76,6 @@ namespace Leaosoft.Master
             GameObject uiServicePrefab = Resources.Load(UIServicePrefabPath) as GameObject;
                 
             GameObject serviceObject = Object.Instantiate(uiServicePrefab);
-            
-            serviceObject.GetComponent<IGameService>().RegisterService();
-        }
-        
-        private static void InitializeInputService()
-        {
-            GameObject inputServicePrefab = Resources.Load(InputServicePrefabPath) as GameObject;
-                
-            GameObject serviceObject = Object.Instantiate(inputServicePrefab);
             
             serviceObject.GetComponent<IGameService>().RegisterService();
         }

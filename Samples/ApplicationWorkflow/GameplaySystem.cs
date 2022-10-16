@@ -1,7 +1,6 @@
-using Leaosoft.Samples.BeginThePlayer.Playing;
 using UnityEngine;
 
-namespace Leaosoft.Samples.BeginThePlayer
+namespace Leaosoft.Samples.ApplicationWorkflow
 {
     public class GameplaySystem : System
     {

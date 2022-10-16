@@ -13,9 +13,8 @@ namespace Leaosoft.Audio
     [DisallowMultipleComponent]
     public sealed class AudioService : MonoBehaviour, IAudioService
     {
-        [SerializeField] private AudioData[] _audiosData;
-
         private Dictionary<Sound, AudioData> _audioDataDictionary;
+        private AudioData[] _audiosData;
 
         public void RegisterService()
         {
@@ -26,7 +25,21 @@ namespace Leaosoft.Audio
         {
             ServiceLocator.DeregisterService<IAudioService>();
         }
+
+        public void PopulateAudiosData(AudioData[] audiosData)
+        {
+            _audiosData = audiosData;
             
+            _audioDataDictionary = new Dictionary<Sound, AudioData>();
+
+            foreach (AudioData audioData in _audiosData)
+            {
+                audioData.IsPlaying = false;
+
+                _audioDataDictionary.Add(audioData.Sound, audioData);
+            }
+        }
+        
         public void PlaySound(Sound sound, Vector3 position)
         {
             if (_audioDataDictionary.TryGetValue(sound, out AudioData audioData))
@@ -68,18 +81,6 @@ namespace Leaosoft.Audio
             SoundPlayer soundPlayer = soundPlayerGameObject.GetComponent<SoundPlayer>();
 
             return soundPlayer;
-        }
-
-        private void Awake()
-        {
-            _audioDataDictionary = new Dictionary<Sound, AudioData>();
-
-            foreach (AudioData audioData in _audiosData)
-            {
-                audioData.IsPlaying = false;
-
-                _audioDataDictionary.Add(audioData.Sound, audioData);
-            }
         }
     }
 }

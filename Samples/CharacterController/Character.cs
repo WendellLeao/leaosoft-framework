@@ -1,7 +1,6 @@
-﻿using Leaosoft.Input;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Leaosoft.Gameplay.Playing
+namespace Leaosoft.Samples.CharacterController
 {
     public sealed class Character : Entity
     {
@@ -16,23 +15,14 @@ namespace Leaosoft.Gameplay.Playing
         [Header("View")] 
         [SerializeField] private CharacterView _characterView;
 
-        private IInputService _inputService;
-
-        public void Begin(IInputService inputService)
-        {
-            _inputService = inputService;
-
-            base.Begin();
-        }
-
         protected override void OnBegin()
         {
             base.OnBegin();
             
             _characterView.Setup();
             
-            _characterMovement.Begin(_inputService, _rigidBody);
-            _characterJump.Begin(_inputService, _rigidBody, _boxCollider);
+            _characterMovement.Begin(_rigidBody);
+            _characterJump.Begin(_rigidBody, _boxCollider);
         }
 
         protected override void OnStop()

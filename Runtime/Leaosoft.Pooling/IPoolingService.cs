@@ -6,6 +6,12 @@ namespace Leaosoft.Pooling
     public interface IPoolingService : IGameService
     {
         /// <summary>
+        /// Populates all the pools data that will be used by the <see cref="PoolingService"/>.
+        /// </summary>
+        /// <param name="poolsData">all the pools data.</param>
+        void PopulatePoolsData(PoolData[] poolsData);
+        
+        /// <summary>
         /// Returns some <see cref="GameObject"/> that has being spawned by the <see cref="PoolingService"/>.
         /// </summary>
         /// <param name="poolType">the pool you want to get an <see cref="GameObject"/> from.</param>

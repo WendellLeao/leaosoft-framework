@@ -5,20 +5,29 @@ namespace Leaosoft.Master
 {
     public sealed class StartupHandler : MonoBehaviour
     {
+        [SerializeField] private AudiosManager _audiosManager;
+        [SerializeField] private PoolsManager _poolsManager;
+        
         private void Awake()
         {
-            Application.targetFrameRate = 60; //TODO: Unlock the frame rate
+            _audiosManager.Initialize();
+            _poolsManager.Initialize();
+            
+            HandleInitialization();
+            
+            Debug.Log("<color=white>Leaosoft - The game has been successfully initialized!</color>");
+        }
 
+        private void HandleInitialization()
+        {
             if (StartupSceneLoader.HasLoadStartupScene)
             {
                 LoadFirstLoadedScene();
-            }
-            else
-            {
-                InitializeGame();
+                
+                return;
             }
             
-            Debug.Log("Leaosoft - The game has been successfully initialized!");
+            InitializeGame();
         }
 
         private void InitializeGame()

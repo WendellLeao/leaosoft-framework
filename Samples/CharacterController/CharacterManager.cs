@@ -1,8 +1,6 @@
-﻿using Leaosoft.Services;
-using Leaosoft.Input;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Leaosoft.Gameplay.Playing
+namespace Leaosoft.Samples.CharacterController
 {
     public sealed class CharacterManager : Manager
     {
@@ -12,9 +10,7 @@ namespace Leaosoft.Gameplay.Playing
         {
             base.OnInitialize();
             
-            IInputService inputService = ServiceLocator.GetService<IInputService>();
-            
-            _character.Begin(inputService);
+            _character.Begin();
         }
 
         protected override void OnDispose()

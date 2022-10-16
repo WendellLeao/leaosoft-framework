@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Leaosoft.Samples.BeginThePlayer.Playing
+namespace Leaosoft.Samples.ApplicationWorkflow
 {
     public sealed class Character : Entity
     {

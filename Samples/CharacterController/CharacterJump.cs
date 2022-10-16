@@ -1,7 +1,6 @@
-﻿using Leaosoft.Input;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Leaosoft.Gameplay.Playing
+namespace Leaosoft.Samples.CharacterController
 {
     public sealed class CharacterJump : EntityComponent
     {
@@ -9,33 +8,17 @@ namespace Leaosoft.Gameplay.Playing
         [SerializeField] private float _minimumDistance = 0.06f;
         [SerializeField] private LayerMask _groundLayers;
         
-        private IInputService _inputService;
         private BoxCollider2D _boxCollider;
         private Rigidbody2D _rigidBody;
         private bool _isJumping;
         private bool _isGrounded;
 
-        public void Begin(IInputService inputService, Rigidbody2D rigidBody, BoxCollider2D boxCollider)
+        public void Begin(Rigidbody2D rigidBody, BoxCollider2D boxCollider)
         {
-            _inputService = inputService;
             _boxCollider = boxCollider;
             _rigidBody = rigidBody;
             
             base.Begin();
-        }
-
-        protected override void OnBegin()
-        {
-            base.OnBegin();
-            
-            _inputService.OnReadInputs += HandleReadInputs;
-        }
-
-        protected override void OnStop()
-        {
-            base.OnStop();
-            
-            _inputService.OnReadInputs -= HandleReadInputs;
         }
 
         protected override void OnTick(float deltaTime)
@@ -55,11 +38,6 @@ namespace Leaosoft.Gameplay.Playing
             }
             
             _rigidBody.AddForce(Vector2.up * _jumpForce);
-        }
-
-        private void HandleReadInputs(InputsData inputsData)
-        {
-            _isJumping = inputsData.PressJump;
         }
 
         private bool CanJump()

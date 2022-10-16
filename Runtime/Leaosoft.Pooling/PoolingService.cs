@@ -25,6 +25,15 @@ namespace Leaosoft.Pooling
 		{
 			ServiceLocator.DeregisterService<IPoolingService>();
 		}
+
+		public void PopulatePoolsData(PoolData[] poolsData)
+		{
+			_poolsData = poolsData;
+			
+			_poolDictionary = new Dictionary<PoolType, Queue<GameObject>>();
+			
+			PopulateDictionary();
+		}
 		
 		public GameObject GetObjectFromPool(PoolType poolType)
 		{
@@ -55,6 +64,25 @@ namespace Leaosoft.Pooling
 			objectToReturn.SetActive(false);
 		}
 
+		private void PopulateDictionary()
+		{
+			foreach (PoolData pool in _poolsData)
+			{
+				Queue<GameObject> objectPool = new Queue<GameObject>();
+
+				for (int i = 0; i < pool.StartAmount; i++)
+				{
+					GameObject newGameObject = CreateNewObject(pool.ObjectToPool);
+
+					objectPool.Enqueue(newGameObject);
+
+					newGameObject.transform.SetParent(transform);
+				}
+
+				_poolDictionary.Add(pool.PoolType, objectPool);
+			}
+		}
+		
 		private GameObject CreateNewObject(GameObject gameObject)
 		{
 			GameObject newGameObject = Instantiate(gameObject);
@@ -79,32 +107,6 @@ namespace Leaosoft.Pooling
 			}
 
 			return null;
-		}
-
-		private void Awake()
-		{
-			_poolDictionary = new Dictionary<PoolType, Queue<GameObject>>();
-			
-			PopulateDictionary();
-		}
-
-		private void PopulateDictionary()
-		{
-			foreach (PoolData pool in _poolsData)
-			{
-				Queue<GameObject> objectPool = new Queue<GameObject>();
-
-				for (int i = 0; i < pool.StartAmount; i++)
-				{
-					GameObject newGameObject = CreateNewObject(pool.ObjectToPool);
-
-					objectPool.Enqueue(newGameObject);
-
-					newGameObject.transform.SetParent(transform);
-				}
-
-				_poolDictionary.Add(pool.PoolType, objectPool);
-			}
 		}
 	}
 }

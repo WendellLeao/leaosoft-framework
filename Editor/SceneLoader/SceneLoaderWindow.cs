@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Leaosoft.Editor.SceneLoader
 {
-    public sealed class SceneLoaderEditorWindow : EditorWindow
+    public sealed class SceneLoaderWindow : EditorWindow
     {
-        [MenuItem("Tools/Leaosoft/Scene Loader")]
+        [MenuItem("Leaosoft/Tools/Scene Loader")]
         public static void ShowWindow()
         {
-            SceneLoaderEditorWindow window = GetWindow<SceneLoaderEditorWindow>();
+            SceneLoaderWindow window = GetWindow<SceneLoaderWindow>();
 
             window.titleContent = new GUIContent("Scene Loader");
             window.minSize = new Vector2(800, 600);
