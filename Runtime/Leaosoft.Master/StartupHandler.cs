@@ -1,19 +1,48 @@
 using UnityEngine.SceneManagement;
+using Leaosoft.Events;
+using Leaosoft.Save;
 using UnityEngine;
 
 namespace Leaosoft.Master
 {
     public sealed class StartupHandler : MonoBehaviour
     {
-        [SerializeField] private ServicesManager _servicesManager;
+        [SerializeField] private AudioServiceManager _audioServiceManager;
+        [SerializeField] private PoolingServiceManager _poolingServiceManager;
+        [SerializeField] private ScreenServiceManager _screenServiceManager;
         
         private void Awake()
         {
-            _servicesManager.Initialize();
-            
+            InitializeServices();
+
             HandleInitialization();
+        }
+
+        private void InitializeServices()
+        {
+            InitializeSaveService();
+
+            InitializeEventService();
+
+            _audioServiceManager.Initialize();
             
-            Debug.Log("<color=white>Leaosoft - The game has been successfully initialized!</color>");
+            _poolingServiceManager.Initialize();
+            
+            _screenServiceManager.Initialize();
+        }
+
+        private static void InitializeSaveService()
+        {
+            ISaveService newSaveService = new SaveService();
+
+            newSaveService.RegisterService();
+        }
+
+        private static void InitializeEventService()
+        {
+            IEventService newEventService = new EventService();
+
+            newEventService.RegisterService();
         }
 
         private void HandleInitialization()

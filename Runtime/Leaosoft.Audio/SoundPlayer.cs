@@ -52,7 +52,9 @@ namespace Leaosoft.Audio
             
             async void DeactivateSoundGameObjectAsync()
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(10));
+                float clipDuration = _audioSource.clip.length;
+                
+                await UniTask.Delay(TimeSpan.FromSeconds(clipDuration));
                 
                 gameObject.SetActive(false);
             }
