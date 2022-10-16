@@ -5,7 +5,6 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Leaosoft",
-        "Leaosoft.Input",
         "Leaosoft.Pooling",
         "Leaosoft.Save",
         "Leaosoft.Audio"

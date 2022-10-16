@@ -39,7 +39,7 @@ namespace Leaosoft.Master
 
         private void LoadFirstLoadedScene()
         {
-            SceneManager.LoadSceneAsync(StartupSceneLoader.FirstLoadedSceneName);
+            SceneManager.LoadSceneAsync(StartupSceneLoader.FirstLoadedSceneIndex);
         }
     }
 }

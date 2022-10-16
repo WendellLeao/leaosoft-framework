@@ -5,10 +5,10 @@ namespace Leaosoft.Master
 {
     public sealed class StartupSceneLoader
     {
-        public static string FirstLoadedSceneName;
+        public static int FirstLoadedSceneIndex;
         public static bool HasLoadStartupScene;
         
-        private const string StartupSceneName = "StartupScene";
+        private const int StartupSceneIndex = 0;
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void CheckActiveScene()
@@ -17,15 +17,17 @@ namespace Leaosoft.Master
             {
                 return;
             }
+
+            int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
             
-            FirstLoadedSceneName = SceneManager.GetActiveScene().name;
+            FirstLoadedSceneIndex = activeSceneIndex;
             
-            if (SceneManager.GetActiveScene().name == StartupSceneName)
+            if (activeSceneIndex == StartupSceneIndex)
             {
                 return;
             }
 
-            SceneManager.LoadScene(StartupSceneName);
+            SceneManager.LoadScene(StartupSceneIndex);
 
             HasLoadStartupScene = true;
         }
