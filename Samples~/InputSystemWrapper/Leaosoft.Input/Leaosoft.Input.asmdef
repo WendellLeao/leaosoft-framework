@@ -1,0 +1,18 @@
+{
+    "name": "Leaosoft.Input",
+    "rootNamespace": "Leaosoft.Input",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:6db9c19b80736f643b859bc09ee968c2",
+        "GUID:6cfc7f64e61e1e4429f37484e489b8cf"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
