@@ -16,6 +16,18 @@ namespace Leaosoft.Editor.SceneLoader
             window.minSize = new Vector2(800, 600);
         }
 
+        private static void SetupLabel(string labelText)
+        {
+            GUIStyle labelStyle = new GUIStyle(GUI.skin.label)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontStyle = FontStyle.Bold,
+                fontSize = 18
+            };
+            
+            GUILayout.Label(labelText, labelStyle);
+        }
+        
         private void OnGUI()
         {
             if (Application.isPlaying)
@@ -30,18 +42,6 @@ namespace Leaosoft.Editor.SceneLoader
             GUILayout.Space(20);
             
             CreateScenesList();
-        }
-
-        private static void SetupLabel(string labelText)
-        {
-            GUIStyle labelStyle = new GUIStyle(GUI.skin.label)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontStyle = FontStyle.Bold,
-                fontSize = 18
-            };
-            
-            GUILayout.Label(labelText, labelStyle);
         }
         
         private void CreateScenesList()
