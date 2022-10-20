@@ -24,17 +24,12 @@
   },
   "samples": [
     {
-      "displayName": "Input System Wrapper",
-      "description": "Example of how to create wrapper for the InputSystem and use it as a GameService.",
-      "path": "Samples~/InputSystemWrapper"
-    },
-    {
       "displayName": "Application Workflow",
       "description": "Example of how to use Systems, Managers and Entities.",
       "path": "Samples~/ApplicationWorkflow"
     },
     {
-      "displayName": "CharacterController",
+      "displayName": "Character Controller",
       "description": "Example of how to create a modular character controller using EntityComponents.",
       "path": "Samples~/CharacterController"
     }
