@@ -12,7 +12,7 @@ namespace Leaosoft.UI
     /// </summary>
     
     [DisallowMultipleComponent]
-    public sealed class ScreenService : MonoBehaviour, IScreenService
+    public sealed class ScreenService : GameService, IScreenService
     {
         private readonly List<Screen> _openedScreens = new List<Screen>();
         private readonly List<Screen> _registeredScreens = new List<Screen>();
@@ -29,6 +29,9 @@ namespace Leaosoft.UI
         {
             ServiceLocator.DeregisterService<IScreenService>();
         }
+        
+        public void Initialize()
+        {}
         
         public Screen OpenScreen(Screen screen, OpenScreenMode openScreenMode = OpenScreenMode.Single, float delay = 0)
         {

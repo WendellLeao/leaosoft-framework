@@ -5,17 +5,18 @@ namespace Leaosoft.Editor.EssentialsImporter
 {
     public class EssentialsImporter : EditorWindow
     {
-        private const string InputServicePackagePath = "Packages/com.leaosoft.core/Essentials/Essentials.unitypackage";
+        private const string EssentialsPackagePath = "Packages/com.leaosoft.core/Essentials/Essentials.unitypackage";
+        private const string InputServicePackagePath = "Packages/com.leaosoft.core/Essentials/InputService.unitypackage";
 
         private const float _minWindowWidth = 600f;
         private const float _minWindowHeight = 120f;
         
-        [MenuItem("Leaosoft/Import Essentials", false, 11)]
+        [MenuItem("Leaosoft/Import Essentials", false, 20)]
         public static void ShowWindow()
         {
             EssentialsImporter window = GetWindow<EssentialsImporter>();
 
-            window.titleContent = new GUIContent("Leaosoft Import Essentials");
+            window.titleContent = new GUIContent("Leaosoft Importer");
             
             CenterWindow(window);
             
@@ -39,11 +40,12 @@ namespace Leaosoft.Editor.EssentialsImporter
         {
             GUIStyle labelStyle = new GUIStyle(GUI.skin.label)
             {
+                richText = true,
                 wordWrap = true,
                 fontSize = 13
             };
             
-            EditorGUILayout.LabelField("Thank you for download the Leaosoft Framework package. " +
+            EditorGUILayout.LabelField("Thank you for download the <b>Leaosoft Framework package</b>. " +
                                        "Import the essentials to integrate new services and resources " +
                                        "to your project. Importing the essentials you will be able to " +
                                        "edit scripts and add new features much easier.", labelStyle);
@@ -66,7 +68,8 @@ namespace Leaosoft.Editor.EssentialsImporter
         private static void ImportEssentials()
         {
             string[] packageNames =
-            {
+            {   
+                EssentialsPackagePath,
                 InputServicePackagePath
             };
 

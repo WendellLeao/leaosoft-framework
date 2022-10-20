@@ -23,6 +23,9 @@ namespace Leaosoft.Events
             ServiceLocator.DeregisterService<IEventService>();
         }
         
+        public void Initialize()
+        {}
+        
         public void AddEventListener<T>(UnityAction<ServiceEvent> listener) where T : ServiceEvent
         {
             Type type = typeof(T);

@@ -7,7 +7,7 @@ namespace Leaosoft.Editor.SceneLoader
 {
     public sealed class SceneLoaderWindow : EditorWindow
     {
-        [MenuItem("Leaosoft/Tools/Scene Loader", false, 1)]
+        [MenuItem("Leaosoft/Tools/Scene Loader", false, 10)]
         public static void ShowWindow()
         {
             SceneLoaderWindow window = GetWindow<SceneLoaderWindow>();

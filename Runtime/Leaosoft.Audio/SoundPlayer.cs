@@ -11,6 +11,7 @@ namespace Leaosoft.Audio
     public sealed class SoundPlayer : MonoBehaviour
     {
         [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private PoolData _soundPlayerPool;
 
         private AudioData _audioData;
 
@@ -25,11 +26,7 @@ namespace Leaosoft.Audio
         {
             IPoolingService poolingService = ServiceLocator.GetService<IPoolingService>();
             
-            IAudioService audioService = ServiceLocator.GetService<IAudioService>();
-
-            PoolData soundPlayerPool = audioService.SoundPlayerPool;
-            
-            poolingService.ReturnObjectToPool(soundPlayerPool.Id, gameObject);
+            poolingService.ReturnObjectToPool(_soundPlayerPool.Id, gameObject);
 
             if (_audioData != null)
             {

@@ -28,6 +28,9 @@ namespace Leaosoft.Save
 			ServiceLocator.DeregisterService<ISaveService>();
 		}
 		
+		public void Initialize()
+		{}
+		
 		public void SaveData()
 		{
 			string json = JsonUtility.ToJson(_localGameData, true);

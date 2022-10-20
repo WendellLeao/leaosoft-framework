@@ -11,13 +11,14 @@ namespace Leaosoft.Audio
     /// </summary>
     
     [DisallowMultipleComponent]
-    public sealed class AudioService : MonoBehaviour, IAudioService
+    public sealed class AudioService : GameService, IAudioService
     {
+        [SerializeField] private AudioData[] _audiosData;
+        
+        [Header("Sound Player")]
+        [SerializeField] private PoolData _soundPlayerPool;
+        
         private Dictionary<string, AudioData> _audioDataDictionary;
-        private AudioData[] _audiosData;
-        private PoolData _soundPlayerPool;
-
-        public PoolData SoundPlayerPool => _soundPlayerPool;
         
         public void RegisterService()
         {
@@ -29,11 +30,8 @@ namespace Leaosoft.Audio
             ServiceLocator.DeregisterService<IAudioService>();
         }
 
-        public void Initialize(AudioData[] audiosData, PoolData soundPlayerPool)
+        public void Initialize()
         {
-            _audiosData = audiosData;
-            _soundPlayerPool = soundPlayerPool;
-            
             _audioDataDictionary = new Dictionary<string, AudioData>();
 
             foreach (AudioData audioData in _audiosData)

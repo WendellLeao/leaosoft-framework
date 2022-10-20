@@ -2,6 +2,8 @@
 {
     public interface IGameService
     {
+        void Initialize();
+        
         /// <summary>
         /// Registers a <see cref="IGameService"/>.
         /// </summary>

@@ -10,10 +10,11 @@ namespace Leaosoft.Pooling
 	/// </summary>
 	
 	[DisallowMultipleComponent]
-	public sealed class PoolingService: MonoBehaviour, IPoolingService
+	public sealed class PoolingService: GameService, IPoolingService
 	{
+		[SerializeField] private PoolData[] _poolsData;
+		
 		private Dictionary<string, Queue<GameObject>> _poolDictionary;
-		private PoolData[] _poolsData;
 
 		public void RegisterService()
 		{
@@ -25,10 +26,8 @@ namespace Leaosoft.Pooling
 			ServiceLocator.DeregisterService<IPoolingService>();
 		}
 
-		public void Initialize(PoolData[] poolsData)
+		public void Initialize()
 		{
-			_poolsData = poolsData;
-			
 			_poolDictionary = new Dictionary<string, Queue<GameObject>>();
 			
 			PopulateDictionary();

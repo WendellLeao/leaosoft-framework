@@ -1,51 +1,20 @@
 using UnityEngine.SceneManagement;
-using Leaosoft.Events;
-using Leaosoft.Save;
 using UnityEngine;
 
 namespace Leaosoft.Master
 {
     public sealed class StartupHandler : MonoBehaviour
     {
-        [SerializeField] private AudioServiceManager _audioServiceManager;
-        [SerializeField] private PoolingServiceManager _poolingServiceManager;
-        [SerializeField] private ScreenServiceManager _screenServiceManager;
+        [SerializeField] private ServicesRegister _servicesRegister;
         
         private void Awake()
         {
-            InitializeServices();
+            _servicesRegister.Initialize();
 
-            HandleInitialization();
+            HandleStartupScene();
         }
 
-        private void InitializeServices()
-        {
-            InitializeSaveService();
-
-            InitializeEventService();
-
-            _audioServiceManager.Initialize();
-            
-            _poolingServiceManager.Initialize();
-            
-            _screenServiceManager.Initialize();
-        }
-
-        private static void InitializeSaveService()
-        {
-            ISaveService newSaveService = new SaveService();
-
-            newSaveService.RegisterService();
-        }
-
-        private static void InitializeEventService()
-        {
-            IEventService newEventService = new EventService();
-
-            newEventService.RegisterService();
-        }
-
-        private void HandleInitialization()
+        private void HandleStartupScene()
         {
             if (StartupSceneLoader.HasLoadStartupScene)
             {
@@ -54,10 +23,10 @@ namespace Leaosoft.Master
                 return;
             }
             
-            InitializeGame();
+            StartGame();
         }
 
-        private void InitializeGame()
+        private void StartGame()
         {
             int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
 
