@@ -12,9 +12,18 @@ namespace Leaosoft.Editor.EssentialsImporter
             InputServicePackagePath
         };
         
+        private static string[] _essentialPackagesName =
+        {   
+            EssentialsPackageName,
+            InputServicePackageName
+        };
+        
         private const string LeaosoftAssetsPath = "Assets/Leaosoft";
         private const string EssentialsPackagePath = "Packages/com.leaosoft.core/Packages/Essentials.unitypackage";
         private const string InputServicePackagePath = "Packages/com.leaosoft.core/Packages/InputService.unitypackage";
+        
+        private const string EssentialsPackageName = "Essentials";
+        private const string InputServicePackageName = "InputService";
 
         private const float _minWindowWidth = 600f;
         private const float _minWindowHeight = 120f;
@@ -34,6 +43,11 @@ namespace Leaosoft.Editor.EssentialsImporter
         [InitializeOnLoadMethod]
         private static void CheckAndShowWindow()
         {
+            if (HasOpenInstances<EssentialsImporterWindow>())
+            {
+                return;
+            }
+            
             EditorSceneManager.sceneOpened += (scene, mode) =>
             {
                 //TODO: Fix this hard coded check
@@ -45,6 +59,32 @@ namespace Leaosoft.Editor.EssentialsImporter
                 }
                 
                 ShowWindow();
+            };
+        }
+        
+        [InitializeOnLoadMethod]
+        private static void CheckImportingAndCloseWindow()
+        {
+            if (!HasOpenInstances<EssentialsImporterWindow>())
+            {
+                return;
+            }
+            
+            AssetDatabase.importPackageCompleted += (string importedPackageName) =>
+            {
+                foreach (string essentialPackageName in _essentialPackagesName)
+                {
+                    if (!importedPackageName.Contains(essentialPackageName))
+                    {
+                        continue;
+                    }
+                    
+                    EssentialsImporterWindow window = GetWindow<EssentialsImporterWindow>();
+                    
+                    window.Close();
+                    
+                    return;
+                }
             };
         }
 
