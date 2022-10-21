@@ -35,11 +35,11 @@ namespace Leaosoft.Editor.SceneLoader
                 GUI.enabled = false;
             }
             
-            GUILayout.Space(20);
+            GUILayout.Space(20f);
             
             SetupLabel("Scene Loader");
 
-            GUILayout.Space(20);
+            GUILayout.Space(20f);
             
             CreateScenesList();
         }
@@ -56,7 +56,7 @@ namespace Leaosoft.Editor.SceneLoader
                 
                 GUIStyle buttonStyle = new GUIStyle(EditorStyles.toolbarButton)
                 {
-                    fixedHeight = 45
+                    fixedHeight = 45f
                 };
 
                 if (GUILayout.Button(sceneName, buttonStyle))
