@@ -1,10 +1,18 @@
+using UnityEditor.SceneManagement;
 using UnityEditor;
 using UnityEngine;
 
 namespace Leaosoft.Editor.EssentialsImporter
 {
-    public class EssentialsImporter : EditorWindow
+    public sealed class EssentialsImporterWindow : EditorWindow
     {
+        private static string[] _essentialPackagesPath =
+        {   
+            EssentialsPackagePath,
+            InputServicePackagePath
+        };
+        
+        private const string LeaosoftAssetsPath = "Assets/Leaosoft";
         private const string EssentialsPackagePath = "Packages/com.leaosoft.core/Packages/Essentials.unitypackage";
         private const string InputServicePackagePath = "Packages/com.leaosoft.core/Packages/InputService.unitypackage";
 
@@ -14,7 +22,7 @@ namespace Leaosoft.Editor.EssentialsImporter
         [MenuItem("Leaosoft/Import Essentials")]
         public static void ShowWindow()
         {
-            EssentialsImporter window = GetWindow<EssentialsImporter>();
+            EssentialsImporterWindow window = GetWindow<EssentialsImporterWindow>();
 
             window.titleContent = new GUIContent("Leaosoft Importer");
             
@@ -23,7 +31,24 @@ namespace Leaosoft.Editor.EssentialsImporter
             window.Focus();
         }
 
-        private static void CenterWindow(EssentialsImporter window)
+        [InitializeOnLoadMethod]
+        private static void CheckAndShowWindow()
+        {
+            EditorSceneManager.sceneOpened += (scene, mode) =>
+            {
+                //TODO: Fix this hard coded check
+                bool hasEssentials = AssetDatabase.IsValidFolder(LeaosoftAssetsPath);
+                
+                if (hasEssentials)
+                {
+                    return;
+                }
+                
+                ShowWindow();
+            };
+        }
+
+        private static void CenterWindow(EssentialsImporterWindow window)
         {
             Rect main = EditorGUIUtility.GetMainWindowPosition();
             
@@ -67,13 +92,7 @@ namespace Leaosoft.Editor.EssentialsImporter
 
         private static void ImportEssentials()
         {
-            string[] packageNames =
-            {   
-                EssentialsPackagePath,
-                InputServicePackagePath
-            };
-
-            foreach (string package in packageNames)
+            foreach (string package in _essentialPackagesPath)
             {
                 AssetDatabase.ImportPackage(package, false);
             }
