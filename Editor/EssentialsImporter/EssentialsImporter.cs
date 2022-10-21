@@ -5,13 +5,13 @@ namespace Leaosoft.Editor.EssentialsImporter
 {
     public class EssentialsImporter : EditorWindow
     {
-        private const string EssentialsPackagePath = "Packages/com.leaosoft.core/Essentials/Essentials.unitypackage";
-        private const string InputServicePackagePath = "Packages/com.leaosoft.core/Essentials/InputService.unitypackage";
+        private const string EssentialsPackagePath = "Packages/com.leaosoft.core/Packages/Essentials.unitypackage";
+        private const string InputServicePackagePath = "Packages/com.leaosoft.core/Packages/InputService.unitypackage";
 
         private const float _minWindowWidth = 600f;
         private const float _minWindowHeight = 120f;
         
-        [MenuItem("Leaosoft/Import Essentials", false, 20)]
+        [MenuItem("Leaosoft/Import Essentials")]
         public static void ShowWindow()
         {
             EssentialsImporter window = GetWindow<EssentialsImporter>();
