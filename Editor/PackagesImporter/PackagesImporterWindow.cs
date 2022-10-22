@@ -6,7 +6,7 @@ namespace Leaosoft.Editor.PackagesImporter
 {
     public sealed class PackagesImporterWindow : EditorWindow
     {
-        private static string[] _essentialPackagesPath =
+        private static readonly string[] _essentialPackagesPath =
         {   
             EssentialsPackagePath,
         };

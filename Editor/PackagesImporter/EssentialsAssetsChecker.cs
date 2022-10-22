@@ -1,14 +1,13 @@
-﻿using Leaosoft.Editor.PackagesImporter;
-using UnityEditor;
+﻿using UnityEditor;
 
-namespace Leaosoft.Master
+namespace Leaosoft.Editor.PackagesImporter
 {
     [InitializeOnLoad]
-    public static class EssentialsChecker
+    public static class EssentialsAssetsChecker
     {
         private const string LeaosoftAssetsPath = "Assets/Leaosoft";
         
-        static EssentialsChecker()
+        static EssentialsAssetsChecker()
         {
             if (HasImportedEssentials())
             {
