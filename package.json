@@ -1,6 +1,6 @@
 {
   "name": "com.leaosoft.core",
-  "version": "1.4.10",
+  "version": "1.4.11",
   "displayName": "Leaosoft Framework",
   "description": "A framework with many useful services and ready-to-use modular tools to make game development easier.",
   "unity": "2021.3",
