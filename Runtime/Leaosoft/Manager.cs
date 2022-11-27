@@ -9,6 +9,8 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class Manager : MonoBehaviour
     {
+        [SerializeField] private Entity[] _entities;
+        
         private bool _hasInitialized;
 
         public bool HasInitialized => _hasInitialized;
@@ -68,31 +70,51 @@ namespace Leaosoft
             
             OnFixedTick(fixedDeltaTime);
         }
-        
+
         /// <summary>
         /// OnInitialize is called after the Manager initializes.
         /// </summary>
         protected virtual void OnInitialize()
-        {}
-        
+        {
+            foreach (Entity entity in _entities)
+            {
+                entity.Begin();
+            }
+        }
+
         /// <summary>
         /// OnDispose is called after the Manager disposes.
         /// </summary>
         protected virtual void OnDispose()
-        {}
-        
+        {
+            foreach (Entity entity in _entities)
+            {
+                entity.Stop();
+            }
+        }
+
         /// <summary>
         /// OnTick is called every frame, if it has begun.
         /// </summary>
         /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
         protected virtual void OnTick(float deltaTime)
-        {}
-        
+        {
+            foreach (Entity entity in _entities)
+            {
+                entity.Tick(deltaTime);
+            }
+        }
+
         /// <summary>
         /// OnFixedTick is called in a fixed time, if it has begun.
         /// </summary>
         /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)
-        {}
+        {
+            foreach (Entity entity in _entities)
+            {
+                entity.FixedTick(fixedDeltaTime);
+            }
+        }
     }
 }

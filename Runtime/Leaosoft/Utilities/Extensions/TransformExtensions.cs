@@ -10,5 +10,12 @@ namespace Leaosoft.Utilities.Extensions
             transform.localRotation = Quaternion.identity;
             transform.localScale = Vector3.one;
         }
+
+        public static string GetRootName(this Transform transform)
+        {
+            Transform root = transform.root;
+
+            return root.name;
+        }
     }
 }
