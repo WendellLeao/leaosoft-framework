@@ -15,6 +15,8 @@ namespace Leaosoft
 
         public bool HasInitialized => _hasInitialized;
         
+        protected Entity[] Entities => _entities;
+        
         /// <summary>
         /// Initializes the Manager.
         /// </summary>

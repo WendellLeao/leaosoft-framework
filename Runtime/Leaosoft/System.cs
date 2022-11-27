@@ -11,6 +11,8 @@ namespace Leaosoft
     {
         [SerializeField] private Manager[] _managers;
 
+        protected Manager[] Managers => _managers;
+
         /// <summary>
         /// OnInitialize is called automatically by the <see cref="Awake"/>.
         /// </summary>
