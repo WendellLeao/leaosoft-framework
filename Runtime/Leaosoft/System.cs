@@ -9,55 +9,31 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class System : MonoBehaviour
     {
-        [SerializeField] private Manager[] _managers;
-
-        protected Manager[] Managers => _managers;
-
         /// <summary>
         /// OnInitialize is called automatically by the <see cref="Awake"/>.
         /// </summary>
         protected virtual void OnInitialize()
-        {
-            foreach (Manager manager in _managers)
-            {
-                manager.Initialize();
-            }
-        }
+        { }
 
         /// <summary>
         /// OnDispose is called automatically by the <see cref="OnDestroy"/>.
         /// </summary>
         protected virtual void OnDispose()
-        {
-            foreach (Manager manager in _managers)
-            {
-                manager.Dispose();
-            }
-        }
+        { }
 
         /// <summary>
         /// OnTick is called automatically by the <see cref="Update"/>.
         /// </summary>
         /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
         protected virtual void OnTick(float deltaTime)
-        {
-            foreach (Manager manager in _managers)
-            {
-                manager.Tick(deltaTime);
-            }
-        }
+        { }
 
         /// <summary>
         /// OnFixedTick is called automatically by the <see cref="FixedUpdate"/>.
         /// </summary>
         /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)
-        {
-            foreach (Manager manager in _managers)
-            {
-                manager.FixedTick(fixedDeltaTime);
-            }
-        }
+        { }
 
         private void Awake()
         {
