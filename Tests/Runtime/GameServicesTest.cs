@@ -1,11 +1,11 @@
 using NUnit.Framework;
-using Game.Services;
-using Game.Pooling;
-using Game.Events;
-using Game.Audio;
-using Game.Input;
-using Game.Save;
-using Game.UI;
+using Leaosoft.Audio;
+using Leaosoft.Pooling;
+using Leaosoft.Save;
+using Leaosoft.Services;
+using Leaosoft.Events;
+using Leaosoft.Input;
+using Leaosoft.UI;
 
 namespace Runtime.Tests.Game.Master
 {

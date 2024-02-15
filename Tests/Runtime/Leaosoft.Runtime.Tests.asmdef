@@ -7,7 +7,11 @@
         "Leaosoft",
         "Leaosoft.Pooling",
         "Leaosoft.Save",
-        "Leaosoft.Audio"
+        "Leaosoft.Audio",
+        "Leaosoft.Services",
+        "Leaosoft.Input",
+        "Leaosoft.UI",
+        "Leaosoft.Events"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
