@@ -1,0 +1,37 @@
+{
+  "name": "com.leaosoft.core",
+  "version": "1.0.0",
+  "displayName": "Leaosoft Framework",
+  "description": "A framework with many useful services and ready-to-use modular tools to make game development easier.",
+  "unity": "2021.3",
+  "author": {
+    "name": "Wendell Le\u00e3o",
+    "email": "leaowendell@outlook.com",
+    "url": "https://github.com/WendellLeao"
+  },
+  "keywords": [
+    "framework",
+    "services",
+    "utilities"
+  ],
+  "documentationUrl": "https://github.com/WendellLeao/leaosoft-framework/blob/main/README.md",
+  "licensesUrl": "https://github.com/WendellLeao/leaosoft-framework/blob/main/LICENSE",
+  "license": "MIT",
+  "type": "tool",
+  "dependencies": {
+    "com.unity.inputsystem": "1.4.1",
+    "com.cysharp.unitask": "2.3.1"
+  },
+  "samples": [
+    {
+      "displayName": "Application Workflow",
+      "description": "Example of how to use Systems, Managers and Entities.",
+      "path": "Samples~/ApplicationWorkflow"
+    },
+    {
+      "displayName": "Character Controller",
+      "description": "Example of how to create a modular character controller using EntityComponents.",
+      "path": "Samples~/CharacterController"
+    }
+  ]
+}
