@@ -20,23 +20,23 @@ namespace Leaosoft.UI.Screens
         public void Initialize()
         {
             _button.onClick.AddListener(HandleButtonClick);
-            
+
             OnInitialize();
         }
 
         public void Dispose()
         {
             _button.onClick.RemoveListener(HandleButtonClick);
-            
+
             OnDispose();
         }
 
         protected virtual void OnInitialize()
         { }
-        
+
         protected virtual void OnDispose()
         { }
-        
+
         private void HandleButtonClick()
         {
             DispatchClickEventAsync();

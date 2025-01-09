@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Leaosoft
 {
     /// <summary>
-    /// Make a game object not be destroyed when loading a new scene.
+    /// Makes a <see cref="GameObject"/> not be destroyed when loading a new scene.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class PersistentObject : MonoBehaviour

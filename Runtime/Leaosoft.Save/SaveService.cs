@@ -26,22 +26,22 @@ namespace Leaosoft.Save
 
 		public void LoadData()
 		{
-			if(!SaveFileExists() && !_wasCreated)
+			if (!SaveFileExists() && !_wasCreated)
 			{
 				_wasCreated = true;
 
+				Debug.Log("No save file found. Creating a new one...");
+
 				SaveData();
 
-				Debug.Log("No save file found. Creating a new one...");
+				return;
 			}
-			else
-			{
-				string json = File.ReadAllText(GetFilePath());
 
-				_localGameData = JsonUtility.FromJson<LocalGameData>(json);
-				
-				_wasCreated = false;
-			}
+			string json = File.ReadAllText(GetFilePath());
+
+			_localGameData = JsonUtility.FromJson<LocalGameData>(json);
+
+			_wasCreated = false;
 		}
 
 		protected override void RegisterService()
@@ -58,7 +58,7 @@ namespace Leaosoft.Save
 		{
 			return File.Exists(GetFilePath());
 		}
-	
+
 		private string GetFilePath()
 		{
 			return Path.Combine(Application.persistentDataPath, FileName);

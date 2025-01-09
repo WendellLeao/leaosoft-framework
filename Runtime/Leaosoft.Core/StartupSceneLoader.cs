@@ -37,9 +37,9 @@ namespace Leaosoft.Core
             }
 
             int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            
+
             FirstLoadedSceneIndex = activeSceneIndex;
-            
+
             if (activeSceneIndex == StartupSceneIndex)
             {
                 return;

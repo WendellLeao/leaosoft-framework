@@ -6,7 +6,7 @@ namespace Leaosoft.Core
     public static class LogsHandler
     {
         private static bool _hasDisableLogs;
-        
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void HandleLogsVisibility()
         {
@@ -14,7 +14,7 @@ namespace Leaosoft.Core
             {
                 return;
             }
-            
+
             ILogger logger = Debug.unityLogger;
 
             logger.logEnabled = false;

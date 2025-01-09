@@ -9,40 +9,40 @@ namespace Leaosoft.UI.Screens.Modals
 
         [Header("Confirmation Settings")]
         [SerializeField]
-        private UIScreenButton _confirmButton;
+        private UIScreenButton confirmButton;
         [SerializeField]
-        private UIScreenButton _denyButton;
+        private UIScreenButton denyButton;
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            
-            _confirmButton.Initialize();
-            _denyButton.Initialize();
+
+            confirmButton.Initialize();
+            denyButton.Initialize();
         }
 
         protected override void OnDispose()
         {
             base.OnDispose();
-            
-            _confirmButton.Dispose();
-            _denyButton.Dispose();
+
+            confirmButton.Dispose();
+            denyButton.Dispose();
         }
 
         protected override void OnSubscribeEvents()
         {
             base.OnSubscribeEvents();
 
-            _confirmButton.OnClick += HandleConfirmButtonClick;
-            _denyButton.OnClick += OnCloseButtonClick;
+            confirmButton.OnClick += HandleConfirmButtonClick;
+            denyButton.OnClick += OnCloseButtonClick;
         }
 
         protected override void OnUnsubscribeEvents()
         {
             base.OnUnsubscribeEvents();
 
-            _confirmButton.OnClick -= HandleConfirmButtonClick;
-            _denyButton.OnClick -= OnCloseButtonClick;
+            confirmButton.OnClick -= HandleConfirmButtonClick;
+            denyButton.OnClick -= OnCloseButtonClick;
         }
 
         private void HandleConfirmButtonClick()

@@ -6,15 +6,15 @@ namespace Leaosoft.Services
     public abstract class GameService : MonoBehaviour
     {
         protected abstract void RegisterService();
-        
+
         protected abstract void UnregisterService();
 
         protected virtual void OnInitialize()
         { }
-        
+
         protected virtual void OnDispose()
         { }
-        
+
         protected virtual void OnTick(float deltaTime)
         { }
 
@@ -28,7 +28,7 @@ namespace Leaosoft.Services
         private void OnDestroy()
         {
             UnregisterService();
-            
+
             OnDispose();
         }
 

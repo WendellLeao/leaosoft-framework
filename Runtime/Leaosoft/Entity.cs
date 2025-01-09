@@ -3,17 +3,17 @@
 namespace Leaosoft
 {
     /// <summary>
-    /// A Entity is a dynamic game object, it can be composed by one or more <see cref="EntityComponent"/>.
+    /// An Entity is a dynamic game object, it can be composed by one or more <see cref="EntityComponent"/>.
     /// </summary>
     [DisallowMultipleComponent]
     public abstract class Entity : MonoBehaviour
     {
         private bool _isEnabled;
-        
+
         public bool IsEnabled => _isEnabled;
 
         /// <summary>
-        /// Begins the Entity.
+        /// Begins the Entity in case it hasn't been yet.
         /// </summary>
         public void Begin()
         {
@@ -21,14 +21,14 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             _isEnabled = true;
-            
+
             OnBegin();
         }
 
         /// <summary>
-        /// Stops the Entity.
+        /// Stops the Entity in case it hasn't been yet.
         /// </summary>
         public void Stop()
         {
@@ -36,14 +36,14 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             _isEnabled = false;
 
             OnStop();
         }
 
         /// <summary>
-        /// Updates the Entity each frame, if it has begun.
+        /// If enabled, updates the Entity each frame.
         /// </summary>
         public void Tick(float deltaTime)
         {
@@ -51,12 +51,12 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             OnTick(deltaTime);
         }
-        
+
         /// <summary>
-        /// Updates the Entity in a fixed time, if it has begun.
+        /// If enabled, updates the Entity in a fixed time.
         /// </summary>
         public void FixedTick(float fixedDeltaTime)
         {
@@ -64,31 +64,31 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             OnFixedTick(fixedDeltaTime);
         }
 
         /// <summary>
-        /// OnBegin is called after the Entity begins.
+        /// Is called after the Entity begins.
         /// </summary>
         protected virtual void OnBegin()
         { }
-        
+
         /// <summary>
-        /// OnStop is called after the Entity stops.
+        /// Is called after the Entity stops.
         /// </summary>
         protected virtual void OnStop()
         { }
 
         /// <summary>
-        /// OnTick is called every frame, if it has begun.
+        /// Is called after the Entity ticks each frame.
         /// </summary>
         /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
         protected virtual void OnTick(float deltaTime)
         { }
 
         /// <summary>
-        /// OnFixedTick is called in a fixed time, if it has begun.
+        /// Is called after the Entity ticks in a fixed frame.
         /// </summary>
         /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)

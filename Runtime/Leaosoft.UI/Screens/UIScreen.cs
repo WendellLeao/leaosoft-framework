@@ -11,9 +11,9 @@ namespace Leaosoft.UI.Screens
 
         [Header("Settings")]
         [SerializeField]
-        private UIScreenButton _closeButton;
+        private UIScreenButton closeButton;
         [SerializeField]
-        private bool _openOnInitialize;
+        private bool openOnInitialize;
 
         private IScreenService _screenService;
         private bool _hasInitialized;
@@ -30,16 +30,16 @@ namespace Leaosoft.UI.Screens
             }
 
             _hasInitialized = true;
-            
+
             _screenService = ServiceLocator.GetService<IScreenService>();
-            
+
             _screenService.RegisterScreen(this);
 
             SetIsOpened(false);
-            
+
             OnInitialize();
 
-            if (_openOnInitialize)
+            if (openOnInitialize)
             {
                 Open();
             }
@@ -53,7 +53,7 @@ namespace Leaosoft.UI.Screens
             }
 
             _hasInitialized = false;
-            
+
             _screenService.UnregisterScreen(this);
 
             OnDispose();
@@ -102,7 +102,7 @@ namespace Leaosoft.UI.Screens
 
             OnShow();
         }
-        
+
         public void Hide()
         {
             if (_isHidden)
@@ -145,7 +145,7 @@ namespace Leaosoft.UI.Screens
 
         protected virtual void OnShow()
         { }
-        
+
         protected virtual void OnHide()
         { }
 
@@ -159,9 +159,9 @@ namespace Leaosoft.UI.Screens
 
         private void SubscribeEvents()
         {
-            if (_closeButton != null)
+            if (closeButton != null)
             {
-                _closeButton.OnClick += OnCloseButtonClick;
+                closeButton.OnClick += OnCloseButtonClick;
             }
 
             OnSubscribeEvents();
@@ -169,9 +169,9 @@ namespace Leaosoft.UI.Screens
 
         private void UnsubscribeEvents()
         {
-            if (_closeButton != null)
+            if (closeButton != null)
             {
-                _closeButton.OnClick -= OnCloseButtonClick;
+                closeButton.OnClick -= OnCloseButtonClick;
             }
 
             OnUnsubscribeEvents();

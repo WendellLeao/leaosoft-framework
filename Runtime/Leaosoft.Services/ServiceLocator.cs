@@ -18,7 +18,7 @@ namespace Leaosoft.Services
         public static void RegisterService<T>(T service) where T : IGameService
         {
             int serviceHashCode = GetServiceHashCode<T>();
-            
+
             ServiceMap[serviceHashCode] = service;
         }
 

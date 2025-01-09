@@ -11,9 +11,9 @@ namespace Leaosoft.Audio
     public sealed class SoundPlayer : MonoBehaviour
     {
         [SerializeField]
-        private AudioSource _audioSource;
+        private AudioSource audioSource;
         [SerializeField]
-        private PoolData _soundPlayerPool;
+        private PoolData soundPlayerPool;
 
         private AudioData _audioData;
 
@@ -27,10 +27,10 @@ namespace Leaosoft.Audio
         private void OnDisable()
         {
             IPoolingService poolingService = ServiceLocator.GetService<IPoolingService>();
-            
-            poolingService.ReturnObjectToPool(_soundPlayerPool.Id, gameObject);
 
-            if (_audioData != null)
+            poolingService.ReturnObjectToPool(soundPlayerPool.Id, gameObject);
+
+            if (_audioData is not null)
             {
                 _audioData.SetIsPlaying(false);
             }
@@ -40,9 +40,9 @@ namespace Leaosoft.Audio
         {
             SetAudioData(audioData);
 
-            _audioSource.Play();
+            audioSource.Play();
 
-            if (_audioSource.loop)
+            if (audioSource.loop)
             {
                 return;
             }
@@ -52,36 +52,36 @@ namespace Leaosoft.Audio
 
         private async void DeactivateSoundGameObjectAsync()
         {
-            float clipDuration = _audioSource.clip.length;
-                
+            float clipDuration = audioSource.clip.length;
+
             await UniTask.Delay(TimeSpan.FromSeconds(clipDuration));
-                
+
             gameObject.SetActive(false);
         }
-        
+
         private void SetAudioData(AudioData audioData)
         {
             _audioData = audioData;
 
             int randomIndex = Random.Range(0, audioData.AudioClips.Length);
-            
-            _audioSource.clip = audioData.AudioClips[randomIndex];
 
-            _audioSource.volume = audioData.Volume;
+            audioSource.clip = audioData.AudioClips[randomIndex];
 
-            _audioSource.pitch = audioData.Pitch;
+            audioSource.volume = audioData.Volume;
 
-            _audioSource.spatialBlend = audioData.SpatialBlend;
+            audioSource.pitch = audioData.Pitch;
 
-            _audioSource.loop = audioData.Loop;
+            audioSource.spatialBlend = audioData.SpatialBlend;
 
-            _audioSource.outputAudioMixerGroup = audioData.AudioMixerGroup;
+            audioSource.loop = audioData.Loop;
+
+            audioSource.outputAudioMixerGroup = audioData.AudioMixerGroup;
 
             if (audioData.PersistentSound)
             {
                 transform.SetParent(null);
-                
-                DontDestroyOnLoad(_audioSource.gameObject);
+
+                DontDestroyOnLoad(audioSource.gameObject);
             }
         }
     }

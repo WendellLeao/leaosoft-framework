@@ -9,9 +9,9 @@ namespace Leaosoft.UI.Screens
         public event Action<IUIScreen> OnClosed;
 
         public void Open();
-        
+
         public void Close();
-        
+
         public void Show();
 
         public void Hide();

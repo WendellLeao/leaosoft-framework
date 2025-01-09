@@ -3,7 +3,7 @@
 namespace Leaosoft
 {
     /// <summary>
-    /// A Manager can controls one or more <see cref="Entity"/>.
+    /// A Manager controls one or more <see cref="Entity"/>.
     /// </summary>
     [DisallowMultipleComponent]
     public abstract class Manager : MonoBehaviour
@@ -11,9 +11,9 @@ namespace Leaosoft
         private bool _isInitialized;
 
         public bool IsInitialized => _isInitialized;
-        
+
         /// <summary>
-        /// Initializes the Manager.
+        /// Initializes the Manager in case it hasn't been yet.
         /// </summary>
         public void Initialize()
         {
@@ -21,14 +21,14 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             _isInitialized = true;
-            
+
             OnInitialize();
         }
 
         /// <summary>
-        /// Disposes the Manager.
+        /// Disposes the Manager in case it hasn't been yet.
         /// </summary>
         public void Dispose()
         {
@@ -36,14 +36,14 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             _isInitialized = false;
-            
+
             OnDispose();
         }
 
         /// <summary>
-        /// Updates the Manager each frame, if it has initialized.
+        /// If enabled, updates the Manager each frame.
         /// </summary>
         public void Tick(float deltaTime)
         {
@@ -51,12 +51,12 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             OnTick(deltaTime);
         }
-        
+
         /// <summary>
-        /// Updates the Manager in a fixed time, if it has initialized.
+        /// If enabled, updates the Manager in a fixed time.
         /// </summary>
         public void FixedTick(float fixedDeltaTime)
         {
@@ -64,31 +64,31 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             OnFixedTick(fixedDeltaTime);
         }
 
         /// <summary>
-        /// OnInitialize is called after the Manager initializes.
+        /// Is called after the Manager initializes.
         /// </summary>
         protected virtual void OnInitialize()
         { }
 
         /// <summary>
-        /// OnDispose is called after the Manager disposes.
+        /// Is called after the Manager disposes.
         /// </summary>
         protected virtual void OnDispose()
         { }
 
         /// <summary>
-        /// OnTick is called every frame, if it has begun.
+        /// Is called after the Manager ticks each frame.
         /// </summary>
         /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
         protected virtual void OnTick(float deltaTime)
         { }
 
         /// <summary>
-        /// OnFixedTick is called in a fixed time, if it has begun.
+        /// Is called after the Manager ticks in a fixed frame.
         /// </summary>
         /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)

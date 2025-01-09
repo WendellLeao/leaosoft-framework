@@ -12,8 +12,8 @@ namespace Leaosoft.Pooling
 	public sealed class PoolingService: GameService, IPoolingService
 	{
 		[SerializeField]
-		private PoolsDataCollection _poolsDataCollection;
-		
+		private PoolsDataCollection poolsDataCollection;
+
 		private readonly Dictionary<string, Queue<GameObject>> _poolDictionary = new();
 
 		public GameObject GetObjectFromPool(string poolId)
@@ -65,7 +65,7 @@ namespace Leaosoft.Pooling
 
 		private void PopulateDictionary()
 		{
-			foreach (PoolData pool in _poolsDataCollection.PoolsData)
+			foreach (PoolData pool in poolsDataCollection.PoolsData)
 			{
 				Queue<GameObject> objectPool = new Queue<GameObject>();
 
@@ -81,7 +81,7 @@ namespace Leaosoft.Pooling
 				_poolDictionary.Add(pool.Id, objectPool);
 			}
 		}
-		
+
 		private GameObject CreateNewObject(GameObject prefab)
 		{
 			GameObject newGameObject = Instantiate(prefab);
@@ -93,7 +93,7 @@ namespace Leaosoft.Pooling
 
 		private GameObject CreateBackupObject(string poolId)
 		{
-			foreach (PoolData pool in _poolsDataCollection.PoolsData)
+			foreach (PoolData pool in poolsDataCollection.PoolsData)
 			{
 				if (pool.Id == poolId)
 				{

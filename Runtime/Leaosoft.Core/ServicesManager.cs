@@ -6,16 +6,16 @@ namespace Leaosoft.Core
     public sealed class ServicesManager : Manager
     {
         [SerializeField]
-        private GameServicesCollection _gameServicesCollection;
+        private GameServicesCollection gameServicesCollection;
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            
+
             GameObject servicesContainer = CreateServicesContainer();
 
-            GameService[] gameServices = _gameServicesCollection.GameServices;
-            
+            GameService[] gameServices = gameServicesCollection.GameServices;
+
             foreach (GameService gameService in gameServices)
             {
                 Instantiate(gameService, servicesContainer.transform);
@@ -27,7 +27,7 @@ namespace Leaosoft.Core
             GameObject gameServicesContainer = new GameObject();
 
             gameServicesContainer.name = "GameServices";
-            
+
             DontDestroyOnLoad(gameServicesContainer);
 
             return gameServicesContainer;

@@ -5,8 +5,8 @@ namespace Leaosoft.Pooling
     public sealed class PoolsDataCollection : ScriptableObject
     {
         [SerializeField]
-        private PoolData[] _poolsData;
+        private PoolData[] poolsData;
 
-        public PoolData[] PoolsData => _poolsData;
+        public PoolData[] PoolsData => poolsData;
     }
 }

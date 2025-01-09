@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Leaosoft.Audio
 {
     /// <summary>
-    /// The AudioService provides the abstraction <see cref="IAudioService"/> to play a sound anywhere in the project.
+    /// The AudioService provides the abstraction <see cref="IAudioService"/> to play a sound anywhere in the game.
     /// <seealso cref="ServiceLocator"/>
     /// </summary>
     [DisallowMultipleComponent]
@@ -14,11 +14,11 @@ namespace Leaosoft.Audio
     {
         [SerializeField]
         private AudiosDataCollection _audiosDataCollection;
-        
+
         [Header("Sound Player")]
         [SerializeField]
         private PoolData _soundPlayerPool;
-        
+
         private readonly Dictionary<string, AudioData> _audioDataDictionary = new();
 
         public void PlaySound(string audioId, Vector3 position)
@@ -28,7 +28,7 @@ namespace Leaosoft.Audio
                 Debug.LogError($"Couldn't find any AudioData with id '{audioId}'");
                 return;
             }
-            
+
             if (!CanPlaySound(audioData))
             {
                 return;
@@ -54,7 +54,7 @@ namespace Leaosoft.Audio
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            
+
             foreach (AudioData audioData in _audiosDataCollection.AudiosData)
             {
                 audioData.SetIsPlaying(false);
@@ -62,7 +62,7 @@ namespace Leaosoft.Audio
                 _audioDataDictionary.Add(audioData.Id, audioData);
             }
         }
-        
+
         private bool CanPlaySound(AudioData audioData)
         {
             if (!audioData.PersistentSound)

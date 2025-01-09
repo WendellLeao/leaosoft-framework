@@ -23,7 +23,7 @@ namespace Leaosoft.Utilities
 
             SceneManager.LoadScene(nextSceneIndex);
         }
-        
+
         public static string[] GetBuildSettingsScenesPath()
         {
             string[] scenesPath = new string[SceneManager.sceneCountInBuildSettings];

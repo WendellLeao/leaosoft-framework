@@ -11,7 +11,7 @@ namespace Leaosoft.Pooling
         /// <param name="poolId">the id of the pool you want to get an <see cref="GameObject"/> from.</param>
         /// <returns>the requested <see cref="GameObject"/>.</returns>
         public GameObject GetObjectFromPool(string poolId);
-        
+
         /// <summary>
         /// Returns an <see cref="GameObject"/> to the selected pool, so it can be used again later.
         /// </summary>

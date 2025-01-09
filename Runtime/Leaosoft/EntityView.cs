@@ -3,7 +3,7 @@
 namespace Leaosoft
 {
     /// <summary>
-    /// Controls the view of a <see cref="Entity"/>.
+    /// Controls the visual of an <see cref="Entity"/>.
     /// </summary>
     [DisallowMultipleComponent]
     public abstract class EntityView : MonoBehaviour
@@ -11,9 +11,9 @@ namespace Leaosoft
         private bool _isEnabled;
 
         public bool IsEnabled => _isEnabled;
-        
+
         /// <summary>
-        /// Setups the View.
+        /// Begins the view in case it hasn't been yet.
         /// </summary>
         public void Begin()
         {
@@ -21,29 +21,29 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             _isEnabled = true;
-            
-            OnSetup();
+
+            OnBegin();
         }
 
         /// <summary>
-        /// Disposes the View.
+        /// Begins the view in case it hasn't been yet.
         /// </summary>
-        public void Dispose()
+        public void Stop()
         {
             if (!_isEnabled)
             {
                 return;
             }
-            
+
             _isEnabled = false;
-            
-            OnDispose();
+
+            OnStop();
         }
 
         /// <summary>
-        /// Updates the View each frame, if it is enabled.
+        /// If enabled, updates the view each frame.
         /// </summary>
         public void Tick(float deltaTime)
         {
@@ -51,12 +51,12 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             OnTick(deltaTime);
         }
-        
+
         /// <summary>
-        /// Updates the View in a fixed time, if it is enabled.
+        /// If enabled, updates the view in a fixed time.
         /// </summary>
         public void FixedTick(float fixedDeltaTime)
         {
@@ -64,31 +64,31 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             OnFixedTick(fixedDeltaTime);
         }
-        
+
         /// <summary>
-        /// OnSetup is called after the View is setup.
+        /// Is called after the view begins.
         /// </summary>
-        protected virtual void OnSetup()
+        protected virtual void OnBegin()
         { }
-        
+
         /// <summary>
-        /// OnDispose is called after the View disposes.
+        /// Is called after the view stops.
         /// </summary>
-        protected virtual void OnDispose()
+        protected virtual void OnStop()
         { }
-        
+
         /// <summary>
-        /// OnTick is called every frame, if it is enabled.
+        /// Is called after the view ticks each frame.
         /// </summary>
         /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
         protected virtual void OnTick(float deltaTime)
         { }
-        
+
         /// <summary>
-        /// OnFixedTick is called in a fixed time, if it is enabled.
+        /// Is called after the view ticks in a fixed frame.
         /// </summary>
         /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)

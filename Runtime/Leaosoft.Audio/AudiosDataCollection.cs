@@ -5,8 +5,8 @@ namespace Leaosoft.Audio
     public sealed class AudiosDataCollection : ScriptableObject
     {
         [SerializeField]
-        private AudioData[] _audiosData;
+        private AudioData[] audiosData;
 
-        public AudioData[] AudiosData => _audiosData;
+        public AudioData[] AudiosData => audiosData;
     }
 }

@@ -63,7 +63,7 @@ namespace Leaosoft.UI
 
             CloseScreen(screen);
         }
-        
+
         protected override void RegisterService()
         {
             ServiceLocator.RegisterService<IScreenService>(this);
@@ -80,9 +80,9 @@ namespace Leaosoft.UI
             {
                 HideScreenOnTop();
             }
-            
+
             screen.Open();
-            
+
             _openedScreens.Push(screen);
         }
 

@@ -5,13 +5,13 @@ namespace Leaosoft.Core
     public sealed class StartupSystem : System
     {
         [SerializeField]
-        private ServicesManager _servicesManager;
-        
+        private ServicesManager servicesManager;
+
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            
-            _servicesManager.Initialize();
+
+            servicesManager.Initialize();
 
             StartupSceneLoader.HandleLoadScene();
         }

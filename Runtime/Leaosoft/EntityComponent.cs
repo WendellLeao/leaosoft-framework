@@ -3,17 +3,17 @@
 namespace Leaosoft
 {
     /// <summary>
-    /// A Component attached on a <see cref="Entity"/>.
+    /// A component attached on an <see cref="Entity"/> that provides it determined behaviors.
     /// </summary>
     [RequireComponent(typeof(Entity))]
     public abstract class EntityComponent : MonoBehaviour
     {
         private bool _isEnabled;
-        
+
         public bool IsEnabled => _isEnabled;
-        
+
         /// <summary>
-        /// Begins the Component.
+        /// Begins the component in case it hasn't been yet.
         /// </summary>
         public void Begin()
         {
@@ -21,14 +21,14 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             _isEnabled = true;
-            
+
             OnBegin();
         }
 
         /// <summary>
-        /// Stops the Component.
+        /// Stops the component in case it hasn't been yet.
         /// </summary>
         public void Stop()
         {
@@ -36,14 +36,14 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             _isEnabled = false;
-                
+
             OnStop();
         }
 
         /// <summary>
-        /// Updates the Component each frame, if it is enabled.
+        /// If enabled, updates the component each frame.
         /// </summary>
         public void Tick(float deltaTime)
         {
@@ -51,12 +51,12 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             OnTick(deltaTime);
         }
-        
+
         /// <summary>
-        /// Updates the Component in a fixed time, if it is enabled.
+        /// If enabled, updates the component in a fixed time.
         /// </summary>
         public void FixedTick(float fixedDeltaTime)
         {
@@ -64,31 +64,31 @@ namespace Leaosoft
             {
                 return;
             }
-            
+
             OnFixedTick(fixedDeltaTime);
         }
-        
+
         /// <summary>
-        /// OnBegin is called after the Component begins.
+        /// Is called after the component begins.
         /// </summary>
         protected virtual void OnBegin()
         { }
-        
+
         /// <summary>
-        /// OnStop is called after the Component stops.
+        /// Is called after the component stops.
         /// </summary>
         protected virtual void OnStop()
         { }
-        
+
         /// <summary>
-        /// OnTick is called every frame, if the Component is enabled.
+        /// Is called after the component ticks each frame.
         /// </summary>
         /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
         protected virtual void OnTick(float deltaTime)
         { }
-        
+
         /// <summary>
-        /// OnFixedTick is called in a fixed time, if the Component is enabled.
+        /// Is called after the component ticks in a fixed frame.
         /// </summary>
         /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)

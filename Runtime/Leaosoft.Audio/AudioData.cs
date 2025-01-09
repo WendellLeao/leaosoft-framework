@@ -8,39 +8,39 @@ namespace Leaosoft.Audio
     public sealed class AudioData : ScriptableObject
     {
         [SerializeField]
-        private string _id;
+        private string id;
         [SerializeField]
-        [Space(10)] 
-        private AudioClip[] _audioClips;
+        [Space(height: 10)]
+        private AudioClip[] audioClips;
         [SerializeField]
-        [Space(10)] 
-        private AudioMixerGroup _audioMixerGroup;
+        [Space(height: 10)]
+        private AudioMixerGroup audioMixerGroup;
         [SerializeField]
-        [Space(10)]
+        [Space(height: 10)]
         [Range(0f, 1f)]
-        private float _volume = 0.5f;
+        private float volume = 0.5f;
         [SerializeField]
-        [Range(0f, 3f)] 
-        private float _pitch = 1f;
+        [Range(0f, 3f)]
+        private float pitch = 1f;
         [SerializeField]
-        [Range(0f, 1f)] 
-        private float _spatialBlend = 0.5f;
+        [Range(0f, 1f)]
+        private float spatialBlend = 0.5f;
         [SerializeField]
-        [Space(10)]
-        private bool _loop;
+        [Space(height: 10)]
+        private bool loop;
         [SerializeField]
-        private bool _persistentSound;
+        private bool persistentSound;
 
         private bool _isPlaying;
 
-        public string Id => _id;
-        public AudioClip[] AudioClips => _audioClips;
-        public AudioMixerGroup AudioMixerGroup => _audioMixerGroup;
-        public float Volume => _volume;
-        public float Pitch => _pitch;
-        public float SpatialBlend => _spatialBlend;
-        public bool Loop => _loop;
-        public bool PersistentSound => _persistentSound;
+        public string Id => id;
+        public AudioClip[] AudioClips => audioClips;
+        public AudioMixerGroup AudioMixerGroup => audioMixerGroup;
+        public float Volume => volume;
+        public float Pitch => pitch;
+        public float SpatialBlend => spatialBlend;
+        public bool Loop => loop;
+        public bool PersistentSound => persistentSound;
         public bool IsPlaying => _isPlaying;
 
         public void SetIsPlaying(bool isPlaying)

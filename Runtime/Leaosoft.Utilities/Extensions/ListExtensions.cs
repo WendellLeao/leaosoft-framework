@@ -16,7 +16,7 @@ namespace Leaosoft.Utilities.Extensions
             item = list[0];
             return true;
         }
-        
+
         public static bool TryGetLast<T>(this List<T> list, out T item)
         {
             if (list.Count <= 0)
@@ -27,7 +27,7 @@ namespace Leaosoft.Utilities.Extensions
 
             int lastIndex = list.Count - 1;
             int clampedLastIndex = Math.Clamp(lastIndex, 0, lastIndex);
-            
+
             item = list[clampedLastIndex];
             return true;
         }

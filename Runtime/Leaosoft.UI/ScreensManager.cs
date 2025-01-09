@@ -11,7 +11,7 @@ namespace Leaosoft.UI
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            
+
             foreach (UIScreen screen in _screens)
             {
                 screen.Initialize();
@@ -21,7 +21,7 @@ namespace Leaosoft.UI
         protected override void OnDispose()
         {
             base.OnDispose();
-            
+
             foreach (UIScreen screen in _screens)
             {
                 screen.Dispose();
@@ -31,7 +31,7 @@ namespace Leaosoft.UI
         protected override void OnTick(float deltaTime)
         {
             base.OnTick(deltaTime);
-            
+
             foreach (UIScreen screen in _screens)
             {
                 screen.Tick(deltaTime);

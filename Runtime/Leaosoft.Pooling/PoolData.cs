@@ -7,14 +7,14 @@ namespace Leaosoft.Pooling
 	public sealed class PoolData : ScriptableObject
 	{
 		[SerializeField]
-		private string _id;
+		private string id;
 		[SerializeField]
-		private GameObject _objectToPool;
+		private GameObject objectToPool;
 		[SerializeField]
-		private int _startAmount;
-		
-		public string Id => _id;
-		public GameObject ObjectToPool => _objectToPool;
-		public int StartAmount => _startAmount;
+		private int startAmount;
+
+		public string Id => id;
+		public GameObject ObjectToPool => objectToPool;
+		public int StartAmount => startAmount;
 	}
 }

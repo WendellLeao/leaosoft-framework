@@ -6,27 +6,27 @@ namespace Leaosoft.UI.Screens
     public sealed class FixedScrollRect : ScrollRect
     {
         [SerializeField]
-        private float _fixedSide = 0.125f;
+        private float fixedSide = 0.125f;
 
         protected override void LateUpdate()
         {
             base.LateUpdate();
 
-            TrySetHorizontalScrollbarSize(_fixedSide);
-            TrySetVerticalScrollbarSize(_fixedSide);
+            TrySetHorizontalScrollbarSize(fixedSide);
+            TrySetVerticalScrollbarSize(fixedSide);
         }
 
         public override void Rebuild(CanvasUpdate executing)
         {
             base.Rebuild(executing);
 
-            TrySetHorizontalScrollbarSize(_fixedSide);
-            TrySetVerticalScrollbarSize(_fixedSide);
+            TrySetHorizontalScrollbarSize(fixedSide);
+            TrySetVerticalScrollbarSize(fixedSide);
         }
 
         private void TrySetHorizontalScrollbarSize(float size)
         {
-            if (horizontalScrollbar != null)
+            if (horizontalScrollbar is not null)
             {
                 horizontalScrollbar.size = size;
             }
@@ -34,7 +34,7 @@ namespace Leaosoft.UI.Screens
 
         private void TrySetVerticalScrollbarSize(float size)
         {
-            if (verticalScrollbar != null)
+            if (verticalScrollbar is not null)
             {
                 verticalScrollbar.size = size;
             }
