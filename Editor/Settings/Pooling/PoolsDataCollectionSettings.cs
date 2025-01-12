@@ -16,13 +16,13 @@ namespace Leaosoft.Editor.Settings.Pooling
             return new SerializedObject(GetOrCreateSettings());
         }
 
-        private static PoolsDataCollection GetOrCreateSettings()
+        private static PoolDataCollection GetOrCreateSettings()
         {
-            PoolsDataCollection settings = AssetDatabase.LoadAssetAtPath<PoolsDataCollection>(PoolsDataCollectionPath);
+            PoolDataCollection settings = AssetDatabase.LoadAssetAtPath<PoolDataCollection>(PoolsDataCollectionPath);
             
             if (settings == null)
             {
-                settings = ScriptableObject.CreateInstance<PoolsDataCollection>();
+                settings = ScriptableObject.CreateInstance<PoolDataCollection>();
 
                 AssetDatabase.CreateAsset(settings, PoolsDataCollectionPath);
                 AssetDatabase.SaveAssets();

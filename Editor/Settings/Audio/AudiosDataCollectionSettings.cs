@@ -16,13 +16,13 @@ namespace Leaosoft.Editor.Settings.Audio
             return new SerializedObject(GetOrCreateSettings());
         }
 
-        private static AudiosDataCollection GetOrCreateSettings()
+        private static AudioDataCollection GetOrCreateSettings()
         {
-            AudiosDataCollection settings = AssetDatabase.LoadAssetAtPath<AudiosDataCollection>(AudiosDataCollectionPath);
+            AudioDataCollection settings = AssetDatabase.LoadAssetAtPath<AudioDataCollection>(AudiosDataCollectionPath);
             
             if (settings == null)
             {
-                settings = ScriptableObject.CreateInstance<AudiosDataCollection>();
+                settings = ScriptableObject.CreateInstance<AudioDataCollection>();
 
                 AssetDatabase.CreateAsset(settings, AudiosDataCollectionPath);
                 AssetDatabase.SaveAssets();

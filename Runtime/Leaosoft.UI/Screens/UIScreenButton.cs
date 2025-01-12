@@ -11,22 +11,22 @@ namespace Leaosoft.UI.Screens
 
         [Header("Button Settings")]
         [SerializeField]
-        private Button _button;
+        private Button button;
 
         [Header("Animation Settings")]
         [SerializeField]
-        private float _delayDispatchClick = 0.08f;
+        private float delayDispatchClick = 0.08f;
 
         public void Initialize()
         {
-            _button.onClick.AddListener(HandleButtonClick);
+            button.onClick.AddListener(HandleButtonClick);
 
             OnInitialize();
         }
 
         public void Dispose()
         {
-            _button.onClick.RemoveListener(HandleButtonClick);
+            button.onClick.RemoveListener(HandleButtonClick);
 
             OnDispose();
         }
@@ -44,19 +44,19 @@ namespace Leaosoft.UI.Screens
 
         private async void DispatchClickEventAsync()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(_delayDispatchClick));
+            await UniTask.Delay(TimeSpan.FromSeconds(delayDispatchClick));
 
             OnClick?.Invoke();
         }
 
         public void SetIsInteractable(bool isInteractable)
         {
-            _button.interactable = isInteractable;
+            button.interactable = isInteractable;
         }
 
         public void SetSprite(Sprite sprite)
         {
-            _button.image.sprite = sprite;
+            button.image.sprite = sprite;
         }
     }
 }

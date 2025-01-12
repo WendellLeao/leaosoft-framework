@@ -12,12 +12,13 @@ namespace Leaosoft.Audio
     [DisallowMultipleComponent]
     public sealed class AudioService : GameService, IAudioService
     {
-        [SerializeField]
-        private AudiosDataCollection _audiosDataCollection;
-
         [Header("Sound Player")]
         [SerializeField]
-        private PoolData _soundPlayerPool;
+        private PoolData soundPlayerPool;
+
+        [Header("Data")]
+        [SerializeField]
+        private AudioDataCollection audioDataCollection;
 
         private readonly Dictionary<string, AudioData> _audioDataDictionary = new();
 
@@ -25,7 +26,7 @@ namespace Leaosoft.Audio
         {
             if (!_audioDataDictionary.TryGetValue(audioId, out AudioData audioData))
             {
-                Debug.LogError($"Couldn't find any AudioData with id '{audioId}'");
+                Debug.LogError($"Couldn't find any AudioData with id '{audioId}'!");
                 return;
             }
 
@@ -34,7 +35,7 @@ namespace Leaosoft.Audio
                 return;
             }
 
-            SoundPlayer soundPlayer = GetSoundPlayerFromPool(_soundPlayerPool.Id);
+            SoundPlayer soundPlayer = GetSoundPlayerFromPool(soundPlayerPool.Id);
 
             soundPlayer.PlaySound(audioData, position);
 
@@ -55,7 +56,7 @@ namespace Leaosoft.Audio
         {
             base.OnInitialize();
 
-            foreach (AudioData audioData in _audiosDataCollection.AudiosData)
+            foreach (AudioData audioData in audioDataCollection.AudioData)
             {
                 audioData.SetIsPlaying(false);
 

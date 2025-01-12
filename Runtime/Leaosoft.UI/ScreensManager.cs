@@ -6,13 +6,13 @@ namespace Leaosoft.UI
     public sealed class ScreensManager : Manager
     {
         [SerializeField]
-        private UIScreen[] _screens;
+        private UIScreen[] screens;
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            foreach (UIScreen screen in _screens)
+            foreach (UIScreen screen in screens)
             {
                 screen.Initialize();
             }
@@ -22,7 +22,7 @@ namespace Leaosoft.UI
         {
             base.OnDispose();
 
-            foreach (UIScreen screen in _screens)
+            foreach (UIScreen screen in screens)
             {
                 screen.Dispose();
             }
@@ -32,7 +32,7 @@ namespace Leaosoft.UI
         {
             base.OnTick(deltaTime);
 
-            foreach (UIScreen screen in _screens)
+            foreach (UIScreen screen in screens)
             {
                 screen.Tick(deltaTime);
             }
