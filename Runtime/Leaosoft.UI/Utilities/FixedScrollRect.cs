@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Leaosoft.UI.Screens
+namespace Leaosoft.UI.Utilities
 {
     public sealed class FixedScrollRect : ScrollRect
     {

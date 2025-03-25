@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Leaosoft.Services;
 using Leaosoft.UI.Screens;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Leaosoft.UI
 {
@@ -12,56 +15,21 @@ namespace Leaosoft.UI
     [DisallowMultipleComponent]
     public sealed class ScreenService : GameService, IScreenService
     {
-        private readonly List<IUIScreen> _registeredScreens = new();
         private readonly Stack<IUIScreen> _openedScreens = new();
 
-        public void RegisterScreen(IUIScreen screen)
+        public async UniTask<IUIScreen> OpenScreenAsync<T>(UIScreenData screenData) where T : IUIScreen
         {
-            if (_registeredScreens.Contains(screen))
+            if (IsScreenOpened(screenData, out IUIScreen screen))
             {
-                Debug.LogWarning($"The screen '{screen.GetType().Name}' is already registered!");
-                return;
+                Debug.LogWarning($"The screen with id \"{screen.Id}\" is already opened!");
+                return screen;
             }
+            
+            screen = await LoadAndGetScreenAsync(screenData);
+            
+            _openedScreens.Push(screen);
 
-            _registeredScreens.Add(screen);
-        }
-
-        public void UnregisterScreen(IUIScreen screen)
-        {
-            if (!_registeredScreens.Contains(screen))
-            {
-                Debug.LogWarning($"Couldn't unregister the screen '{screen.GetType().Name}' because it wasn't registered!");
-                return;
-            }
-
-            _registeredScreens.Remove(screen);
-        }
-
-        public void OpenScreen<T>(bool additive = true) where T : IUIScreen
-        {
-            if (TryGetRegisteredScreen<T>(out IUIScreen screen))
-            {
-                if (_openedScreens.Contains(screen))
-                {
-                    Debug.LogWarning($"The screen '{typeof(T).Name}' is already opened!");
-                    return;
-                }
-
-                OpenScreen(screen, additive);
-            }
-        }
-
-        public void CloseScreenOnTop()
-        {
-            if (!_openedScreens.TryPeek(out IUIScreen screen))
-            {
-                Debug.LogWarning("Couldn't close screen on top because there's none!");
-                return;
-            }
-
-            screen = _openedScreens.Pop();
-
-            CloseScreen(screen);
+            return screen;
         }
 
         protected override void RegisterService()
@@ -74,48 +42,45 @@ namespace Leaosoft.UI
             ServiceLocator.UnregisterService<IScreenService>();
         }
 
-        private void OpenScreen(IUIScreen screen, bool additive)
+        private async UniTask<IUIScreen> LoadAndGetScreenAsync(UIScreenData screenData)
         {
-            if (!additive)
+            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(screenData.SceneName, screenData.LoadSceneMode);
+
+            if (asyncOperation is null)
             {
-                HideScreenOnTop();
+                throw new NullReferenceException($"The async operation for the screen scene \"{screenData.SceneName}\" is null!");
+            }
+            
+            while (!asyncOperation.isDone)
+            {
+                await UniTask.Yield();
             }
 
-            screen.Open();
+            // await UniTask.Yield(); TODO: the reminded one
 
-            _openedScreens.Push(screen);
-        }
+            Scene scene = SceneManager.GetSceneByName(screenData.SceneName);
 
-        private void CloseScreen(IUIScreen screen)
-        {
-            screen.Close();
-
-            if (_openedScreens.TryPeek(out screen))
+            foreach (GameObject rootGameObject in scene.GetRootGameObjects())
             {
-                screen.Show();
-            }
-        }
-
-        private void HideScreenOnTop()
-        {
-            if (_openedScreens.TryPeek(out IUIScreen screen))
-            {
-                screen.Hide();
-            }
-        }
-
-        private bool TryGetRegisteredScreen<T>(out IUIScreen screen)
-        {
-            foreach (IUIScreen registeredScreen in _registeredScreens)
-            {
-                if (registeredScreen is T)
+                if (rootGameObject.TryGetComponent(out IUIScreen screen))
                 {
-                    screen = registeredScreen;
-                    return true;
+                    return screen;
                 }
             }
 
-            Debug.LogError($"There's no registered screen named '{typeof(T).Name}'!");
+            throw new ArgumentException($"Couldn't find any screen component in the scene \"{scene.name}\"!");
+        }
+
+        private bool IsScreenOpened(UIScreenData screenData, out IUIScreen screen)
+        {
+            foreach (IUIScreen openedScreen in _openedScreens)
+            {
+                if (string.Equals(openedScreen.Id, screenData.Id))
+                {
+                    screen = openedScreen;
+                    return true;
+                }
+            }
 
             screen = null;
             return false;

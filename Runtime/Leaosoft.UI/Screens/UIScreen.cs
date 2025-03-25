@@ -1,5 +1,4 @@
 ﻿using System;
-using Leaosoft.Services;
 using UnityEngine;
 
 namespace Leaosoft.UI.Screens
@@ -9,19 +8,20 @@ namespace Leaosoft.UI.Screens
         public event Action<IUIScreen> OnOpened;
         public event Action<IUIScreen> OnClosed;
 
-        [Header("Settings")]
+        [Header("Objects")]
         [SerializeField]
         private UIScreenButton closeButton;
+        
+        [Header("Data")]
         [SerializeField]
-        private bool openOnInitialize;
+        private UIScreenData screenData;
 
-        private IScreenService _screenService;
         private bool _hasInitialized;
         private bool _isOpened;
         private bool _isHidden;
 
-        protected IScreenService ScreenService => _screenService;
-
+        public string Id => screenData.Id;
+        
         public void Initialize()
         {
             if (_hasInitialized)
@@ -31,15 +31,11 @@ namespace Leaosoft.UI.Screens
 
             _hasInitialized = true;
 
-            _screenService = ServiceLocator.GetService<IScreenService>();
-
-            _screenService.RegisterScreen(this);
-
             SetIsOpened(false);
 
             OnInitialize();
 
-            if (openOnInitialize)
+            if (screenData.OpenOnInitialize)
             {
                 Open();
             }
@@ -53,8 +49,6 @@ namespace Leaosoft.UI.Screens
             }
 
             _hasInitialized = false;
-
-            _screenService.UnregisterScreen(this);
 
             OnDispose();
         }
@@ -159,7 +153,7 @@ namespace Leaosoft.UI.Screens
 
         private void SubscribeEvents()
         {
-            if (closeButton != null)
+            if (closeButton is not null)
             {
                 closeButton.OnClick += OnCloseButtonClick;
             }
@@ -169,7 +163,7 @@ namespace Leaosoft.UI.Screens
 
         private void UnsubscribeEvents()
         {
-            if (closeButton != null)
+            if (closeButton is not null)
             {
                 closeButton.OnClick -= OnCloseButtonClick;
             }

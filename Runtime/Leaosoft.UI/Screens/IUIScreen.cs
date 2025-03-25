@@ -8,6 +8,8 @@ namespace Leaosoft.UI.Screens
 
         public event Action<IUIScreen> OnClosed;
 
+        public string Id { get; }
+        
         public void Open();
 
         public void Close();
