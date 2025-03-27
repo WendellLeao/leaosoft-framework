@@ -17,5 +17,7 @@ namespace Leaosoft.UI.Screens
         public void Show();
 
         public void Hide();
+
+        public void Tick(float deltaTime);
     }
 }

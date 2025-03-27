@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Leaosoft.UI.Screens
 {
@@ -10,48 +11,16 @@ namespace Leaosoft.UI.Screens
 
         [Header("Objects")]
         [SerializeField]
-        private UIScreenButton closeButton;
+        private Button closeButton;
         
         [Header("Data")]
         [SerializeField]
         private UIScreenData screenData;
 
-        private bool _hasInitialized;
         private bool _isOpened;
         private bool _isHidden;
 
         public string Id => screenData.Id;
-        
-        public void Initialize()
-        {
-            if (_hasInitialized)
-            {
-                return;
-            }
-
-            _hasInitialized = true;
-
-            SetIsOpened(false);
-
-            OnInitialize();
-
-            if (screenData.OpenOnInitialize)
-            {
-                Open();
-            }
-        }
-
-        public void Dispose()
-        {
-            if (!_hasInitialized)
-            {
-                return;
-            }
-
-            _hasInitialized = false;
-
-            OnDispose();
-        }
 
         public void Open()
         {
@@ -87,7 +56,7 @@ namespace Leaosoft.UI.Screens
 
         public void Show()
         {
-            if (!_isHidden)
+            if (!_isOpened || !_isHidden)
             {
                 return;
             }
@@ -99,7 +68,7 @@ namespace Leaosoft.UI.Screens
 
         public void Hide()
         {
-            if (_isHidden)
+            if (!_isOpened || _isHidden)
             {
                 return;
             }
@@ -118,12 +87,6 @@ namespace Leaosoft.UI.Screens
 
             OnTick(deltaTime);
         }
-
-        protected virtual void OnInitialize()
-        { }
-
-        protected virtual void OnDispose()
-        { }
 
         protected virtual void OnSubscribeEvents()
         { }
@@ -155,7 +118,7 @@ namespace Leaosoft.UI.Screens
         {
             if (closeButton is not null)
             {
-                closeButton.OnClick += OnCloseButtonClick;
+                closeButton.onClick.AddListener(OnCloseButtonClick);
             }
 
             OnSubscribeEvents();
@@ -165,7 +128,7 @@ namespace Leaosoft.UI.Screens
         {
             if (closeButton is not null)
             {
-                closeButton.OnClick -= OnCloseButtonClick;
+                closeButton.onClick.RemoveListener(OnCloseButtonClick);
             }
 
             OnUnsubscribeEvents();
@@ -175,14 +138,19 @@ namespace Leaosoft.UI.Screens
         {
             _isOpened = isOpened;
 
-            gameObject.SetActive(_isOpened);
+            SetActive(_isOpened);
         }
 
         private void SetIsHidden(bool isHidden)
         {
             _isHidden = isHidden;
 
-            gameObject.SetActive(!_isHidden);
+            SetActive(!_isHidden);
+        }
+
+        private void SetActive(bool isActive)
+        {
+            gameObject.SetActive(isActive);
         }
     }
 }

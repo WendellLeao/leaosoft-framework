@@ -13,15 +13,9 @@ namespace Leaosoft.UI.Screens
         private string sceneName;
         [SerializeField]
         private LoadSceneMode loadSceneMode;
-        [SerializeField]
-        private bool openOnInitialize;
 
         public string Id => id;
-
         public string SceneName => sceneName;
-
         public LoadSceneMode LoadSceneMode => loadSceneMode;
-
-        public bool OpenOnInitialize => openOnInitialize;
     }
 }

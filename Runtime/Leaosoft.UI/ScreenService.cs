@@ -17,7 +17,7 @@ namespace Leaosoft.UI
     {
         private readonly Stack<IUIScreen> _openedScreens = new();
 
-        public async UniTask<IUIScreen> OpenScreenAsync<T>(UIScreenData screenData) where T : IUIScreen
+        public async UniTask<IUIScreen> OpenScreenAsync(UIScreenData screenData)
         {
             if (IsScreenOpened(screenData, out IUIScreen screen))
             {
@@ -26,6 +26,8 @@ namespace Leaosoft.UI
             }
             
             screen = await LoadAndGetScreenAsync(screenData);
+            
+            screen.Open();
             
             _openedScreens.Push(screen);
 
@@ -40,6 +42,16 @@ namespace Leaosoft.UI
         protected override void UnregisterService()
         {
             ServiceLocator.UnregisterService<IScreenService>();
+        }
+
+        protected override void OnTick(float deltaTime)
+        {
+            base.OnTick(deltaTime);
+
+            foreach (IUIScreen openedScreen in _openedScreens)
+            {
+                openedScreen.Tick(deltaTime);
+            }
         }
 
         private async UniTask<IUIScreen> LoadAndGetScreenAsync(UIScreenData screenData)

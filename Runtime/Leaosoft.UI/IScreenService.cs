@@ -6,6 +6,6 @@ namespace Leaosoft.UI
 {
     public interface IScreenService : IGameService
     {
-        public UniTask<IUIScreen> OpenScreenAsync<T>(UIScreenData screenData) where T : IUIScreen;
+        public UniTask<IUIScreen> OpenScreenAsync(UIScreenData screenData);
     }
 }
