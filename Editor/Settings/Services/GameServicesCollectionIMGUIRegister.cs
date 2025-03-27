@@ -37,7 +37,7 @@ namespace Leaosoft.Editor.Settings.Services
                         properties.AddToClassList("property-list");
                         rootElement.Add(properties);
 
-                        properties.Add(new PropertyField(settings.FindProperty("_gameServices"), "Game Services Collection"));
+                        properties.Add(new PropertyField(settings.FindProperty("gameServices"), "Game Services Collection"));
 
                         rootElement.Bind(settings);
                     },

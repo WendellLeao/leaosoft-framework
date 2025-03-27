@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Leaosoft.Editor.Settings.Audio
 {
-    public sealed class AudiosDataCollectionSettings
+    public static class AudiosDataCollectionSettings
     {
-        private AudioData[] _audiosData;
+        private static AudioData[] _audioData;
 
-        private const string AudiosDataCollectionPath = PathUtility.DataAssetsPath + "/Audio/AudiosDataCollection.asset";
+        private const string AudiosDataCollectionPath = PathUtility.DataAssetsPath + "/Audio/AudioDataCollection.asset";
         
         internal static SerializedObject GetSerializedObject()
         {

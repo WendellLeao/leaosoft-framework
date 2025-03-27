@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Leaosoft.Editor.Settings.Pooling
 {
-    public sealed class PoolsDataCollectionSettings
+    public static class PoolsDataCollectionSettings
     {
-        private PoolData[] _poolsData;
+        private static PoolData[] _poolsData;
 
-        private const string PoolsDataCollectionPath = PathUtility.DataAssetsPath + "/Pooling/PoolsDataCollection.asset";
+        private const string PoolsDataCollectionPath = PathUtility.DataAssetsPath + "/Pooling/PoolDataCollection.asset";
         
         internal static SerializedObject GetSerializedObject()
         {

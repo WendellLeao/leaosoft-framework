@@ -37,12 +37,12 @@ namespace Leaosoft.Editor.Settings.Audio
                         properties.AddToClassList("property-list");
                         rootElement.Add(properties);
 
-                        properties.Add(new PropertyField(settings.FindProperty("_audiosData"), "Audios Data Collection"));
+                        properties.Add(new PropertyField(settings.FindProperty("audioData"), "Audio Data Collection"));
 
                         rootElement.Bind(settings);
                     },
 
-                    keywords = new HashSet<string>(new[] { "Audios Data Collection" })
+                    keywords = new HashSet<string>(new[] { "Audio Data Collection" })
                 };
 
             return provider;
