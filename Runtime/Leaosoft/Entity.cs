@@ -8,21 +8,53 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class Entity : MonoBehaviour
     {
-        private bool _isEnabled;
+        private bool _hasInitialized;
+        private bool _hasBegun;
 
-        public bool IsEnabled => _isEnabled;
+        public bool HasInitialized => _hasInitialized;
+        public bool HasBegun => _hasBegun;
 
+        /// <summary>
+        /// Initializes the Entity in case it hasn't been yet.
+        /// </summary>
+        public void Initialize()
+        {
+            if (_hasInitialized)
+            {
+                return;
+            }
+
+            _hasInitialized = true;
+
+            OnInitialize();
+        }
+
+        /// <summary>
+        /// Disposes the Entity in case it hasn't been yet.
+        /// </summary>
+        public void Dispose()
+        {
+            if (!_hasInitialized)
+            {
+                return;
+            }
+
+            _hasInitialized = false;
+
+            OnDispose();
+        }
+        
         /// <summary>
         /// Begins the Entity in case it hasn't been yet.
         /// </summary>
         public void Begin()
         {
-            if (_isEnabled)
+            if (_hasBegun)
             {
                 return;
             }
 
-            _isEnabled = true;
+            _hasBegun = true;
 
             OnBegin();
         }
@@ -32,12 +64,12 @@ namespace Leaosoft
         /// </summary>
         public void Stop()
         {
-            if (!_isEnabled)
+            if (!_hasBegun)
             {
                 return;
             }
 
-            _isEnabled = false;
+            _hasBegun = false;
 
             OnStop();
         }
@@ -47,7 +79,7 @@ namespace Leaosoft
         /// </summary>
         public void Tick(float deltaTime)
         {
-            if (!_isEnabled)
+            if (!_hasBegun)
             {
                 return;
             }
@@ -60,7 +92,7 @@ namespace Leaosoft
         /// </summary>
         public void FixedTick(float fixedDeltaTime)
         {
-            if (!_isEnabled)
+            if (!_hasBegun)
             {
                 return;
             }
@@ -68,6 +100,18 @@ namespace Leaosoft
             OnFixedTick(fixedDeltaTime);
         }
 
+        /// <summary>
+        /// Is called after the Entity initializes.
+        /// </summary>
+        protected virtual void OnInitialize()
+        { }
+
+        /// <summary>
+        /// Is called after the Entity disposes.
+        /// </summary>
+        protected virtual void OnDispose()
+        { }
+        
         /// <summary>
         /// Is called after the Entity begins.
         /// </summary>

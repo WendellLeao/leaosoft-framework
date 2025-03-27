@@ -10,7 +10,7 @@ namespace Leaosoft
     {
         private void Awake()
         {
-            transform.SetParent(null);
+            transform.SetParent(p: null);
 
             DontDestroyOnLoad(gameObject);
         }

@@ -8,21 +8,21 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class Manager : MonoBehaviour
     {
-        private bool _isInitialized;
+        private bool _hasInitialized;
 
-        public bool IsInitialized => _isInitialized;
+        public bool HasInitialized => _hasInitialized;
 
         /// <summary>
         /// Initializes the Manager in case it hasn't been yet.
         /// </summary>
         public void Initialize()
         {
-            if (_isInitialized)
+            if (_hasInitialized)
             {
                 return;
             }
 
-            _isInitialized = true;
+            _hasInitialized = true;
 
             OnInitialize();
         }
@@ -32,12 +32,12 @@ namespace Leaosoft
         /// </summary>
         public void Dispose()
         {
-            if (!_isInitialized)
+            if (!_hasInitialized)
             {
                 return;
             }
 
-            _isInitialized = false;
+            _hasInitialized = false;
 
             OnDispose();
         }
@@ -47,7 +47,7 @@ namespace Leaosoft
         /// </summary>
         public void Tick(float deltaTime)
         {
-            if (!_isInitialized)
+            if (!_hasInitialized)
             {
                 return;
             }
@@ -60,7 +60,7 @@ namespace Leaosoft
         /// </summary>
         public void FixedTick(float fixedDeltaTime)
         {
-            if (!_isInitialized)
+            if (!_hasInitialized)
             {
                 return;
             }
