@@ -24,9 +24,10 @@ namespace Leaosoft.Core
 
         private static GameObject CreateServicesContainer()
         {
-            GameObject gameServicesContainer = new GameObject();
-
-            gameServicesContainer.name = "GameServices";
+            GameObject gameServicesContainer = new GameObject
+            {
+                name = "GameServices"
+            };
 
             DontDestroyOnLoad(gameServicesContainer);
 
