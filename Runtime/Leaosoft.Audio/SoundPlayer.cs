@@ -4,6 +4,7 @@ using Leaosoft.Services;
 using Leaosoft.Pooling;
 using UnityEngine;
 using System;
+using System.Threading;
 
 namespace Leaosoft.Audio
 {
@@ -16,10 +17,15 @@ namespace Leaosoft.Audio
         private PoolData soundPlayerPool;
 
         private AudioData _audioData;
+        private CancellationTokenSource _deactivateSoundGameObjectCts;
 
         public void PlaySound(AudioData audioData, Vector3 position)
         {
-            SetAndPlayAudioSource(audioData);
+            SetAudioData(audioData);
+            
+            SetupAudioSource(audioData);
+            
+            PlayAudioSource();
 
             transform.position = position;
         }
@@ -30,39 +36,70 @@ namespace Leaosoft.Audio
 
             poolingService.ReturnObjectToPool(soundPlayerPool.Id, gameObject);
 
-            if (_audioData is not null)
+            if (_audioData != null)
             {
                 _audioData.SetIsPlaying(false);
             }
         }
 
-        private void SetAndPlayAudioSource(AudioData audioData)
+        private void OnDestroy()
         {
-            SetAudioData(audioData);
+            DisposeDeactivateSoundGameObjectCts();
+        }
 
+        private void PlayAudioSource()
+        {
             audioSource.Play();
 
             if (audioSource.loop)
             {
                 return;
             }
+            
+            _deactivateSoundGameObjectCts = new CancellationTokenSource();
 
-            DeactivateSoundGameObjectAsync();
+            DeactivateSoundGameObjectAsync(_deactivateSoundGameObjectCts.Token);
         }
 
-        private async void DeactivateSoundGameObjectAsync()
+        private async void DeactivateSoundGameObjectAsync(CancellationToken token)
         {
-            float clipDuration = audioSource.clip.length;
+            try
+            {
+                float clipDuration = audioSource.clip.length;
 
-            await UniTask.Delay(TimeSpan.FromSeconds(clipDuration));
+                await UniTask.Delay(TimeSpan.FromSeconds(clipDuration), cancellationToken: token);
 
-            gameObject.SetActive(false);
+                gameObject.SetActive(false);
+            }
+            catch (OperationCanceledException e)
+            {
+                Debug.LogWarning($"The operation was canceled when trying to deactivate the sound GameObject: {e}",
+                    gameObject);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Unexpected error when trying to deactivate the sound GameObject: {e}", gameObject);
+            }
+            finally
+            {
+                DisposeDeactivateSoundGameObjectCts();
+            }
         }
 
+        private void DisposeDeactivateSoundGameObjectCts()
+        {
+            _deactivateSoundGameObjectCts?.Cancel();
+            _deactivateSoundGameObjectCts?.Dispose();
+            _deactivateSoundGameObjectCts = null;
+        }
+        
         private void SetAudioData(AudioData audioData)
         {
             _audioData = audioData;
+        }
 
+        private void SetupAudioSource(AudioData audioData)
+        {
             int randomIndex = Random.Range(0, audioData.AudioClips.Length);
 
             audioSource.clip = audioData.AudioClips[randomIndex];
