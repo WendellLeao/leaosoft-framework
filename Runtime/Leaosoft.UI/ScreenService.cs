@@ -21,7 +21,7 @@ namespace Leaosoft.UI
         {
             if (IsScreenOpened(screenData, out IUIScreen screen))
             {
-                Debug.LogWarning($"The screen with id \"{screen.Id}\" is already opened!");
+                Debug.LogWarning($"The screen with id '{screen.Id}' is already opened!");
                 return screen;
             }
             
@@ -60,7 +60,7 @@ namespace Leaosoft.UI
 
             if (asyncOperation == null)
             {
-                throw new NullReferenceException($"The async operation for the screen scene \"{screenData.SceneName}\" is null!");
+                throw new NullReferenceException($"The async operation for the screen scene '{screenData.SceneName}' is null!");
             }
             
             while (!asyncOperation.isDone)
@@ -80,7 +80,7 @@ namespace Leaosoft.UI
                 }
             }
 
-            throw new ArgumentException($"Couldn't find any screen component in the scene \"{scene.name}\"!");
+            throw new ArgumentException($"Couldn't find any screen component in the scene '{scene.name}'!");
         }
 
         private bool IsScreenOpened(UIScreenData screenData, out IUIScreen screen)
