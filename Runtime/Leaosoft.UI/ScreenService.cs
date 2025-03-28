@@ -58,7 +58,7 @@ namespace Leaosoft.UI
         {
             AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(screenData.SceneName, screenData.LoadSceneMode);
 
-            if (asyncOperation is null)
+            if (asyncOperation == null)
             {
                 throw new NullReferenceException($"The async operation for the screen scene \"{screenData.SceneName}\" is null!");
             }

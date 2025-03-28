@@ -42,6 +42,7 @@ namespace Leaosoft.UI.Screens
             DispatchClickEventAsync();
         }
 
+        // TODO: add cancellation token
         private async void DispatchClickEventAsync()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(delayDispatchClick));
