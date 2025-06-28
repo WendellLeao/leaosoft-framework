@@ -116,7 +116,7 @@ namespace Leaosoft.UI.Screens
 
         private void SubscribeEvents()
         {
-            if (closeButton != null)
+            if (closeButton)
             {
                 closeButton.onClick.AddListener(OnCloseButtonClick);
             }
@@ -126,7 +126,7 @@ namespace Leaosoft.UI.Screens
 
         private void UnsubscribeEvents()
         {
-            if (closeButton != null)
+            if (closeButton)
             {
                 closeButton.onClick.RemoveListener(OnCloseButtonClick);
             }

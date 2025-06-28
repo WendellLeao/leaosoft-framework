@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,8 @@ namespace Leaosoft.UI.Screens
         [SerializeField]
         private float delayDispatchClick = 0.08f;
 
+        private CancellationTokenSource _dispatchClickEventCts;
+        
         public void Initialize()
         {
             button.onClick.AddListener(HandleButtonClick);
@@ -28,6 +31,8 @@ namespace Leaosoft.UI.Screens
         {
             button.onClick.RemoveListener(HandleButtonClick);
 
+            DisposeDispatchClickEventCts();
+            
             OnDispose();
         }
 
@@ -39,17 +44,39 @@ namespace Leaosoft.UI.Screens
 
         private void HandleButtonClick()
         {
-            DispatchClickEventAsync();
+            _dispatchClickEventCts?.Cancel();
+            _dispatchClickEventCts = new CancellationTokenSource();
+            
+            DispatchClickEventAsync(_dispatchClickEventCts.Token);
         }
 
-        // TODO: add cancellation token
-        private async void DispatchClickEventAsync()
+        private async void DispatchClickEventAsync(CancellationToken token)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(delayDispatchClick));
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(delayDispatchClick), cancellationToken: token);
 
-            OnClick?.Invoke();
+                OnClick?.Invoke();
+            }
+            catch (OperationCanceledException e)
+            { }
+            catch (Exception e)
+            {
+                Debug.LogError(e, gameObject);
+            }
+            finally
+            {
+                DisposeDispatchClickEventCts();
+            }
         }
 
+        private void DisposeDispatchClickEventCts()
+        {
+            _dispatchClickEventCts?.Cancel();
+            _dispatchClickEventCts?.Dispose();
+            _dispatchClickEventCts = null;
+        }
+        
         public void SetIsInteractable(bool isInteractable)
         {
             button.interactable = isInteractable;
