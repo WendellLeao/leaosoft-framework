@@ -8,43 +8,48 @@ using System.Threading;
 
 namespace Leaosoft.Audio
 {
-    [DisallowMultipleComponent, RequireComponent(typeof(AudioSource))]
-    public sealed class SoundPlayer : MonoBehaviour
+    [RequireComponent(typeof(AudioSource))]
+    public sealed class SoundPlayer : Entity
     {
+        public event Action<SoundPlayer> OnClipFinished;
+        
         [SerializeField]
         private AudioSource audioSource;
         [SerializeField]
         private PoolData soundPlayerPool;
 
         private AudioData _audioData;
-        private CancellationTokenSource _deactivateSoundGameObjectCts;
+        private CancellationTokenSource _handleClipLengthCts;
 
-        public void PlaySound(AudioData audioData, Vector3 position)
+        public void Begin(AudioData audioData, Vector3 position)
         {
-            SetAudioData(audioData);
+            _audioData = audioData;
             
             SetupAudioSource(audioData);
             
-            PlayAudioSource();
-
+            audioData.SetIsPlaying(true);
+            
             transform.position = position;
+            
+            PlayAudioSource();
+            
+            base.Begin();
         }
 
-        private void OnDisable()
+        protected override void OnStop()
         {
+            base.OnStop();
+            
             IPoolingService poolingService = ServiceLocator.GetService<IPoolingService>();
 
             poolingService.ReturnObjectToPool(soundPlayerPool.Id, gameObject);
-
-            if (_audioData != null)
+            
+            if (_audioData)
             {
                 _audioData.SetIsPlaying(false);
             }
-        }
-
-        private void OnDestroy()
-        {
-            DisposeDeactivateSoundGameObjectCts();
+            
+            DisposeHandleClipLengthCts();
         }
 
         private void PlayAudioSource()
@@ -56,20 +61,20 @@ namespace Leaosoft.Audio
                 return;
             }
             
-            _deactivateSoundGameObjectCts = new CancellationTokenSource();
+            _handleClipLengthCts = new CancellationTokenSource();
 
-            DeactivateSoundGameObjectAsync(_deactivateSoundGameObjectCts.Token);
+            HandleClipLengthAsync(_handleClipLengthCts.Token);
         }
 
-        private async void DeactivateSoundGameObjectAsync(CancellationToken token)
+        private async void HandleClipLengthAsync(CancellationToken token)
         {
             try
             {
                 float clipDuration = audioSource.clip.length;
 
                 await UniTask.Delay(TimeSpan.FromSeconds(clipDuration), cancellationToken: token);
-
-                gameObject.SetActive(false);
+                
+                OnClipFinished?.Invoke(this);
             }
             catch (OperationCanceledException e)
             {
@@ -82,20 +87,15 @@ namespace Leaosoft.Audio
             }
             finally
             {
-                DisposeDeactivateSoundGameObjectCts();
+                DisposeHandleClipLengthCts();
             }
         }
 
-        private void DisposeDeactivateSoundGameObjectCts()
+        private void DisposeHandleClipLengthCts()
         {
-            _deactivateSoundGameObjectCts?.Cancel();
-            _deactivateSoundGameObjectCts?.Dispose();
-            _deactivateSoundGameObjectCts = null;
-        }
-        
-        private void SetAudioData(AudioData audioData)
-        {
-            _audioData = audioData;
+            _handleClipLengthCts?.Cancel();
+            _handleClipLengthCts?.Dispose();
+            _handleClipLengthCts = null;
         }
 
         private void SetupAudioSource(AudioData audioData)

@@ -21,6 +21,7 @@ namespace Leaosoft.Audio
         private AudioDataCollection audioDataCollection;
 
         private readonly Dictionary<string, AudioData> _audioDataDictionary = new();
+        private readonly List<SoundPlayer> _allActiveSoundPlayers = new();
 
         public void PlaySound(string audioId, Vector3 position)
         {
@@ -37,9 +38,7 @@ namespace Leaosoft.Audio
 
             SoundPlayer soundPlayer = GetSoundPlayerFromPool(soundPlayerPool.Id);
 
-            soundPlayer.PlaySound(audioData, position);
-
-            audioData.SetIsPlaying(true);
+            BeginSoundPlayer(position, soundPlayer, audioData);
         }
 
         protected override void RegisterService()
@@ -64,6 +63,34 @@ namespace Leaosoft.Audio
             }
         }
 
+        protected override void OnDispose()
+        {
+            base.OnDispose();
+
+            foreach (SoundPlayer activeSoundPlayer in _allActiveSoundPlayers)
+            {
+                StopSoundPlayer(activeSoundPlayer);
+            }
+        }
+
+        private void BeginSoundPlayer(Vector3 position, SoundPlayer soundPlayer, AudioData audioData)
+        {
+            soundPlayer.OnClipFinished += StopSoundPlayer;
+
+            soundPlayer.Begin(audioData, position);
+            
+            _allActiveSoundPlayers.Add(soundPlayer);
+        }
+        
+        private void StopSoundPlayer(SoundPlayer soundPlayer)
+        {
+            soundPlayer.OnClipFinished -= StopSoundPlayer;
+            
+            soundPlayer.Stop();
+            
+            _allActiveSoundPlayers.Remove(soundPlayer);
+        }
+        
         private bool CanPlaySound(AudioData audioData)
         {
             if (!audioData.PersistentSound)
