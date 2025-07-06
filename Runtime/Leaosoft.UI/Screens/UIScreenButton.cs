@@ -58,7 +58,7 @@ namespace Leaosoft.UI.Screens
 
                 OnClick?.Invoke();
             }
-            catch (OperationCanceledException e)
+            catch (OperationCanceledException)
             { }
             catch (Exception e)
             {
