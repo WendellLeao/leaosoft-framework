@@ -21,19 +21,37 @@ namespace Leaosoft.UI
         {
             if (IsScreenOpened(screenData, out IUIScreen screen))
             {
-                Debug.LogWarning($"The screen with id '{screen.Id}' is already opened!");
+                Debug.LogWarning($"The screen with id '{screen.Data.Id}' is already opened!");
                 return screen;
             }
             
-            screen = await LoadAndGetScreenAsync(screenData);
+            IUIScreen screenOnTop = await LoadAndGetScreenAsync(screenData);
+
+            screenOnTop.OnCloseRequested += HandleScreenCloseRequested;
             
-            screen.Open();
+            screenOnTop.Open();
             
-            _openedScreens.Push(screen);
+            _openedScreens.Push(screenOnTop);
 
             return screen;
         }
 
+        // todo: cancellation
+        public async void CloseCurrentScreenOnTop()
+        {
+            if (!_openedScreens.TryPop(out IUIScreen screenOnTop))
+            {
+                Debug.LogError("There's no current screen on top!");
+                return;
+            }
+            
+            screenOnTop.OnCloseRequested -= HandleScreenCloseRequested;
+            
+            screenOnTop.Close();
+
+            await SceneManager.UnloadSceneAsync(screenOnTop.Data.SceneName);
+        }
+        
         protected override void RegisterService()
         {
             ServiceLocator.RegisterService<IScreenService>(this);
@@ -56,7 +74,7 @@ namespace Leaosoft.UI
 
         private async UniTask<IUIScreen> LoadAndGetScreenAsync(UIScreenData screenData)
         {
-            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(screenData.SceneName, screenData.LoadSceneMode);
+            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(screenData.SceneName, LoadSceneMode.Additive);
 
             if (asyncOperation == null)
             {
@@ -68,7 +86,7 @@ namespace Leaosoft.UI
                 await UniTask.Yield();
             }
 
-            // await UniTask.Yield(); TODO: the reminded one
+            await UniTask.Yield();
 
             Scene scene = SceneManager.GetSceneByName(screenData.SceneName);
 
@@ -83,11 +101,27 @@ namespace Leaosoft.UI
             throw new ArgumentException($"Couldn't find any screen component in the scene '{scene.name}'!");
         }
 
+        private void HandleScreenCloseRequested(IUIScreen screen)
+        {
+            if (!_openedScreens.TryPeek(out IUIScreen screenOnTop))
+            {
+                Debug.LogError("Couldn't peek the current screen on top!");
+            }
+            
+            if (!string.Equals(screen.Data.Id, screenOnTop.Data.Id))
+            {
+                Debug.LogError($"The screen with id '{screen.Data.Id}' is requesting to be closed but is not the one on top!");
+                return;
+            }
+            
+            CloseCurrentScreenOnTop();
+        }
+        
         private bool IsScreenOpened(UIScreenData screenData, out IUIScreen screen)
         {
             foreach (IUIScreen openedScreen in _openedScreens)
             {
-                if (string.Equals(openedScreen.Id, screenData.Id))
+                if (string.Equals(openedScreen.Data.Id, screenData.Id))
                 {
                     screen = openedScreen;
                     return true;

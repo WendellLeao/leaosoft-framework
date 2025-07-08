@@ -4,19 +4,13 @@ namespace Leaosoft.UI.Screens
 {
     public interface IUIScreen
     {
-        public event Action<IUIScreen> OnOpened;
+        public event Action<IUIScreen> OnCloseRequested;
 
-        public event Action<IUIScreen> OnClosed;
-
-        public string Id { get; }
+        public UIScreenData Data { get; }
         
         public void Open();
 
         public void Close();
-
-        public void Show();
-
-        public void Hide();
 
         public void Tick(float deltaTime);
     }
