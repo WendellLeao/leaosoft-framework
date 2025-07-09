@@ -11,12 +11,15 @@ namespace Leaosoft.UI.Screens
         [Header("Objects")]
         [SerializeField]
         private Button closeButton;
+        [SerializeField]
+        private CanvasGroup canvasGroup;
         
         [Header("Data")]
         [SerializeField]
         private UIScreenData screenData;
 
         private bool _isOpened;
+        private bool _isVisible = true;
 
         public UIScreenData Data => screenData;
         
@@ -29,8 +32,6 @@ namespace Leaosoft.UI.Screens
 
             SetIsOpened(true);
 
-            SetActive(true);
-            
             SubscribeEvents();
 
             OnOpen();
@@ -45,8 +46,6 @@ namespace Leaosoft.UI.Screens
 
             SetIsOpened(false);
 
-            SetActive(false);
-            
             UnsubscribeEvents();
 
             OnClose();
@@ -54,7 +53,7 @@ namespace Leaosoft.UI.Screens
 
         public void Tick(float deltaTime)
         {
-            if (!_isOpened)
+            if (!_isOpened || !_isVisible)
             {
                 return;
             }
@@ -62,6 +61,34 @@ namespace Leaosoft.UI.Screens
             OnTick(deltaTime);
         }
 
+        public void Show()
+        {
+            if (_isVisible)
+            {
+                return;
+            }
+            
+            canvasGroup.alpha = 1f;
+
+            SetIsVisible(true);
+            
+            OnShow();
+        }
+
+        public void Hide()
+        {
+            if (!_isVisible)
+            {
+                return;
+            }
+            
+            canvasGroup.alpha = 0f;
+            
+            SetIsVisible(false);
+            
+            OnHide();
+        }
+        
         protected virtual void OnSubscribeEvents()
         { }
 
@@ -75,6 +102,12 @@ namespace Leaosoft.UI.Screens
         { }
 
         protected virtual void OnTick(float deltaTime)
+        { }
+        
+        protected virtual void OnShow()
+        { }
+
+        protected virtual void OnHide()
         { }
 
         private void SubscribeEvents()
@@ -107,9 +140,9 @@ namespace Leaosoft.UI.Screens
             _isOpened = isOpened;
         }
 
-        private void SetActive(bool isActive)
+        private void SetIsVisible(bool isVisible)
         {
-            gameObject.SetActive(isActive);
+            _isVisible = isVisible;
         }
     }
 }

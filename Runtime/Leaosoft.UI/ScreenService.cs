@@ -25,31 +25,20 @@ namespace Leaosoft.UI
                 return screen;
             }
             
-            IUIScreen screenOnTop = await LoadAndGetScreenAsync(screenData);
+            IUIScreen newScreenOnTop = await LoadAndGetScreenAsync(screenData);
 
-            screenOnTop.OnCloseRequested += HandleScreenCloseRequested;
-            
-            screenOnTop.Open();
-            
-            _openedScreens.Push(screenOnTop);
-
-            return screen;
-        }
-
-        // todo: cancellation
-        public async void CloseCurrentScreenOnTop()
-        {
-            if (!_openedScreens.TryPop(out IUIScreen screenOnTop))
+            if (screenData.ScreenType == ScreenType.Single)
             {
-                Debug.LogError("There's no current screen on top!");
-                return;
+                HideCurrentScreenOnTop();
             }
             
-            screenOnTop.OnCloseRequested -= HandleScreenCloseRequested;
+            newScreenOnTop.OnCloseRequested += HandleScreenCloseRequested;
             
-            screenOnTop.Close();
+            newScreenOnTop.Open();
+            
+            _openedScreens.Push(newScreenOnTop);
 
-            await SceneManager.UnloadSceneAsync(screenOnTop.Data.SceneName);
+            return screen;
         }
         
         protected override void RegisterService()
@@ -88,19 +77,14 @@ namespace Leaosoft.UI
 
             await UniTask.Yield();
 
-            Scene scene = SceneManager.GetSceneByName(screenData.SceneName);
-
-            foreach (GameObject rootGameObject in scene.GetRootGameObjects())
+            if (TryGetScreenInScene(screenData.SceneName, out IUIScreen screen))
             {
-                if (rootGameObject.TryGetComponent(out IUIScreen screen))
-                {
-                    return screen;
-                }
+                return screen;
             }
-
-            throw new ArgumentException($"Couldn't find any screen component in the scene '{scene.name}'!");
+            
+            return null;
         }
-
+        
         private void HandleScreenCloseRequested(IUIScreen screen)
         {
             if (!_openedScreens.TryPeek(out IUIScreen screenOnTop))
@@ -115,6 +99,61 @@ namespace Leaosoft.UI
             }
             
             CloseCurrentScreenOnTop();
+        }
+        
+        private void CloseCurrentScreenOnTop()
+        {
+            if (!_openedScreens.TryPop(out IUIScreen screenOnTop))
+            {
+                Debug.LogError("There's no current screen on top!");
+                return;
+            }
+            
+            screenOnTop.OnCloseRequested -= HandleScreenCloseRequested;
+            
+            screenOnTop.Close();
+
+            if (screenOnTop.Data.ScreenType == ScreenType.Single)
+            {
+                ShowCurrentScreenOnTop();
+            }
+            
+            SceneManager.UnloadSceneAsync(screenOnTop.Data.SceneName);
+        }
+
+        private void ShowCurrentScreenOnTop()
+        {
+            if (!_openedScreens.TryPeek(out IUIScreen screenOnTop))
+            {
+                return;
+            }
+                
+            screenOnTop.Show();
+        }
+        
+        private void HideCurrentScreenOnTop()
+        {
+            if (!_openedScreens.TryPeek(out IUIScreen screenOnTop))
+            {
+                return;
+            }
+                
+            screenOnTop.Hide();
+        }
+
+        private bool TryGetScreenInScene(string sceneName, out IUIScreen screen)
+        {
+            Scene scene = SceneManager.GetSceneByName(sceneName);
+
+            foreach (GameObject rootGameObject in scene.GetRootGameObjects())
+            {
+                if (rootGameObject.TryGetComponent(out screen))
+                {
+                    return true;
+                }
+            }
+            
+            throw new ArgumentException($"Couldn't find any screen component in the scene '{scene.name}'!");
         }
         
         private bool IsScreenOpened(UIScreenData screenData, out IUIScreen screen)
