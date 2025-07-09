@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Leaosoft.Core
 {
+    /// <summary>
+    /// Controls the game's initialization.
+    /// </summary>
     public sealed class StartupSystem : System
     {
         [SerializeField]

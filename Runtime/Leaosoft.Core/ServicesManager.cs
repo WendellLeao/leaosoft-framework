@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace Leaosoft.Core
 {
+    /// <summary>
+    /// Initializes the services.
+    /// <seealso cref="ServiceLocator"/>
+    /// </summary>
     public sealed class ServicesManager : Manager
     {
         [SerializeField]
