@@ -3,12 +3,12 @@
     "rootNamespace": "Leaosoft.Core",
     "references": [
         "GUID:d99d98637fd56ff4c9f258fdedb73af5",
-        "GUID:6cfc7f64e61e1e4429f37484e489b8cf",
-        "GUID:6db9c19b80736f643b859bc09ee968c2",
         "GUID:1276c2ca5b43e7e4db3fea2ce49fc407",
+        "GUID:6cfc7f64e61e1e4429f37484e489b8cf",
         "GUID:48fe1c002126e974a83627951e7e89d6",
-        "GUID:18b0f4370b74acf428fb100e5f71e7ca",
         "GUID:e33670ff95bc46b42aa50b5272662677",
+        "GUID:6db9c19b80736f643b859bc09ee968c2",
+        "GUID:18b0f4370b74acf428fb100e5f71e7ca",
         "GUID:f1b7cea8f0a50b74081489eeb86b18bd"
     ],
     "includePlatforms": [],
