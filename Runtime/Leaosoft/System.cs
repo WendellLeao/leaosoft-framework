@@ -33,6 +33,13 @@ namespace Leaosoft
         /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)
         { }
+        
+        /// <summary>
+        /// Is called automatically by the <see cref="LateUpdate"/>.
+        /// </summary>
+        /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
+        protected virtual void OnLateTick(float deltaTime)
+        { }
 
         private void Awake()
         {
@@ -52,6 +59,11 @@ namespace Leaosoft
         private void FixedUpdate()
         {
             OnFixedTick(Time.fixedDeltaTime);
+        }
+
+        private void LateUpdate()
+        {
+            OnLateTick(Time.deltaTime);
         }
     }
 }

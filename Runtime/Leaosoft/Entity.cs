@@ -99,6 +99,19 @@ namespace Leaosoft
 
             OnFixedTick(fixedDeltaTime);
         }
+        
+        /// <summary>
+        /// If enabled, updates the Entity each frame during LateUpdate.
+        /// </summary>
+        public void LateTick(float deltaTime)
+        {
+            if (!_hasBegun)
+            {
+                return;
+            }
+
+            OnLateTick(deltaTime);
+        }
 
         /// <summary>
         /// Is called after the Entity initializes.
@@ -136,6 +149,13 @@ namespace Leaosoft
         /// </summary>
         /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)
+        { }
+        
+        /// <summary>
+        /// Is called after the Entity late ticks each frame.
+        /// </summary>
+        /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
+        protected virtual void OnLateTick(float deltaTime)
         { }
     }
 }
