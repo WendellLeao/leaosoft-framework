@@ -8,6 +8,14 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class System : MonoBehaviour
     {
+        [SerializeField]
+        private Manager[] managers;
+        
+        /// <summary>
+        /// Is called on <see cref="Awake"/> to initialize all <see cref="Manager"/>.
+        /// </summary>
+        protected abstract void InitializeManagers();
+        
         /// <summary>
         /// Is called automatically by the <see cref="Awake"/>.
         /// </summary>
@@ -33,25 +41,85 @@ namespace Leaosoft
         /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)
         { }
+        
+        /// <summary>
+        /// Is called automatically by the <see cref="LateUpdate"/>.
+        /// </summary>
+        /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
+        protected virtual void OnLateTick(float deltaTime)
+        { }
 
         private void Awake()
         {
+            InitializeManagers();
+            
             OnInitialize();
         }
 
         private void OnDestroy()
         {
+            foreach (Manager manager in managers)
+            {
+                manager.Dispose();
+            }
+            
             OnDispose();
         }
 
         private void Update()
         {
-            OnTick(Time.deltaTime);
+            float deltaTime = Time.deltaTime;
+            
+            foreach (Manager manager in managers)
+            {
+                manager.Tick(deltaTime);
+            }
+            
+            OnTick(deltaTime);
         }
 
         private void FixedUpdate()
         {
-            OnFixedTick(Time.fixedDeltaTime);
+            float fixedDeltaTime = Time.fixedDeltaTime;
+            
+            foreach (Manager manager in managers)
+            {
+                manager.FixedTick(fixedDeltaTime);
+            }
+            
+            OnFixedTick(fixedDeltaTime);
+        }
+
+        private void LateUpdate()
+        {
+            float deltaTime = Time.deltaTime;
+            
+            foreach (Manager manager in managers)
+            {
+                manager.LateTick(deltaTime);
+            }
+            
+            OnLateTick(deltaTime);
+        }
+        
+        /// <summary>
+        /// Queries the registered <see cref="Manager"/> array to return the specified one.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected bool TryGetManager<T>(out T t) where T : Manager
+        {
+            foreach (Manager manager in managers)
+            {
+                if (manager is T casted)
+                {
+                    t = casted;
+                    return true;
+                }
+            }
+
+            t = null;
+            return false;
         }
     }
 }

@@ -6,8 +6,11 @@ namespace Leaosoft
     /// An Entity is a dynamic game object, it can be composed by one or more <see cref="EntityComponent"/>.
     /// </summary>
     [DisallowMultipleComponent]
-    public abstract class Entity : MonoBehaviour
+    public abstract class Entity : MonoBehaviour, IEntity
     {
+        [SerializeField]
+        private EntityComponent[] entityComponents;
+        
         private bool _hasInitialized;
         private bool _hasBegun;
 
@@ -26,6 +29,8 @@ namespace Leaosoft
 
             _hasInitialized = true;
 
+            InitializeComponents();
+            
             OnInitialize();
         }
 
@@ -41,6 +46,12 @@ namespace Leaosoft
 
             _hasInitialized = false;
 
+            foreach (EntityComponent component in entityComponents)
+            {
+                component.Stop();
+                component.Dispose();
+            }
+            
             OnDispose();
         }
         
@@ -56,6 +67,11 @@ namespace Leaosoft
 
             _hasBegun = true;
 
+            foreach (EntityComponent component in entityComponents)
+            {
+                component.Begin();
+            }
+            
             OnBegin();
         }
 
@@ -71,6 +87,11 @@ namespace Leaosoft
 
             _hasBegun = false;
 
+            foreach (EntityComponent component in entityComponents)
+            {
+                component.Stop();
+            }
+            
             OnStop();
         }
 
@@ -84,6 +105,11 @@ namespace Leaosoft
                 return;
             }
 
+            foreach (EntityComponent component in entityComponents)
+            {
+                component.Tick(deltaTime);
+            }
+            
             OnTick(deltaTime);
         }
 
@@ -97,9 +123,37 @@ namespace Leaosoft
                 return;
             }
 
+            foreach (EntityComponent component in entityComponents)
+            {
+                component.FixedTick(fixedDeltaTime);
+            }
+            
             OnFixedTick(fixedDeltaTime);
         }
+        
+        /// <summary>
+        /// If enabled, updates the Entity each frame during LateUpdate.
+        /// </summary>
+        public void LateTick(float deltaTime)
+        {
+            if (!_hasBegun)
+            {
+                return;
+            }
 
+            foreach (EntityComponent component in entityComponents)
+            {
+                component.LateTick(deltaTime);
+            }
+            
+            OnLateTick(deltaTime);
+        }
+
+        /// <summary>
+        /// TDB
+        /// </summary>
+        protected abstract void InitializeComponents();
+        
         /// <summary>
         /// Is called after the Entity initializes.
         /// </summary>
@@ -136,6 +190,13 @@ namespace Leaosoft
         /// </summary>
         /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)
+        { }
+        
+        /// <summary>
+        /// Is called after the Entity late ticks each frame.
+        /// </summary>
+        /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
+        protected virtual void OnLateTick(float deltaTime)
         { }
     }
 }

@@ -10,12 +10,12 @@ namespace Leaosoft.UI.Screens
         [SerializeField]
         private string id;
         [SerializeField]
-        private string sceneName;
+        private string sceneName; // TODO: improve this
         [SerializeField]
-        private LoadSceneMode loadSceneMode;
+        private ScreenType screenType;
 
         public string Id => id;
         public string SceneName => sceneName;
-        public LoadSceneMode LoadSceneMode => loadSceneMode;
+        public ScreenType ScreenType => screenType;
     }
 }
