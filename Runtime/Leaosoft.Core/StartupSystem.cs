@@ -7,8 +7,10 @@ namespace Leaosoft.Core
     {
         protected override void InitializeManagers()
         {
-            ServicesManager servicesManager = GetManager<ServicesManager>();
-            servicesManager.Initialize();
+            if (TryGetManager(out ServiceManager serviceManager))
+            {
+                serviceManager.Initialize();
+            }
         }
 
         protected override void OnInitialize()

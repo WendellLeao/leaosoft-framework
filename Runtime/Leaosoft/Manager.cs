@@ -8,7 +8,7 @@ namespace Leaosoft
     /// A Manager controls one or more <see cref="Entity"/>.
     /// </summary>
     [DisallowMultipleComponent]
-    public abstract class Manager : MonoBehaviour, IManager, IEntityFactory
+    public abstract class Manager : MonoBehaviour, IEntityFactory
     {
         private readonly List<IEntity> _allSpawnedEntities = new();
         private bool _hasInitialized;

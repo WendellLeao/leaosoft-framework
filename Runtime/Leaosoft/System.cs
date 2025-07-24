@@ -58,7 +58,7 @@ namespace Leaosoft
 
         private void OnDestroy()
         {
-            foreach (IManager manager in managers)
+            foreach (Manager manager in managers)
             {
                 manager.Dispose();
             }
@@ -70,7 +70,7 @@ namespace Leaosoft
         {
             float deltaTime = Time.deltaTime;
             
-            foreach (IManager manager in managers)
+            foreach (Manager manager in managers)
             {
                 manager.Tick(deltaTime);
             }
@@ -82,7 +82,7 @@ namespace Leaosoft
         {
             float fixedDeltaTime = Time.fixedDeltaTime;
             
-            foreach (IManager manager in managers)
+            foreach (Manager manager in managers)
             {
                 manager.FixedTick(fixedDeltaTime);
             }
@@ -94,7 +94,7 @@ namespace Leaosoft
         {
             float deltaTime = Time.deltaTime;
             
-            foreach (IManager manager in managers)
+            foreach (Manager manager in managers)
             {
                 manager.LateTick(deltaTime);
             }
@@ -103,21 +103,23 @@ namespace Leaosoft
         }
         
         /// <summary>
-        /// Queries the registered <see cref="IManager"/> array to return the specified one.
+        /// Queries the registered <see cref="Manager"/> array to return the specified one.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected T GetManager<T>() where T : IManager
+        protected bool TryGetManager<T>(out T t) where T : Manager
         {
             foreach (Manager manager in managers)
             {
                 if (manager is T casted)
                 {
-                    return casted;
+                    t = casted;
+                    return true;
                 }
             }
 
-            return default;
+            t = null;
+            return false;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Leaosoft.Core
     /// Initializes the services.
     /// <seealso cref="ServiceLocator"/>
     /// </summary>
-    public sealed class ServicesManager : Manager
+    public sealed class ServiceManager : Manager
     {
         [SerializeField]
         private GameServicesCollection gameServicesCollection;

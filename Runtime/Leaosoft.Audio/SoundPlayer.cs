@@ -19,21 +19,31 @@ namespace Leaosoft.Audio
         private PoolData soundPlayerPool;
 
         private AudioData _audioData;
+        private Vector3 _targetPosition;
         private CancellationTokenSource _handleClipLengthCts;
 
         public void Begin(AudioData audioData, Vector3 position)
         {
             _audioData = audioData;
-            
-            SetupAudioSource(audioData);
-            
-            audioData.SetIsPlaying(true);
-            
-            transform.position = position;
-            
-            PlayAudioSource();
+            _targetPosition = position;
             
             base.Begin();
+        }
+
+        protected override void InitializeComponents()
+        { }
+
+        protected override void OnBegin()
+        {
+            base.OnBegin();
+            
+            SetupAudioSource(_audioData);
+            
+            _audioData.SetIsPlaying(true);
+            
+            transform.position = _targetPosition;
+            
+            PlayAudioSource();
         }
 
         protected override void OnStop()
