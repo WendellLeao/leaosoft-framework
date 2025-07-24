@@ -112,17 +112,16 @@ namespace Leaosoft
         /// </summary>
         /// <param name="prefab"></param>
         /// <param name="parent"></param>
-        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public T CreateEntity<T>(GameObject prefab, Transform parent) where T : IEntity
+        public IEntity CreateEntity(GameObject prefab, Transform parent)
         {
             if (!prefab.TryGetComponent(out IEntity _))
             {
                 throw new InvalidOperationException($"The prefab '{prefab.name}' does not contain a component of type '{nameof(IEntity)}'");
             }
 
-            T entity = Instantiate(prefab, parent).GetComponent<T>();
+            Entity entity = Instantiate(prefab, parent).GetComponent<Entity>();
             
             _allSpawnedEntities.Add(entity);
             
