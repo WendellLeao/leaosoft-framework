@@ -12,7 +12,7 @@ namespace Leaosoft
         private Manager[] managers;
         
         /// <summary>
-        /// Is called on awake to initialize all <see cref="Manager"/>.
+        /// Is called on <see cref="Awake"/> to initialize all <see cref="Manager"/>.
         /// </summary>
         protected abstract void InitializeManagers();
         
@@ -52,6 +52,7 @@ namespace Leaosoft
         private void Awake()
         {
             InitializeManagers();
+            
             OnInitialize();
         }
 
@@ -102,7 +103,7 @@ namespace Leaosoft
         }
         
         /// <summary>
-        /// Queries the registered <see cref="Manager"/> array to return the specified one.
+        /// Queries the registered <see cref="IManager"/> array to return the specified one.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>

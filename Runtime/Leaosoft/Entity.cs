@@ -6,7 +6,7 @@ namespace Leaosoft
     /// An Entity is a dynamic game object, it can be composed by one or more <see cref="EntityComponent"/>.
     /// </summary>
     [DisallowMultipleComponent]
-    public abstract class Entity : MonoBehaviour
+    public abstract class Entity : MonoBehaviour, IEntity
     {
         private bool _hasInitialized;
         private bool _hasBegun;

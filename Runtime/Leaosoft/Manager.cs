@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Leaosoft
 {
@@ -6,8 +8,9 @@ namespace Leaosoft
     /// A Manager controls one or more <see cref="Entity"/>.
     /// </summary>
     [DisallowMultipleComponent]
-    public abstract class Manager : MonoBehaviour, IManager
+    public abstract class Manager : MonoBehaviour, IManager, IEntityFactory
     {
+        private readonly List<IEntity> _allSpawnedEntities = new();
         private bool _hasInitialized;
 
         public bool HasInitialized => _hasInitialized;
@@ -39,6 +42,14 @@ namespace Leaosoft
 
             _hasInitialized = false;
 
+            foreach (IEntity entity in _allSpawnedEntities)
+            {
+                entity.Stop();
+                entity.Dispose();
+            }
+            
+            _allSpawnedEntities.Clear();
+            
             OnDispose();
         }
 
@@ -52,6 +63,11 @@ namespace Leaosoft
                 return;
             }
 
+            foreach (IEntity entity in _allSpawnedEntities)
+            {
+                entity.Tick(deltaTime);
+            }
+            
             OnTick(deltaTime);
         }
 
@@ -63,6 +79,11 @@ namespace Leaosoft
             if (!_hasInitialized)
             {
                 return;
+            }
+            
+            foreach (IEntity entity in _allSpawnedEntities)
+            {
+                entity.FixedTick(fixedDeltaTime);
             }
 
             OnFixedTick(fixedDeltaTime);
@@ -78,9 +99,36 @@ namespace Leaosoft
                 return;
             }
 
+            foreach (IEntity entity in _allSpawnedEntities)
+            {
+                entity.LateTick(deltaTime);
+            }
+            
             OnLateTick(deltaTime);
         }
 
+        /// <summary>
+        /// TBD
+        /// </summary>
+        /// <param name="prefab"></param>
+        /// <param name="parent"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public T CreateEntity<T>(GameObject prefab, Transform parent) where T : IEntity
+        {
+            if (!prefab.TryGetComponent(out IEntity _))
+            {
+                throw new InvalidOperationException($"The prefab '{prefab.name}' does not contain a component of type '{nameof(IEntity)}'");
+            }
+
+            T entity = Instantiate(prefab, parent).GetComponent<T>();
+            
+            _allSpawnedEntities.Add(entity);
+            
+            return entity;
+        }
+        
         /// <summary>
         /// Is called after the Manager initializes.
         /// </summary>
@@ -113,5 +161,17 @@ namespace Leaosoft
         /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
         protected virtual void OnLateTick(float deltaTime)
         { }
+
+        /// <summary>
+        /// Disposes the <see cref="IEntity"/>.
+        /// </summary>
+        /// <param name="entity"></param>
+        protected virtual void DisposeEntity(IEntity entity)
+        {
+            entity.Stop();
+            entity.Dispose();
+
+            _allSpawnedEntities.Remove(entity);
+        }
     }
 }
