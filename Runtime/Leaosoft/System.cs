@@ -8,6 +8,14 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class System : MonoBehaviour
     {
+        [SerializeField]
+        private Manager[] managers;
+        
+        /// <summary>
+        /// Is called on awake to initialize all <see cref="Manager"/>.
+        /// </summary>
+        protected abstract void InitializeManagers();
+        
         /// <summary>
         /// Is called automatically by the <see cref="Awake"/>.
         /// </summary>
@@ -43,27 +51,72 @@ namespace Leaosoft
 
         private void Awake()
         {
+            InitializeManagers();
             OnInitialize();
         }
 
         private void OnDestroy()
         {
+            foreach (IManager manager in managers)
+            {
+                manager.Dispose();
+            }
+            
             OnDispose();
         }
 
         private void Update()
         {
-            OnTick(Time.deltaTime);
+            float deltaTime = Time.deltaTime;
+            
+            foreach (IManager manager in managers)
+            {
+                manager.Tick(deltaTime);
+            }
+            
+            OnTick(deltaTime);
         }
 
         private void FixedUpdate()
         {
-            OnFixedTick(Time.fixedDeltaTime);
+            float fixedDeltaTime = Time.fixedDeltaTime;
+            
+            foreach (IManager manager in managers)
+            {
+                manager.FixedTick(fixedDeltaTime);
+            }
+            
+            OnFixedTick(fixedDeltaTime);
         }
 
         private void LateUpdate()
         {
-            OnLateTick(Time.deltaTime);
+            float deltaTime = Time.deltaTime;
+            
+            foreach (IManager manager in managers)
+            {
+                manager.LateTick(deltaTime);
+            }
+            
+            OnLateTick(deltaTime);
+        }
+        
+        /// <summary>
+        /// Queries the registered <see cref="Manager"/> array to return the specified one.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected T GetManager<T>() where T : IManager
+        {
+            foreach (Manager manager in managers)
+            {
+                if (manager is T casted)
+                {
+                    return casted;
+                }
+            }
+
+            return default;
         }
     }
 }

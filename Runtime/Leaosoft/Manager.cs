@@ -6,7 +6,7 @@ namespace Leaosoft
     /// A Manager controls one or more <see cref="Entity"/>.
     /// </summary>
     [DisallowMultipleComponent]
-    public abstract class Manager : MonoBehaviour
+    public abstract class Manager : MonoBehaviour, IManager
     {
         private bool _hasInitialized;
 

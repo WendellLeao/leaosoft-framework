@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Leaosoft.Core
 {
     /// <summary>
@@ -7,14 +5,15 @@ namespace Leaosoft.Core
     /// </summary>
     public sealed class StartupSystem : System
     {
-        [SerializeField]
-        private ServicesManager servicesManager;
+        protected override void InitializeManagers()
+        {
+            ServicesManager servicesManager = GetManager<ServicesManager>();
+            servicesManager.Initialize();
+        }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
-
-            servicesManager.Initialize();
 
             StartupSceneLoader.HandleLoadScene();
         }
