@@ -17,6 +17,8 @@ namespace Leaosoft
         public bool HasInitialized => _hasInitialized;
         public bool HasBegun => _hasBegun;
 
+        public GameObject GameObject => gameObject;
+
         /// <summary>
         /// Initializes the Entity in case it hasn't been yet.
         /// </summary>

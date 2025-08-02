@@ -42,13 +42,12 @@ namespace Leaosoft
 
             _hasInitialized = false;
 
-            foreach (IEntity entity in _allSpawnedEntities)
+            for (int i = _allSpawnedEntities.Count - 1; i >= 0; i--)
             {
-                entity.Stop();
-                entity.Dispose();
+                IEntity entity = _allSpawnedEntities[i];
+                
+                DisposeEntity(entity);
             }
-            
-            _allSpawnedEntities.Clear();
             
             OnDispose();
         }
