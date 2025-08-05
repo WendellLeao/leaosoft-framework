@@ -2,6 +2,7 @@
 using Leaosoft.Utilities;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Leaosoft.Editor.StartupSceneLoader
@@ -9,11 +10,8 @@ namespace Leaosoft.Editor.StartupSceneLoader
     [InitializeOnLoad]
     public static class StartupScenePlayModeHandler
     {
-        private const string OriginalScenePathKey = "StartupScene_OriginalScenePath";
-        private const string ShouldReturnToOriginalSceneKey = "StartupScene_ShouldReturn";
-        private const string HasRedirectedKey = "StartupScene_HasRedirected";
-        
         private const string StartupScenePath = PathUtility.AssetsPath + "/Scenes/StartupScene.unity";
+        private const string HasRedirectedKey = "StartupScene_HasRedirected";
 
         static StartupScenePlayModeHandler()
         {
@@ -52,8 +50,8 @@ namespace Leaosoft.Editor.StartupSceneLoader
             string currentScenePath = SceneManager.GetActiveScene().path;
             bool shouldReturn = currentScenePath != StartupScenePath;
 
-            EditorPrefs.SetString(OriginalScenePathKey, currentScenePath);
-            EditorPrefs.SetBool(ShouldReturnToOriginalSceneKey, shouldReturn);
+            EditorPrefs.SetString(PlayerPrefsUtility.OriginalScenePathKey, currentScenePath);
+            EditorPrefs.SetBool(PlayerPrefsUtility.ShouldReturnToOriginalSceneKey, shouldReturn);
             
             if (!shouldReturn)
             {
@@ -71,15 +69,26 @@ namespace Leaosoft.Editor.StartupSceneLoader
 
             EditorApplication.delayCall += () =>
             {
+                string originalScenePathKey = PlayerPrefsUtility.OriginalScenePathKey;
+                string shouldReturnToOriginalSceneKey = PlayerPrefsUtility.ShouldReturnToOriginalSceneKey;
+                
+                string originalScenePath = EditorPrefs.GetString(originalScenePathKey, "");
+                bool shouldReturnToOriginal = EditorPrefs.GetBool(shouldReturnToOriginalSceneKey, false);
+                
+                PlayerPrefs.SetString(originalScenePathKey, originalScenePath);
+                PlayerPrefs.SetInt(shouldReturnToOriginalSceneKey, shouldReturnToOriginal ? 1 : 0);
+                PlayerPrefs.Save();
+                
                 EditorSceneManager.OpenScene(StartupScenePath);
+                
                 EditorApplication.isPlaying = true;
             };
         }
 
         private static void HandleEnteredEditMode()
         {
-            string originalScenePath = EditorPrefs.GetString(OriginalScenePathKey, "");
-            bool shouldReturn = EditorPrefs.GetBool(ShouldReturnToOriginalSceneKey, false);
+            string originalScenePath = EditorPrefs.GetString(PlayerPrefsUtility.OriginalScenePathKey, "");
+            bool shouldReturn = EditorPrefs.GetBool(PlayerPrefsUtility.ShouldReturnToOriginalSceneKey, false);
             
             DeleteAllKeys();
 
@@ -96,8 +105,8 @@ namespace Leaosoft.Editor.StartupSceneLoader
 
         private static void DeleteAllKeys()
         {
-            EditorPrefs.DeleteKey(OriginalScenePathKey);
-            EditorPrefs.DeleteKey(ShouldReturnToOriginalSceneKey);
+            EditorPrefs.DeleteKey(PlayerPrefsUtility.OriginalScenePathKey);
+            EditorPrefs.DeleteKey(PlayerPrefsUtility.ShouldReturnToOriginalSceneKey);
             EditorPrefs.DeleteKey(HasRedirectedKey);
         }
     }
