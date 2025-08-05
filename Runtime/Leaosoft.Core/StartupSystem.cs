@@ -1,3 +1,5 @@
+using Leaosoft.Utilities;
+
 namespace Leaosoft.Core
 {
     /// <summary>
@@ -17,7 +19,7 @@ namespace Leaosoft.Core
         {
             base.OnInitialize();
 
-            StartupSceneLoader.HandleLoadScene();
+            ScenesUtility.LoadNextScene();
         }
     }
 }
