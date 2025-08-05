@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
-namespace Leaosoft.Editor
+namespace Leaosoft.Editor.StartupSceneLoader
 {
     [InitializeOnLoad]
     public static class StartupScenePlayModeHandler

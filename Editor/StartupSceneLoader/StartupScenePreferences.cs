@@ -2,7 +2,7 @@
 using Leaosoft.Utilities;
 using UnityEditor;
 
-namespace Leaosoft.Editor
+namespace Leaosoft.Editor.StartupSceneLoader
 {
     public static class StartupScenePreferences
     {
