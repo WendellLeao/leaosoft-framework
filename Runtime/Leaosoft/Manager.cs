@@ -13,6 +13,7 @@ namespace Leaosoft
         private readonly List<IEntity> _allSpawnedEntities = new();
         private bool _hasInitialized;
 
+        public IReadOnlyList<IEntity> AllSpawnedEntities => _allSpawnedEntities;
         public bool HasInitialized => _hasInitialized;
 
         /// <summary>
