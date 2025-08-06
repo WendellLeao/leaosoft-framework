@@ -5,14 +5,10 @@ namespace Leaosoft
     /// <summary>
     /// A component attached on an <see cref="Entity"/> that provides it determined behaviors.
     /// </summary>
-    [RequireComponent(typeof(Entity))]
     public abstract class EntityComponent : MonoBehaviour
     {
         private bool _hasInitialized;
         private bool _hasBegun;
-
-        public bool HasInitialized => _hasInitialized;
-        public bool HasBegun => _hasBegun;
 
         /// <summary>
         /// Initializes the component in case it hasn't been yet.

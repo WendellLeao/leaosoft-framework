@@ -8,11 +8,11 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class EntityView : MonoBehaviour
     {
+        [SerializeField]
+        private EntityComponent[] components;
+        
         private bool _hasInitialized;
         private bool _hasBegun;
-
-        public bool HasInitialized => _hasInitialized;
-        public bool HasBegun => _hasBegun;
 
         /// <summary>
         /// Initializes the view in case it hasn't been yet.
@@ -26,6 +26,8 @@ namespace Leaosoft
 
             _hasInitialized = true;
 
+            InitializeComponents();
+            
             OnInitialize();
         }
 
@@ -41,6 +43,12 @@ namespace Leaosoft
 
             _hasInitialized = false;
 
+            foreach (EntityComponent component in components)
+            {
+                component.Stop();
+                component.Dispose();
+            }
+            
             OnDispose();
         }
         
@@ -56,6 +64,11 @@ namespace Leaosoft
 
             _hasBegun = true;
 
+            foreach (EntityComponent component in components)
+            {
+                component.Begin();
+            }
+            
             OnBegin();
         }
 
@@ -71,6 +84,11 @@ namespace Leaosoft
 
             _hasBegun = false;
 
+            foreach (EntityComponent component in components)
+            {
+                component.Stop();
+            }
+            
             OnStop();
         }
 
@@ -84,6 +102,11 @@ namespace Leaosoft
                 return;
             }
 
+            foreach (EntityComponent component in components)
+            {
+                component.Tick(deltaTime);
+            }
+            
             OnTick(deltaTime);
         }
 
@@ -97,9 +120,14 @@ namespace Leaosoft
                 return;
             }
 
+            foreach (EntityComponent component in components)
+            {
+                component.FixedTick(fixedDeltaTime);
+            }
+            
             OnFixedTick(fixedDeltaTime);
         }
-
+        
         /// <summary>
         /// If enabled, updates the view each frame during LateUpdate.
         /// </summary>
@@ -110,8 +138,18 @@ namespace Leaosoft
                 return;
             }
 
+            foreach (EntityComponent component in components)
+            {
+                component.LateTick(deltaTime);
+            }
+            
             OnLateTick(deltaTime);
         }
+
+        /// <summary>
+        /// TDB
+        /// </summary>
+        protected abstract void InitializeComponents();
         
         /// <summary>
         /// Is called after the view initializes.

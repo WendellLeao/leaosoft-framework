@@ -9,15 +9,15 @@ namespace Leaosoft
     public abstract class Entity : MonoBehaviour, IEntity
     {
         [SerializeField]
-        private EntityComponent[] entityComponents;
+        private EntityComponent[] components;
+        [SerializeField]
+        private EntityView view;
         
         private bool _hasInitialized;
         private bool _hasBegun;
 
-        public bool HasInitialized => _hasInitialized;
-        public bool HasBegun => _hasBegun;
-
         public GameObject GameObject => gameObject;
+        public EntityView View => view;
 
         /// <summary>
         /// Initializes the Entity in case it hasn't been yet.
@@ -48,11 +48,13 @@ namespace Leaosoft
 
             _hasInitialized = false;
 
-            foreach (EntityComponent component in entityComponents)
+            foreach (EntityComponent component in components)
             {
                 component.Stop();
                 component.Dispose();
             }
+            
+            view?.Dispose();
             
             OnDispose();
         }
@@ -69,10 +71,12 @@ namespace Leaosoft
 
             _hasBegun = true;
 
-            foreach (EntityComponent component in entityComponents)
+            foreach (EntityComponent component in components)
             {
                 component.Begin();
             }
+            
+            view?.Begin();
             
             OnBegin();
         }
@@ -89,10 +93,12 @@ namespace Leaosoft
 
             _hasBegun = false;
 
-            foreach (EntityComponent component in entityComponents)
+            foreach (EntityComponent component in components)
             {
                 component.Stop();
             }
+            
+            view?.Stop();
             
             OnStop();
         }
@@ -107,10 +113,12 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (EntityComponent component in entityComponents)
+            foreach (EntityComponent component in components)
             {
                 component.Tick(deltaTime);
             }
+            
+            view?.Tick(deltaTime);
             
             OnTick(deltaTime);
         }
@@ -125,10 +133,12 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (EntityComponent component in entityComponents)
+            foreach (EntityComponent component in components)
             {
                 component.FixedTick(fixedDeltaTime);
             }
+            
+            view?.FixedTick(fixedDeltaTime);
             
             OnFixedTick(fixedDeltaTime);
         }
@@ -143,10 +153,12 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (EntityComponent component in entityComponents)
+            foreach (EntityComponent component in components)
             {
                 component.LateTick(deltaTime);
             }
+            
+            view?.LateTick(deltaTime);
             
             OnLateTick(deltaTime);
         }
