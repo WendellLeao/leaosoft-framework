@@ -12,7 +12,7 @@ namespace Leaosoft
         private EntityComponent[] components;
         
         private bool _hasInitialized;
-        private bool _hasBegun;
+        private bool _isEnabled;
 
         /// <summary>
         /// Initializes the view in case it hasn't been yet.
@@ -57,12 +57,12 @@ namespace Leaosoft
         /// </summary>
         public void Begin()
         {
-            if (_hasBegun)
+            if (_isEnabled)
             {
                 return;
             }
 
-            _hasBegun = true;
+            _isEnabled = true;
 
             foreach (EntityComponent component in components)
             {
@@ -77,12 +77,12 @@ namespace Leaosoft
         /// </summary>
         public void Stop()
         {
-            if (!_hasBegun)
+            if (!_isEnabled)
             {
                 return;
             }
 
-            _hasBegun = false;
+            _isEnabled = false;
 
             foreach (EntityComponent component in components)
             {
@@ -97,7 +97,7 @@ namespace Leaosoft
         /// </summary>
         public void Tick(float deltaTime)
         {
-            if (!_hasBegun)
+            if (!_isEnabled)
             {
                 return;
             }
@@ -115,7 +115,7 @@ namespace Leaosoft
         /// </summary>
         public void FixedTick(float fixedDeltaTime)
         {
-            if (!_hasBegun)
+            if (!_isEnabled)
             {
                 return;
             }
@@ -133,7 +133,7 @@ namespace Leaosoft
         /// </summary>
         public void LateTick(float deltaTime)
         {
-            if (!_hasBegun)
+            if (!_isEnabled)
             {
                 return;
             }
