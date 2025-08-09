@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Leaosoft
 {
@@ -9,7 +10,7 @@ namespace Leaosoft
     public abstract class Entity : MonoBehaviour, IEntity
     {
         [SerializeField]
-        private EntityComponent[] components;
+        private List<EntityComponent> components = new();
         [SerializeField]
         private EntityView view;
         
@@ -213,5 +214,12 @@ namespace Leaosoft
         /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
         protected virtual void OnLateTick(float deltaTime)
         { }
+
+#if UNITY_EDITOR
+        public void AddComponentsForTests(params EntityComponent[] newComponents)
+        {
+            components.AddRange(newComponents);
+        }
+#endif
     }
 }
