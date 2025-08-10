@@ -5,11 +5,12 @@ using Leaosoft.Pooling;
 using UnityEngine;
 using System;
 using System.Threading;
+using Leaosoft.Domain.Pooling;
 
 namespace Leaosoft.Audio
 {
     [RequireComponent(typeof(AudioSource))]
-    public sealed class SoundPlayer : Entity
+    public sealed class SoundPlayer : Entity, IPooledObject
     {
         public event Action<SoundPlayer> OnClipFinished;
         
@@ -21,6 +22,8 @@ namespace Leaosoft.Audio
         private AudioData _audioData;
         private Vector3 _targetPosition;
         private CancellationTokenSource _handleClipLengthCts;
+        
+        public string PoolId { get; set; }
 
         public void Begin(AudioData audioData, Vector3 position)
         {
@@ -52,7 +55,7 @@ namespace Leaosoft.Audio
             
             IPoolingService poolingService = ServiceLocator.GetService<IPoolingService>();
 
-            poolingService.ReturnObjectToPool(soundPlayerPool.Id, gameObject);
+            poolingService.ReleaseObjectToPool(this); // TODO: call this by invoking an event or something? (DispatchReleaseRequestEvent)
             
             if (_audioData)
             {

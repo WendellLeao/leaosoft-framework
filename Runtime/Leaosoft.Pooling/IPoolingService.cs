@@ -1,22 +1,21 @@
-﻿using Leaosoft.Services;
-using UnityEngine;
+﻿using Leaosoft.Domain.Pooling;
+using Leaosoft.Services;
 
 namespace Leaosoft.Pooling
 {
     public interface IPoolingService : IGameService
     {
         /// <summary>
-        /// Returns some <see cref="GameObject"/> that has being spawned by the <see cref="PoolingService"/>.
+        /// Attempts to get a pooled object from the given pool.
         /// </summary>
-        /// <param name="poolId">the id of the pool you want to get an <see cref="GameObject"/> from.</param>
-        /// <returns>the requested <see cref="GameObject"/>.</returns>
-        public GameObject GetObjectFromPool(string poolId);
-
+        /// <param name="poolId">Id of the pool.</param>
+        /// <param name="result">Returned object if successful.</param>
+        public bool TryGetObjectFromPool<T>(string poolId, out T result) where T : IPooledObject;
+        
         /// <summary>
-        /// Returns an <see cref="GameObject"/> to the selected pool, so it can be used again later.
+        /// Returns an object to its pool for reuse.
         /// </summary>
-        /// <param name="poolId">the id of the pool you want to return the <see cref="GameObject"/>.</param>
-        /// <param name="objectToReturn">the <see cref="GameObject"/> you want to return.</param>
-        public void ReturnObjectToPool(string poolId, GameObject objectToReturn);
+        /// <param name="pooledObject">Object to return.</param>
+        public void ReleaseObjectToPool(IPooledObject pooledObject);
     }
 }

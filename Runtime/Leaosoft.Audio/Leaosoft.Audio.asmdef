@@ -3,6 +3,7 @@
     "rootNamespace": "Leaosoft.Audio",
     "references": [
         "GUID:d99d98637fd56ff4c9f258fdedb73af5",
+        "GUID:7af1e540a441bd543a66d618114cb2a7",
         "GUID:48fe1c002126e974a83627951e7e89d6",
         "GUID:6db9c19b80736f643b859bc09ee968c2",
         "GUID:f1b7cea8f0a50b74081489eeb86b18bd",
