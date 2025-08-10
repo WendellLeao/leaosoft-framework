@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Leaosoft
@@ -105,26 +104,10 @@ namespace Leaosoft
             
             OnLateTick(deltaTime);
         }
-
-        /// <summary>
-        /// TBD
-        /// </summary>
-        /// <param name="prefab"></param>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
-        public IEntity CreateEntity(GameObject prefab, Transform parent)
+        
+        public void AddEntity(IEntity entity)
         {
-            if (!prefab.TryGetComponent(out IEntity _))
-            {
-                throw new InvalidOperationException($"The prefab '{prefab.name}' does not contain a component of type '{nameof(IEntity)}'");
-            }
-
-            Entity entity = Instantiate(prefab, parent).GetComponent<Entity>();
-            
             _allSpawnedEntities.Add(entity);
-            
-            return entity;
         }
         
         /// <summary>

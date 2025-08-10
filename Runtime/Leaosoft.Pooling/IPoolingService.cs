@@ -8,7 +8,7 @@ namespace Leaosoft.Pooling
         /// <summary>
         /// Attempts to get a pooled object from the given pool.
         /// </summary>
-        /// <param name="poolId">Id of the pool.</param>
+        /// <param name="poolId">ID of the pool.</param>
         /// <param name="result">Returned object if successful.</param>
         public bool TryGetObjectFromPool<T>(string poolId, out T result) where T : IPooledObject;
         

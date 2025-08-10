@@ -89,6 +89,11 @@ namespace Leaosoft.Pooling
 
 		private void OnDestroyPooledObject(IPooledObject pooledObject)
 		{
+			if (!pooledObject.GameObject)
+			{
+				return;
+			}
+			
 			Destroy(pooledObject.GameObject);
 		}
 		
