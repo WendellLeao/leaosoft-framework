@@ -7,7 +7,7 @@ namespace Leaosoft.Editor.Settings.Pooling
 {
     public static class PoolsDataCollectionSettings
     {
-        private static PoolData[] _poolsData;
+        private static PoolData[] poolData;
 
         private const string PoolsDataCollectionPath = PathUtility.DataAssetsPath + "/Pooling/PoolDataCollection.asset";
         
@@ -20,7 +20,7 @@ namespace Leaosoft.Editor.Settings.Pooling
         {
             PoolDataCollection settings = AssetDatabase.LoadAssetAtPath<PoolDataCollection>(PoolsDataCollectionPath);
             
-            if (settings == null)
+            if (!settings)
             {
                 settings = ScriptableObject.CreateInstance<PoolDataCollection>();
 

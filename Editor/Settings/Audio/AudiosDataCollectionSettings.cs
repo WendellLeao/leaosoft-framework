@@ -7,7 +7,7 @@ namespace Leaosoft.Editor.Settings.Audio
 {
     public static class AudiosDataCollectionSettings
     {
-        private static AudioData[] _audioData;
+        private static AudioData[] audioData;
 
         private const string AudiosDataCollectionPath = PathUtility.DataAssetsPath + "/Audio/AudioDataCollection.asset";
         
@@ -20,7 +20,7 @@ namespace Leaosoft.Editor.Settings.Audio
         {
             AudioDataCollection settings = AssetDatabase.LoadAssetAtPath<AudioDataCollection>(AudiosDataCollectionPath);
             
-            if (settings == null)
+            if (!settings)
             {
                 settings = ScriptableObject.CreateInstance<AudioDataCollection>();
 

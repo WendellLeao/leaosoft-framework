@@ -7,7 +7,7 @@ namespace Leaosoft.Editor.Settings.Services
 {
     public static class GameServicesCollectionSettings
     {
-        private static GameService[] _gameServices;
+        private static GameService[] gameServices;
 
         private const string AudiosDataCollectionPath = PathUtility.DataAssetsPath + "/Services/GameServicesCollection.asset";
         
@@ -20,7 +20,7 @@ namespace Leaosoft.Editor.Settings.Services
         {
             GameServicesCollection settings = AssetDatabase.LoadAssetAtPath<GameServicesCollection>(AudiosDataCollectionPath);
             
-            if (settings == null)
+            if (!settings)
             {
                 settings = ScriptableObject.CreateInstance<GameServicesCollection>();
 
