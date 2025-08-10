@@ -2,7 +2,6 @@
     "name": "Leaosoft.Pooling",
     "rootNamespace": "Leaosoft.Pooling",
     "references": [
-        "GUID:7af1e540a441bd543a66d618114cb2a7",
         "GUID:6db9c19b80736f643b859bc09ee968c2",
         "GUID:f1b7cea8f0a50b74081489eeb86b18bd"
     ],

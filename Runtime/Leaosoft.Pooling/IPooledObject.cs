@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Leaosoft.Domain.Pooling
+namespace Leaosoft.Pooling
 {
     public interface IPooledObject
     {

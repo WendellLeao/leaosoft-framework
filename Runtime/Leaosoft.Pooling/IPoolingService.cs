@@ -1,5 +1,4 @@
-﻿using Leaosoft.Domain.Pooling;
-using Leaosoft.Services;
+﻿using Leaosoft.Services;
 
 namespace Leaosoft.Pooling
 {

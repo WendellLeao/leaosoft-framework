@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Leaosoft.Domain.Pooling;
 using Leaosoft.Services;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -89,7 +88,7 @@ namespace Leaosoft.Pooling
 
 		private void OnDestroyPooledObject(IPooledObject pooledObject)
 		{
-			if (!pooledObject.GameObject)
+			if (pooledObject == null || !pooledObject.GameObject)
 			{
 				return;
 			}
