@@ -2,7 +2,7 @@
 
 namespace Leaosoft
 {
-    public abstract class EntityManager<T> : Manager where T : IEntity
+    public abstract class EntityManager<T> : Manager, IEntityManager where T : IEntity
     {
         private readonly List<T> _entities = new();
 

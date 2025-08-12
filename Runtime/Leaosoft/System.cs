@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Leaosoft
 {
@@ -8,6 +9,8 @@ namespace Leaosoft
         [SerializeField]
         private Manager[] managers;
 
+        private readonly List<IEntityManager> _entityManagers = new();
+        
         protected abstract void InitializeManagers();
         
         protected virtual void OnInitialize()
@@ -27,6 +30,14 @@ namespace Leaosoft
 
         private void Awake()
         {
+            foreach (Manager manager in managers)
+            {
+                if (manager is IEntityManager entityManager)
+                {
+                    _entityManagers.Add(entityManager);
+                }
+            }
+            
             InitializeManagers();
             
             OnInitialize();
@@ -34,12 +45,9 @@ namespace Leaosoft
 
         private void OnDestroy()
         {
-            foreach (Manager manager in managers)
+            foreach (IEntityManager entityManager in _entityManagers)
             {
-                if (manager is EntityManager<IEntity> entityManager)
-                {
-                    entityManager.Dispose();
-                }
+                entityManager.Dispose();
             }
             
             OnDispose();
@@ -49,12 +57,9 @@ namespace Leaosoft
         {
             float deltaTime = Time.deltaTime;
             
-            foreach (Manager manager in managers)
+            foreach (IEntityManager entityManager in _entityManagers)
             {
-                if (manager is EntityManager<IEntity> entityManager)
-                {
-                    entityManager.Tick(deltaTime);
-                }
+                entityManager.Tick(deltaTime);
             }
             
             OnTick(deltaTime);
@@ -64,12 +69,9 @@ namespace Leaosoft
         {
             float fixedDeltaTime = Time.fixedDeltaTime;
             
-            foreach (Manager manager in managers)
+            foreach (IEntityManager entityManager in _entityManagers)
             {
-                if (manager is EntityManager<IEntity> entityManager)
-                {
-                    entityManager.FixedTick(fixedDeltaTime);
-                }
+                entityManager.FixedTick(fixedDeltaTime);
             }
             
             OnFixedTick(fixedDeltaTime);
@@ -79,12 +81,9 @@ namespace Leaosoft
         {
             float deltaTime = Time.deltaTime;
             
-            foreach (Manager manager in managers)
+            foreach (IEntityManager entityManager in _entityManagers)
             {
-                if (manager is EntityManager<IEntity> entityManager)
-                {
-                    entityManager.LateTick(deltaTime);
-                }
+                entityManager.LateTick(deltaTime);
             }
             
             OnLateTick(deltaTime);
@@ -101,7 +100,9 @@ namespace Leaosoft
                 }
             }
 
-            result = default;
+            Debug.LogError($"Wasn't possible to get the manager '{typeof(T)}'");
+            
+            result = null;
             return false;
         }
     }
