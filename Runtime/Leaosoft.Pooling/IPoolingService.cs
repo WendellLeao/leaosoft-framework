@@ -1,4 +1,5 @@
 ﻿using Leaosoft.Services;
+using UnityEngine;
 
 namespace Leaosoft.Pooling
 {
@@ -8,8 +9,9 @@ namespace Leaosoft.Pooling
         /// Attempts to get a pooled object from the given pool.
         /// </summary>
         /// <param name="poolId">ID of the pool.</param>
+        /// <param name="parent"></param>
         /// <param name="result">Returned object if successful.</param>
-        public bool TryGetObjectFromPool<T>(string poolId, out T result) where T : IPooledObject;
+        public bool TryGetObjectFromPool<T>(string poolId, Transform parent, out T result) where T : IPooledObject;
         
         /// <summary>
         /// Returns an object to its pool for reuse.

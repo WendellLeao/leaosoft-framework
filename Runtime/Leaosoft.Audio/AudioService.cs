@@ -110,7 +110,7 @@ namespace Leaosoft.Audio
         {
             IPoolingService poolingService = ServiceLocator.GetService<IPoolingService>();
 
-            poolingService.TryGetObjectFromPool(soundPlayerId, out SoundPlayer soundPlayer);
+            poolingService.TryGetObjectFromPool(soundPlayerId, parent: null, out SoundPlayer soundPlayer);
             
             return soundPlayer;
         }

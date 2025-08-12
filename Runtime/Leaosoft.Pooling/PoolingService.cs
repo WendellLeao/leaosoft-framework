@@ -18,11 +18,16 @@ namespace Leaosoft.Pooling
 
 		private readonly Dictionary<string, IObjectPool<IPooledObject>> _poolsDictionary = new();
 		
-		public bool TryGetObjectFromPool<T>(string poolId, out T result) where T : IPooledObject
+		public bool TryGetObjectFromPool<T>(string poolId, Transform parent, out T result) where T : IPooledObject
 		{
 			IObjectPool<IPooledObject> pool = GetOrCreatePool(poolId);
 			
 			IPooledObject pooledObject = pool.Get();
+
+			if (parent)
+			{
+				pooledObject.transform.SetParent(parent, worldPositionStays: false);
+			}
 			
 			if (pooledObject is T typed)
 			{
@@ -78,22 +83,22 @@ namespace Leaosoft.Pooling
 
 		private void OnGetFromPool(IPooledObject pooledObject)
 		{
-			pooledObject.GameObject.SetActive(true);
+			pooledObject.gameObject.SetActive(true);
 		}
 
 		private void OnReleaseToPool(IPooledObject pooledObject)
 		{
-			pooledObject.GameObject.SetActive(false);
+			pooledObject.gameObject.SetActive(false);
 		}
 
 		private void OnDestroyPooledObject(IPooledObject pooledObject)
 		{
-			if (pooledObject == null || !pooledObject.GameObject)
+			if (pooledObject == null || !pooledObject.gameObject)
 			{
 				return;
 			}
 			
-			Destroy(pooledObject.GameObject);
+			Destroy(pooledObject.gameObject);
 		}
 		
 		private void ClearAllPools()
@@ -150,7 +155,7 @@ namespace Leaosoft.Pooling
 
 		private bool TryGetObjectPool(IPooledObject pooledObject, out IObjectPool<IPooledObject> result)
 		{
-			if (!pooledObject.GameObject)
+			if (!pooledObject.gameObject)
 			{
 				throw new InvalidOperationException("Wasn't possible to release the object because it is null or destroyed!");
 			}
