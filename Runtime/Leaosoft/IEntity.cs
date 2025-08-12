@@ -1,10 +1,7 @@
-﻿using UnityEngine;
-
-namespace Leaosoft
+﻿namespace Leaosoft
 {
     public interface IEntity
     {
-        public GameObject gameObject { get; }
         public void Initialize();
         public void Dispose();
         public void Begin();
