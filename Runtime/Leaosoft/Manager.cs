@@ -9,10 +9,10 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class Manager : MonoBehaviour
     {
-        private readonly List<IEntity> _allSpawnedEntities = new();
+        private readonly List<Entity> _allSpawnedEntities = new();
         private bool _hasInitialized;
 
-        protected IReadOnlyList<IEntity> AllSpawnedEntities => _allSpawnedEntities;
+        protected IReadOnlyList<Entity> AllSpawnedEntities => _allSpawnedEntities;
 
         /// <summary>
         /// Initializes the Manager in case it hasn't been yet.
@@ -43,7 +43,7 @@ namespace Leaosoft
 
             for (int i = _allSpawnedEntities.Count - 1; i >= 0; i--)
             {
-                IEntity entity = _allSpawnedEntities[i];
+                Entity entity = _allSpawnedEntities[i];
                 
                 DisposeEntity(entity);
             }
@@ -61,7 +61,7 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (IEntity entity in _allSpawnedEntities)
+            foreach (Entity entity in _allSpawnedEntities)
             {
                 entity.Tick(deltaTime);
             }
@@ -79,7 +79,7 @@ namespace Leaosoft
                 return;
             }
             
-            foreach (IEntity entity in _allSpawnedEntities)
+            foreach (Entity entity in _allSpawnedEntities)
             {
                 entity.FixedTick(fixedDeltaTime);
             }
@@ -97,7 +97,7 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (IEntity entity in _allSpawnedEntities)
+            foreach (Entity entity in _allSpawnedEntities)
             {
                 entity.LateTick(deltaTime);
             }
@@ -105,7 +105,7 @@ namespace Leaosoft
             OnLateTick(deltaTime);
         }
         
-        public void AddEntity(IEntity entity)
+        public void AddEntity(Entity entity)
         {
             _allSpawnedEntities.Add(entity);
         }
@@ -147,7 +147,7 @@ namespace Leaosoft
         /// Disposes the <see cref="IEntity"/>.
         /// </summary>
         /// <param name="entity"></param>
-        protected virtual void DisposeEntity(IEntity entity)
+        protected virtual void DisposeEntity(Entity entity)
         {
             entity.Stop();
             entity.Dispose();

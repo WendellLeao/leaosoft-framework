@@ -7,18 +7,15 @@ namespace Leaosoft
     /// An Entity is a dynamic game object, it can be composed by one or more <see cref="EntityComponent"/>.
     /// </summary>
     [DisallowMultipleComponent]
-    public abstract class Entity : MonoBehaviour, IEntity
+    public abstract class Entity : MonoBehaviour
     {
         [SerializeField]
         private List<EntityComponent> components = new();
-        [SerializeField]
-        private EntityView view;
         
         private bool _hasInitialized;
         private bool _isEnabled;
 
         public GameObject GameObject => gameObject;
-        public EntityView View => view;
         public bool IsEnabled => _isEnabled;
 
         /// <summary>
@@ -56,8 +53,6 @@ namespace Leaosoft
                 component.Dispose();
             }
             
-            view?.Dispose();
-            
             OnDispose();
         }
         
@@ -77,8 +72,6 @@ namespace Leaosoft
             {
                 component.Begin();
             }
-            
-            view?.Begin();
             
             OnBegin();
         }
@@ -100,8 +93,6 @@ namespace Leaosoft
                 component.Stop();
             }
             
-            view?.Stop();
-            
             OnStop();
         }
 
@@ -119,8 +110,6 @@ namespace Leaosoft
             {
                 component.Tick(deltaTime);
             }
-            
-            view?.Tick(deltaTime);
             
             OnTick(deltaTime);
         }
@@ -140,8 +129,6 @@ namespace Leaosoft
                 component.FixedTick(fixedDeltaTime);
             }
             
-            view?.FixedTick(fixedDeltaTime);
-            
             OnFixedTick(fixedDeltaTime);
         }
         
@@ -159,8 +146,6 @@ namespace Leaosoft
             {
                 component.LateTick(deltaTime);
             }
-            
-            view?.LateTick(deltaTime);
             
             OnLateTick(deltaTime);
         }
