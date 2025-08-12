@@ -7,7 +7,7 @@ namespace Leaosoft.Core
     /// Initializes the services.
     /// <seealso cref="ServiceLocator"/>
     /// </summary>
-    public sealed class ServiceManager : Manager
+    public sealed class ServiceManager : EntityManager<IEntity>
     {
         [SerializeField]
         private GameServicesCollection gameServicesCollection;
@@ -15,7 +15,7 @@ namespace Leaosoft.Core
         protected override void OnInitialize()
         {
             base.OnInitialize();
-
+            
             GameObject servicesContainer = CreateServicesContainer();
 
             GameService[] gameServices = gameServicesCollection.GameServices;

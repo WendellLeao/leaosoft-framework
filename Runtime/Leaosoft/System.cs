@@ -60,7 +60,10 @@ namespace Leaosoft
         {
             foreach (Manager manager in managers)
             {
-                manager.Dispose();
+                if (manager is EntityManager<IEntity> entityManager)
+                {
+                    entityManager.Dispose();
+                }
             }
             
             OnDispose();
@@ -72,7 +75,10 @@ namespace Leaosoft
             
             foreach (Manager manager in managers)
             {
-                manager.Tick(deltaTime);
+                if (manager is EntityManager<IEntity> entityManager)
+                {
+                    entityManager.Tick(deltaTime);
+                }
             }
             
             OnTick(deltaTime);
@@ -84,7 +90,10 @@ namespace Leaosoft
             
             foreach (Manager manager in managers)
             {
-                manager.FixedTick(fixedDeltaTime);
+                if (manager is EntityManager<IEntity> entityManager)
+                {
+                    entityManager.FixedTick(fixedDeltaTime);
+                }
             }
             
             OnFixedTick(fixedDeltaTime);
@@ -96,7 +105,10 @@ namespace Leaosoft
             
             foreach (Manager manager in managers)
             {
-                manager.LateTick(deltaTime);
+                if (manager is EntityManager<IEntity> entityManager)
+                {
+                    entityManager.LateTick(deltaTime);
+                }
             }
             
             OnLateTick(deltaTime);
@@ -107,18 +119,18 @@ namespace Leaosoft
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected bool TryGetManager<T>(out T t) where T : Manager
+        protected bool TryGetManager<T>(out T result) where T : Manager
         {
             foreach (Manager manager in managers)
             {
                 if (manager is T casted)
                 {
-                    t = casted;
+                    result = casted;
                     return true;
                 }
             }
 
-            t = null;
+            result = default;
             return false;
         }
     }
