@@ -53,14 +53,6 @@ namespace Leaosoft
             OnLateTick(deltaTime);
         }
         
-        public virtual void DisposeEntity(T entity)
-        {
-            entity.Stop();
-            entity.Dispose();
-
-            UnRegisterEntity(entity);
-        }
-        
         protected virtual void OnInitialize()
         { }
 
@@ -75,6 +67,14 @@ namespace Leaosoft
         
         protected virtual void OnLateTick(float deltaTime)
         { }
+        
+        protected virtual void DisposeEntity(T entity)
+        {
+            entity.Stop();
+            entity.Dispose();
+
+            UnRegisterEntity(entity);
+        }
         
         protected void RegisterEntity(T entity)
         {
