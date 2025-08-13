@@ -107,8 +107,6 @@ namespace Leaosoft
                 }
             }
 
-            Debug.LogError($"Wasn't possible to get the manager '{typeof(T)}'");
-            
             result = null;
             return false;
         }
