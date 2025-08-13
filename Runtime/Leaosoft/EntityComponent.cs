@@ -6,7 +6,7 @@ namespace Leaosoft
     {
         private bool _isEnabled;
 
-        public bool IsEnabled => _isEnabled;
+        protected bool IsEnabled => _isEnabled;
 
         public void Initialize()
         {

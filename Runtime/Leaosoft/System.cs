@@ -30,13 +30,7 @@ namespace Leaosoft
 
         private void Awake()
         {
-            foreach (Manager manager in managers)
-            {
-                if (manager is IEntityManager entityManager)
-                {
-                    _entityManagers.Add(entityManager);
-                }
-            }
+            PopulateEntityManagers();
             
             InitializeManagers();
             
@@ -87,6 +81,19 @@ namespace Leaosoft
             }
             
             OnLateTick(deltaTime);
+        }
+        
+        private void PopulateEntityManagers()
+        {
+            foreach (Manager manager in managers)
+            {
+                if (manager is not IEntityManager entityManager)
+                {
+                    continue;
+                }
+                
+                _entityManagers.Add(entityManager);
+            }
         }
         
         protected bool TryGetManager<T>(out T result) where T : Manager

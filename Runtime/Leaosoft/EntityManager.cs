@@ -81,7 +81,7 @@ namespace Leaosoft
             _entities.Add(entity);
         }
 
-        protected void UnRegisterEntity(T entity)
+        private void UnRegisterEntity(T entity)
         {
             _entities.Remove(entity);
         }

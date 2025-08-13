@@ -2,7 +2,6 @@
 {
     public interface IEntityManager
     {
-        public void Initialize();
         public void Dispose();
         public void Tick(float deltaTime);
         public void FixedTick(float fixedDeltaTime);

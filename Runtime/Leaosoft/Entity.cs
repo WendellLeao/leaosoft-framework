@@ -11,8 +11,7 @@ namespace Leaosoft
         
         private bool _isEnabled;
 
-        public GameObject GameObject => gameObject;
-        public bool IsEnabled => _isEnabled;
+        protected bool IsEnabled => _isEnabled;
 
         public void Initialize()
         {
