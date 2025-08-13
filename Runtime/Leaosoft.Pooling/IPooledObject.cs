@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿// ReSharper disable InconsistentNaming
+using UnityEngine;
 
 namespace Leaosoft.Pooling
 {
