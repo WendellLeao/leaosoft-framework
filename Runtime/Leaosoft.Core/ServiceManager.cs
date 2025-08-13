@@ -3,7 +3,11 @@ using UnityEngine;
 
 namespace Leaosoft.Core
 {
-    public sealed class ServicesManager : Manager
+    /// <summary>
+    /// Initializes the services.
+    /// <seealso cref="ServiceLocator"/>
+    /// </summary>
+    public sealed class ServiceManager : EntityManager<IEntity>
     {
         [SerializeField]
         private GameServicesCollection gameServicesCollection;
@@ -11,7 +15,7 @@ namespace Leaosoft.Core
         protected override void OnInitialize()
         {
             base.OnInitialize();
-
+            
             GameObject servicesContainer = CreateServicesContainer();
 
             GameService[] gameServices = gameServicesCollection.GameServices;
@@ -24,9 +28,10 @@ namespace Leaosoft.Core
 
         private static GameObject CreateServicesContainer()
         {
-            GameObject gameServicesContainer = new GameObject();
-
-            gameServicesContainer.name = "GameServices";
+            GameObject gameServicesContainer = new GameObject
+            {
+                name = "GameServices"
+            };
 
             DontDestroyOnLoad(gameServicesContainer);
 

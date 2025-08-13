@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Leaosoft.Services;
 using Leaosoft.UI.Screens;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Leaosoft.UI
 {
@@ -12,58 +15,32 @@ namespace Leaosoft.UI
     [DisallowMultipleComponent]
     public sealed class ScreenService : GameService, IScreenService
     {
-        private readonly List<IUIScreen> _registeredScreens = new();
         private readonly Stack<IUIScreen> _openedScreens = new();
 
-        public void RegisterScreen(IUIScreen screen)
+        public async UniTask<IUIScreen> OpenScreenAsync(UIScreenData screenData)
         {
-            if (_registeredScreens.Contains(screen))
+            if (IsScreenOpened(screenData, out IUIScreen screen))
             {
-                Debug.LogWarning($"The screen '{screen.GetType().Name}' is already registered!");
-                return;
+                Debug.LogWarning($"The screen with id '{screen.Data.Id}' is already opened!");
+                return screen;
             }
+            
+            IUIScreen newScreenOnTop = await LoadAndGetScreenAsync(screenData);
 
-            _registeredScreens.Add(screen);
-        }
-
-        public void UnregisterScreen(IUIScreen screen)
-        {
-            if (!_registeredScreens.Contains(screen))
+            if (screenData.ScreenType == ScreenType.Single)
             {
-                Debug.LogWarning($"Couldn't unregister the screen '{screen.GetType().Name}' because it wasn't registered!");
-                return;
+                HideCurrentScreenOnTop();
             }
+            
+            newScreenOnTop.OnCloseRequested += HandleScreenCloseRequested;
+            
+            newScreenOnTop.Open();
+            
+            _openedScreens.Push(newScreenOnTop);
 
-            _registeredScreens.Remove(screen);
+            return screen;
         }
-
-        public void OpenScreen<T>(bool additive = true) where T : IUIScreen
-        {
-            if (TryGetRegisteredScreen<T>(out IUIScreen screen))
-            {
-                if (_openedScreens.Contains(screen))
-                {
-                    Debug.LogWarning($"The screen '{typeof(T).Name}' is already opened!");
-                    return;
-                }
-
-                OpenScreen(screen, additive);
-            }
-        }
-
-        public void CloseScreenOnTop()
-        {
-            if (!_openedScreens.TryPeek(out IUIScreen screen))
-            {
-                Debug.LogWarning("Couldn't close screen on top because there's none!");
-                return;
-            }
-
-            screen = _openedScreens.Pop();
-
-            CloseScreen(screen);
-        }
-
+        
         protected override void RegisterService()
         {
             ServiceLocator.RegisterService<IScreenService>(this);
@@ -74,48 +51,121 @@ namespace Leaosoft.UI
             ServiceLocator.UnregisterService<IScreenService>();
         }
 
-        private void OpenScreen(IUIScreen screen, bool additive)
+        protected override void OnTick(float deltaTime)
         {
-            if (!additive)
+            base.OnTick(deltaTime);
+
+            foreach (IUIScreen openedScreen in _openedScreens)
             {
-                HideScreenOnTop();
-            }
-
-            screen.Open();
-
-            _openedScreens.Push(screen);
-        }
-
-        private void CloseScreen(IUIScreen screen)
-        {
-            screen.Close();
-
-            if (_openedScreens.TryPeek(out screen))
-            {
-                screen.Show();
+                openedScreen.Tick(deltaTime);
             }
         }
 
-        private void HideScreenOnTop()
+        private async UniTask<IUIScreen> LoadAndGetScreenAsync(UIScreenData screenData)
         {
-            if (_openedScreens.TryPeek(out IUIScreen screen))
+            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(screenData.SceneName, LoadSceneMode.Additive);
+
+            if (asyncOperation == null)
             {
-                screen.Hide();
+                throw new NullReferenceException($"The async operation for the screen scene '{screenData.SceneName}' is null!");
             }
+            
+            while (!asyncOperation.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            await UniTask.Yield();
+
+            if (TryGetScreenInScene(screenData.SceneName, out IUIScreen screen))
+            {
+                return screen;
+            }
+            
+            return null;
+        }
+        
+        private void HandleScreenCloseRequested(IUIScreen screen)
+        {
+            if (!_openedScreens.TryPeek(out IUIScreen screenOnTop))
+            {
+                Debug.LogError("Couldn't peek the current screen on top!");
+            }
+            
+            if (!string.Equals(screen.Data.Id, screenOnTop.Data.Id))
+            {
+                Debug.LogError($"The screen with id '{screen.Data.Id}' is requesting to be closed but is not the one on top!");
+                return;
+            }
+            
+            CloseCurrentScreenOnTop();
+        }
+        
+        private void CloseCurrentScreenOnTop()
+        {
+            if (!_openedScreens.TryPop(out IUIScreen screenOnTop))
+            {
+                Debug.LogError("There's no current screen on top!");
+                return;
+            }
+            
+            screenOnTop.OnCloseRequested -= HandleScreenCloseRequested;
+            
+            screenOnTop.Close();
+
+            if (screenOnTop.Data.ScreenType == ScreenType.Single)
+            {
+                ShowCurrentScreenOnTop();
+            }
+            
+            SceneManager.UnloadSceneAsync(screenOnTop.Data.SceneName);
         }
 
-        private bool TryGetRegisteredScreen<T>(out IUIScreen screen)
+        private void ShowCurrentScreenOnTop()
         {
-            foreach (IUIScreen registeredScreen in _registeredScreens)
+            if (!_openedScreens.TryPeek(out IUIScreen screenOnTop))
             {
-                if (registeredScreen is T)
+                return;
+            }
+                
+            screenOnTop.Show();
+        }
+        
+        private void HideCurrentScreenOnTop()
+        {
+            if (!_openedScreens.TryPeek(out IUIScreen screenOnTop))
+            {
+                return;
+            }
+                
+            screenOnTop.Hide();
+        }
+
+        private bool TryGetScreenInScene(string sceneName, out IUIScreen screen)
+        {
+            Scene scene = SceneManager.GetSceneByName(sceneName);
+
+            foreach (GameObject rootGameObject in scene.GetRootGameObjects())
+            {
+                if (rootGameObject.TryGetComponent(out screen))
                 {
-                    screen = registeredScreen;
                     return true;
                 }
             }
-
-            Debug.LogError($"There's no registered screen named '{typeof(T).Name}'!");
+            
+            throw new ArgumentException($"Couldn't find any screen component in the scene '{scene.name}'!");
+        }
+        
+        private bool IsScreenOpened(UIScreenData screenData, out IUIScreen screen)
+        {
+            foreach (IUIScreen openedScreen in _openedScreens)
+            {
+                if (string.Equals(openedScreen.Data.Id, screenData.Id))
+                {
+                    screen = openedScreen;
+                    return true;
+                }
+            }
 
             screen = null;
             return false;

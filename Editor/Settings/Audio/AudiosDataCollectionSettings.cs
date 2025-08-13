@@ -5,24 +5,24 @@ using UnityEngine;
 
 namespace Leaosoft.Editor.Settings.Audio
 {
-    public sealed class AudiosDataCollectionSettings
+    public static class AudiosDataCollectionSettings
     {
-        private AudioData[] _audiosData;
+        private static AudioData[] audioData;
 
-        private const string AudiosDataCollectionPath = PathUtility.DataAssetsPath + "/Audio/AudiosDataCollection.asset";
+        private const string AudiosDataCollectionPath = PathUtility.DataAssetsPath + "/Audio/AudioDataCollection.asset";
         
         internal static SerializedObject GetSerializedObject()
         {
             return new SerializedObject(GetOrCreateSettings());
         }
 
-        private static AudiosDataCollection GetOrCreateSettings()
+        private static AudioDataCollection GetOrCreateSettings()
         {
-            AudiosDataCollection settings = AssetDatabase.LoadAssetAtPath<AudiosDataCollection>(AudiosDataCollectionPath);
+            AudioDataCollection settings = AssetDatabase.LoadAssetAtPath<AudioDataCollection>(AudiosDataCollectionPath);
             
-            if (settings == null)
+            if (!settings)
             {
-                settings = ScriptableObject.CreateInstance<AudiosDataCollection>();
+                settings = ScriptableObject.CreateInstance<AudioDataCollection>();
 
                 AssetDatabase.CreateAsset(settings, AudiosDataCollectionPath);
                 AssetDatabase.SaveAssets();

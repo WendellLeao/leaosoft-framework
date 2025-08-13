@@ -1,64 +1,28 @@
 ﻿using System;
-using Leaosoft.Services;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Leaosoft.UI.Screens
 {
     public abstract class UIScreen : MonoBehaviour, IUIScreen
     {
-        public event Action<IUIScreen> OnOpened;
-        public event Action<IUIScreen> OnClosed;
+        public event Action<IUIScreen> OnCloseRequested;
 
-        [Header("Settings")]
+        [Header("Objects")]
         [SerializeField]
-        private UIScreenButton closeButton;
+        private Button closeButton;
         [SerializeField]
-        private bool openOnInitialize;
+        private CanvasGroup canvasGroup;
+        
+        [Header("Data")]
+        [SerializeField]
+        private UIScreenData screenData;
 
-        private IScreenService _screenService;
-        private bool _hasInitialized;
         private bool _isOpened;
-        private bool _isHidden;
+        private bool _isVisible = true;
 
-        protected IScreenService ScreenService => _screenService;
-
-        public void Initialize()
-        {
-            if (_hasInitialized)
-            {
-                return;
-            }
-
-            _hasInitialized = true;
-
-            _screenService = ServiceLocator.GetService<IScreenService>();
-
-            _screenService.RegisterScreen(this);
-
-            SetIsOpened(false);
-
-            OnInitialize();
-
-            if (openOnInitialize)
-            {
-                Open();
-            }
-        }
-
-        public void Dispose()
-        {
-            if (!_hasInitialized)
-            {
-                return;
-            }
-
-            _hasInitialized = false;
-
-            _screenService.UnregisterScreen(this);
-
-            OnDispose();
-        }
-
+        public UIScreenData Data => screenData;
+        
         public void Open()
         {
             if (_isOpened)
@@ -71,8 +35,6 @@ namespace Leaosoft.UI.Screens
             SubscribeEvents();
 
             OnOpen();
-
-            OnOpened?.Invoke(this);
         }
 
         public void Close()
@@ -87,37 +49,11 @@ namespace Leaosoft.UI.Screens
             UnsubscribeEvents();
 
             OnClose();
-
-            OnClosed?.Invoke(this);
-        }
-
-        public void Show()
-        {
-            if (!_isHidden)
-            {
-                return;
-            }
-
-            SetIsHidden(false);
-
-            OnShow();
-        }
-
-        public void Hide()
-        {
-            if (_isHidden)
-            {
-                return;
-            }
-
-            SetIsHidden(true);
-
-            OnHide();
         }
 
         public void Tick(float deltaTime)
         {
-            if (!_isOpened)
+            if (!_isOpened || !_isVisible)
             {
                 return;
             }
@@ -125,12 +61,34 @@ namespace Leaosoft.UI.Screens
             OnTick(deltaTime);
         }
 
-        protected virtual void OnInitialize()
-        { }
+        public void Show()
+        {
+            if (_isVisible)
+            {
+                return;
+            }
+            
+            canvasGroup.alpha = 1f;
 
-        protected virtual void OnDispose()
-        { }
+            SetIsVisible(true);
+            
+            OnShow();
+        }
 
+        public void Hide()
+        {
+            if (!_isVisible)
+            {
+                return;
+            }
+            
+            canvasGroup.alpha = 0f;
+            
+            SetIsVisible(false);
+            
+            OnHide();
+        }
+        
         protected virtual void OnSubscribeEvents()
         { }
 
@@ -143,25 +101,20 @@ namespace Leaosoft.UI.Screens
         protected virtual void OnClose()
         { }
 
+        protected virtual void OnTick(float deltaTime)
+        { }
+        
         protected virtual void OnShow()
         { }
 
         protected virtual void OnHide()
         { }
 
-        protected virtual void OnTick(float deltaTime)
-        { }
-
-        protected virtual void OnCloseButtonClick()
-        {
-            Close();
-        }
-
         private void SubscribeEvents()
         {
-            if (closeButton != null)
+            if (closeButton)
             {
-                closeButton.OnClick += OnCloseButtonClick;
+                closeButton.onClick.AddListener(HandleCloseButtonClick);
             }
 
             OnSubscribeEvents();
@@ -169,26 +122,27 @@ namespace Leaosoft.UI.Screens
 
         private void UnsubscribeEvents()
         {
-            if (closeButton != null)
+            if (closeButton)
             {
-                closeButton.OnClick -= OnCloseButtonClick;
+                closeButton.onClick.RemoveListener(HandleCloseButtonClick);
             }
 
             OnUnsubscribeEvents();
         }
 
+        private void HandleCloseButtonClick()
+        {
+            OnCloseRequested?.Invoke(this);
+        }
+        
         private void SetIsOpened(bool isOpened)
         {
             _isOpened = isOpened;
-
-            gameObject.SetActive(_isOpened);
         }
 
-        private void SetIsHidden(bool isHidden)
+        private void SetIsVisible(bool isVisible)
         {
-            _isHidden = isHidden;
-
-            gameObject.SetActive(!_isHidden);
+            _isVisible = isVisible;
         }
     }
 }

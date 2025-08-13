@@ -37,12 +37,12 @@ namespace Leaosoft.Editor.Settings.Pooling
                         properties.AddToClassList("property-list");
                         rootElement.Add(properties);
 
-                        properties.Add(new PropertyField(settings.FindProperty("_poolsData"), "Pools Data Collection"));
+                        properties.Add(new PropertyField(settings.FindProperty("poolData"), "Pool Data Collection"));
 
                         rootElement.Bind(settings);
                     },
 
-                    keywords = new HashSet<string>(new[] { "Pools Data Collection" })
+                    keywords = new HashSet<string>(new[] { "Pool Data Collection" })
                 };
 
             return provider;

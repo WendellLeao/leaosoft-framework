@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,23 +12,27 @@ namespace Leaosoft.UI.Screens
 
         [Header("Button Settings")]
         [SerializeField]
-        private Button _button;
+        private Button button;
 
         [Header("Animation Settings")]
         [SerializeField]
-        private float _delayDispatchClick = 0.08f;
+        private float delayDispatchClick = 0.08f;
 
+        private CancellationTokenSource _dispatchClickEventCts;
+        
         public void Initialize()
         {
-            _button.onClick.AddListener(HandleButtonClick);
+            button.onClick.AddListener(HandleButtonClick);
 
             OnInitialize();
         }
 
         public void Dispose()
         {
-            _button.onClick.RemoveListener(HandleButtonClick);
+            button.onClick.RemoveListener(HandleButtonClick);
 
+            DisposeDispatchClickEventCts();
+            
             OnDispose();
         }
 
@@ -39,24 +44,47 @@ namespace Leaosoft.UI.Screens
 
         private void HandleButtonClick()
         {
-            DispatchClickEventAsync();
+            _dispatchClickEventCts?.Cancel();
+            _dispatchClickEventCts = new CancellationTokenSource();
+            
+            DispatchClickEventAsync(_dispatchClickEventCts.Token);
         }
 
-        private async void DispatchClickEventAsync()
+        private async void DispatchClickEventAsync(CancellationToken token)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(_delayDispatchClick));
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(delayDispatchClick), cancellationToken: token);
 
-            OnClick?.Invoke();
+                OnClick?.Invoke();
+            }
+            catch (OperationCanceledException)
+            { }
+            catch (Exception e)
+            {
+                Debug.LogError(e, gameObject);
+            }
+            finally
+            {
+                DisposeDispatchClickEventCts();
+            }
         }
 
+        private void DisposeDispatchClickEventCts()
+        {
+            _dispatchClickEventCts?.Cancel();
+            _dispatchClickEventCts?.Dispose();
+            _dispatchClickEventCts = null;
+        }
+        
         public void SetIsInteractable(bool isInteractable)
         {
-            _button.interactable = isInteractable;
+            button.interactable = isInteractable;
         }
 
         public void SetSprite(Sprite sprite)
         {
-            _button.image.sprite = sprite;
+            button.image.sprite = sprite;
         }
     }
 }

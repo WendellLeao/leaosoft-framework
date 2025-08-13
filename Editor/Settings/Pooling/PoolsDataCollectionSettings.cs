@@ -5,24 +5,24 @@ using UnityEngine;
 
 namespace Leaosoft.Editor.Settings.Pooling
 {
-    public sealed class PoolsDataCollectionSettings
+    public static class PoolsDataCollectionSettings
     {
-        private PoolData[] _poolsData;
+        private static PoolData[] poolData;
 
-        private const string PoolsDataCollectionPath = PathUtility.DataAssetsPath + "/Pooling/PoolsDataCollection.asset";
+        private const string PoolsDataCollectionPath = PathUtility.DataAssetsPath + "/Pooling/PoolDataCollection.asset";
         
         internal static SerializedObject GetSerializedObject()
         {
             return new SerializedObject(GetOrCreateSettings());
         }
 
-        private static PoolsDataCollection GetOrCreateSettings()
+        private static PoolDataCollection GetOrCreateSettings()
         {
-            PoolsDataCollection settings = AssetDatabase.LoadAssetAtPath<PoolsDataCollection>(PoolsDataCollectionPath);
+            PoolDataCollection settings = AssetDatabase.LoadAssetAtPath<PoolDataCollection>(PoolsDataCollectionPath);
             
-            if (settings == null)
+            if (!settings)
             {
-                settings = ScriptableObject.CreateInstance<PoolsDataCollection>();
+                settings = ScriptableObject.CreateInstance<PoolDataCollection>();
 
                 AssetDatabase.CreateAsset(settings, PoolsDataCollectionPath);
                 AssetDatabase.SaveAssets();

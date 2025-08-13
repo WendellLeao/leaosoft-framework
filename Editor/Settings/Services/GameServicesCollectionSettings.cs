@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Leaosoft.Editor.Settings.Services
 {
-    public sealed class GameServicesCollectionSettings
+    public static class GameServicesCollectionSettings
     {
-        private GameService[] _gameServices;
+        private static GameService[] gameServices;
 
         private const string AudiosDataCollectionPath = PathUtility.DataAssetsPath + "/Services/GameServicesCollection.asset";
         
@@ -20,7 +20,7 @@ namespace Leaosoft.Editor.Settings.Services
         {
             GameServicesCollection settings = AssetDatabase.LoadAssetAtPath<GameServicesCollection>(AudiosDataCollectionPath);
             
-            if (settings == null)
+            if (!settings)
             {
                 settings = ScriptableObject.CreateInstance<GameServicesCollection>();
 

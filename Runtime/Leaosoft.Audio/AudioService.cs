@@ -12,20 +12,22 @@ namespace Leaosoft.Audio
     [DisallowMultipleComponent]
     public sealed class AudioService : GameService, IAudioService
     {
-        [SerializeField]
-        private AudiosDataCollection _audiosDataCollection;
-
         [Header("Sound Player")]
         [SerializeField]
-        private PoolData _soundPlayerPool;
+        private PoolData soundPlayerPool;
+
+        [Header("Data")]
+        [SerializeField]
+        private AudioDataCollection audioDataCollection;
 
         private readonly Dictionary<string, AudioData> _audioDataDictionary = new();
+        private readonly List<SoundPlayer> _allActiveSoundPlayers = new();
 
         public void PlaySound(string audioId, Vector3 position)
         {
             if (!_audioDataDictionary.TryGetValue(audioId, out AudioData audioData))
             {
-                Debug.LogError($"Couldn't find any AudioData with id '{audioId}'");
+                Debug.LogError($"Couldn't find any AudioData with id '{audioId}'!");
                 return;
             }
 
@@ -34,11 +36,9 @@ namespace Leaosoft.Audio
                 return;
             }
 
-            SoundPlayer soundPlayer = GetSoundPlayerFromPool(_soundPlayerPool.Id);
+            SoundPlayer soundPlayer = GetSoundPlayerFromPool(soundPlayerPool.Id);
 
-            soundPlayer.PlaySound(audioData, position);
-
-            audioData.SetIsPlaying(true);
+            BeginSoundPlayer(position, soundPlayer, audioData);
         }
 
         protected override void RegisterService()
@@ -55,7 +55,7 @@ namespace Leaosoft.Audio
         {
             base.OnInitialize();
 
-            foreach (AudioData audioData in _audiosDataCollection.AudiosData)
+            foreach (AudioData audioData in audioDataCollection.AudioData)
             {
                 audioData.SetIsPlaying(false);
 
@@ -63,6 +63,34 @@ namespace Leaosoft.Audio
             }
         }
 
+        protected override void OnDispose()
+        {
+            base.OnDispose();
+
+            foreach (SoundPlayer activeSoundPlayer in _allActiveSoundPlayers)
+            {
+                StopSoundPlayer(activeSoundPlayer);
+            }
+        }
+
+        private void BeginSoundPlayer(Vector3 position, SoundPlayer soundPlayer, AudioData audioData)
+        {
+            soundPlayer.OnClipFinished += StopSoundPlayer;
+
+            soundPlayer.Begin(audioData, position);
+            
+            _allActiveSoundPlayers.Add(soundPlayer);
+        }
+        
+        private void StopSoundPlayer(SoundPlayer soundPlayer)
+        {
+            soundPlayer.OnClipFinished -= StopSoundPlayer;
+            
+            soundPlayer.Stop();
+            
+            _allActiveSoundPlayers.Remove(soundPlayer);
+        }
+        
         private bool CanPlaySound(AudioData audioData)
         {
             if (!audioData.PersistentSound)
@@ -82,10 +110,8 @@ namespace Leaosoft.Audio
         {
             IPoolingService poolingService = ServiceLocator.GetService<IPoolingService>();
 
-            GameObject soundPlayerGameObject = poolingService.GetObjectFromPool(soundPlayerId);
-
-            SoundPlayer soundPlayer = soundPlayerGameObject.GetComponent<SoundPlayer>();
-
+            poolingService.TryGetObjectFromPool(soundPlayerId, parent: null, out SoundPlayer soundPlayer);
+            
             return soundPlayer;
         }
     }

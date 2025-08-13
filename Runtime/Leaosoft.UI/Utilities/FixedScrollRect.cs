@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Leaosoft.UI.Screens
+namespace Leaosoft.UI.Utilities
 {
     public sealed class FixedScrollRect : ScrollRect
     {
@@ -26,7 +26,7 @@ namespace Leaosoft.UI.Screens
 
         private void TrySetHorizontalScrollbarSize(float size)
         {
-            if (horizontalScrollbar is not null)
+            if (horizontalScrollbar != null)
             {
                 horizontalScrollbar.size = size;
             }
@@ -34,7 +34,7 @@ namespace Leaosoft.UI.Screens
 
         private void TrySetVerticalScrollbarSize(float size)
         {
-            if (verticalScrollbar is not null)
+            if (verticalScrollbar != null)
             {
                 verticalScrollbar.size = size;
             }

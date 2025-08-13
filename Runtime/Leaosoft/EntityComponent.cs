@@ -2,19 +2,22 @@
 
 namespace Leaosoft
 {
-    /// <summary>
-    /// A component attached on an <see cref="Entity"/> that provides it determined behaviors.
-    /// </summary>
-    [RequireComponent(typeof(Entity))]
     public abstract class EntityComponent : MonoBehaviour
     {
         private bool _isEnabled;
 
-        public bool IsEnabled => _isEnabled;
+        protected bool IsEnabled => _isEnabled;
 
-        /// <summary>
-        /// Begins the component in case it hasn't been yet.
-        /// </summary>
+        public void Initialize()
+        {
+            OnInitialize();
+        }
+
+        public void Dispose()
+        {
+            OnDispose();
+        }
+
         public void Begin()
         {
             if (_isEnabled)
@@ -27,9 +30,6 @@ namespace Leaosoft
             OnBegin();
         }
 
-        /// <summary>
-        /// Stops the component in case it hasn't been yet.
-        /// </summary>
         public void Stop()
         {
             if (!_isEnabled)
@@ -42,9 +42,6 @@ namespace Leaosoft
             OnStop();
         }
 
-        /// <summary>
-        /// If enabled, updates the component each frame.
-        /// </summary>
         public void Tick(float deltaTime)
         {
             if (!_isEnabled)
@@ -55,9 +52,6 @@ namespace Leaosoft
             OnTick(deltaTime);
         }
 
-        /// <summary>
-        /// If enabled, updates the component in a fixed time.
-        /// </summary>
         public void FixedTick(float fixedDeltaTime)
         {
             if (!_isEnabled)
@@ -67,31 +61,36 @@ namespace Leaosoft
 
             OnFixedTick(fixedDeltaTime);
         }
+        
+        public void LateTick(float deltaTime)
+        {
+            if (!_isEnabled)
+            {
+                return;
+            }
 
-        /// <summary>
-        /// Is called after the component begins.
-        /// </summary>
+            OnLateTick(deltaTime);
+        }
+
+        protected virtual void OnInitialize()
+        { }
+
+        protected virtual void OnDispose()
+        { }
+        
         protected virtual void OnBegin()
         { }
 
-        /// <summary>
-        /// Is called after the component stops.
-        /// </summary>
         protected virtual void OnStop()
         { }
 
-        /// <summary>
-        /// Is called after the component ticks each frame.
-        /// </summary>
-        /// <param name="deltaTime">is the amount of time that has passed since the last frame update in seconds.</param>
         protected virtual void OnTick(float deltaTime)
         { }
 
-        /// <summary>
-        /// Is called after the component ticks in a fixed frame.
-        /// </summary>
-        /// <param name="fixedDeltaTime">is the amount of time that has passed since the last FixedUpdate call.</param>
         protected virtual void OnFixedTick(float fixedDeltaTime)
+        { }
+
+        protected virtual void OnLateTick(float deltaTime)
         { }
     }
 }

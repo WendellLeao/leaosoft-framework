@@ -2,6 +2,10 @@
 
 namespace Leaosoft.Services
 {
+    /// <summary>
+    /// Base class for global game services.
+    /// <seealso cref="ServiceLocator"/>
+    /// </summary>
     [DisallowMultipleComponent]
     public abstract class GameService : MonoBehaviour
     {

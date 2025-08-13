@@ -12,49 +12,56 @@ namespace Leaosoft.Events
     /// </summary>
     public sealed class EventService : GameService, IEventService
     {
-        private readonly Dictionary<Type, UnityEvent<GameEvent>> _eventDictionary = new();
+        private readonly Dictionary<Type, object> _eventDictionary = new();
 
-        public void AddEventListener<T>(UnityAction<GameEvent> listener) where T : GameEvent
+        public void AddEventListener<T>(UnityAction<T> listener) where T : GameEvent
         {
             Type type = typeof(T);
 
-            if (_eventDictionary.TryGetValue(type, out UnityEvent<GameEvent> gameEvent))
+            if (_eventDictionary.TryGetValue(type, out object existingEvent))
             {
-                gameEvent.AddListener(listener);
+                UnityEvent<T> unityEvent = (UnityEvent<T>)existingEvent;
+                
+                unityEvent.AddListener(listener);
+                
                 return;
             }
 
-            gameEvent = new UnityEvent<GameEvent>();
+            UnityEvent<T> newEvent = new();
 
-            gameEvent.AddListener(listener);
+            newEvent.AddListener(listener);
 
-            _eventDictionary.Add(type, gameEvent);
+            _eventDictionary.Add(type, newEvent);
         }
 
-        public void RemoveEventListener<T>(UnityAction<GameEvent> listener) where T : GameEvent
+        public void RemoveEventListener<T>(UnityAction<T> listener) where T : GameEvent
         {
             Type type = typeof(T);
 
-            if (!_eventDictionary.TryGetValue(type, out UnityEvent<GameEvent> gameEvent))
+            if (!_eventDictionary.TryGetValue(type, out object existingEvent))
             {
                 Debug.LogWarning($"There's no listener registered for the event '{type.Name}'!");
                 return;
             }
-
-            gameEvent.RemoveListener(listener);
+            
+            UnityEvent<T> unityEvent = (UnityEvent<T>)existingEvent;
+            
+            unityEvent.RemoveListener(listener);
         }
 
-        public void DispatchEvent(GameEvent eventToDispatch)
+        public void DispatchEvent<T>(T eventToDispatch) where T : GameEvent
         {
-            Type type = eventToDispatch.GetType();
+            Type type = typeof(T);
 
-            if (!_eventDictionary.TryGetValue(type, out UnityEvent<GameEvent> gameEvent))
+            if (!_eventDictionary.TryGetValue(type, out object gameEvent))
             {
-                Debug.LogWarning($"Couldn't dispatch the event '{type.Name}' because it wasn't registered!");
+                Debug.LogWarning($"There's no listener registered for the event '{type.Name}'!");
                 return;
             }
-
-            gameEvent.Invoke(eventToDispatch);
+            
+            UnityEvent<T> unityEvent = (UnityEvent<T>)gameEvent;
+            
+            unityEvent.Invoke(eventToDispatch);
         }
 
         protected override void RegisterService()
