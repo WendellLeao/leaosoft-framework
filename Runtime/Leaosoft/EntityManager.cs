@@ -2,9 +2,9 @@
 
 namespace Leaosoft
 {
-    public abstract class EntityManager<T> : Manager, IEntityManager where T : IEntity
+    public abstract class EntityManager<TEntity> : Manager, IEntityManager where TEntity : IEntity
     {
-        private readonly List<T> _entities = new();
+        private readonly List<TEntity> _entities = new();
 
         public void Initialize()
         {
@@ -15,7 +15,7 @@ namespace Leaosoft
         {
             for (int i = _entities.Count - 1; i >= 0; i--)
             {
-                T entity = _entities[i];
+                TEntity entity = _entities[i];
                 
                 DisposeEntity(entity);
             }
@@ -25,7 +25,7 @@ namespace Leaosoft
 
         public void Tick(float deltaTime)
         {
-            foreach (T entity in _entities)
+            foreach (TEntity entity in _entities)
             {
                 entity.Tick(deltaTime);
             }
@@ -35,7 +35,7 @@ namespace Leaosoft
 
         public void FixedTick(float fixedDeltaTime)
         {
-            foreach (T entity in _entities)
+            foreach (TEntity entity in _entities)
             {
                 entity.FixedTick(fixedDeltaTime);
             }
@@ -45,7 +45,7 @@ namespace Leaosoft
 
         public void LateTick(float deltaTime)
         {
-            foreach (T entity in _entities)
+            foreach (TEntity entity in _entities)
             {
                 entity.LateTick(deltaTime);
             }
@@ -68,7 +68,7 @@ namespace Leaosoft
         protected virtual void OnLateTick(float deltaTime)
         { }
         
-        protected virtual void DisposeEntity(T entity)
+        protected virtual void DisposeEntity(TEntity entity)
         {
             entity.Stop();
             entity.Dispose();
@@ -76,12 +76,12 @@ namespace Leaosoft
             UnRegisterEntity(entity);
         }
         
-        protected void RegisterEntity(T entity)
+        protected void RegisterEntity(TEntity entity)
         {
             _entities.Add(entity);
         }
 
-        private void UnRegisterEntity(T entity)
+        private void UnRegisterEntity(TEntity entity)
         {
             _entities.Remove(entity);
         }
