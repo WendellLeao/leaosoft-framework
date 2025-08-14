@@ -6,7 +6,7 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class Entity : MonoBehaviour
     {
-        private readonly List<EntityComponent> _components = new();
+        private readonly List<IEntityComponent> _components = new();
         
         private bool _isEnabled;
 
@@ -33,7 +33,7 @@ namespace Leaosoft
 
             _isEnabled = false;
             
-            foreach (EntityComponent component in _components)
+            foreach (IEntityComponent component in _components)
             {
                 component.Dispose();
             }
@@ -48,7 +48,7 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (EntityComponent component in _components)
+            foreach (IEntityComponent component in _components)
             {
                 component.Tick(deltaTime);
             }
@@ -63,7 +63,7 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (EntityComponent component in _components)
+            foreach (IEntityComponent component in _components)
             {
                 component.FixedTick(fixedDeltaTime);
             }
@@ -78,7 +78,7 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (EntityComponent component in _components)
+            foreach (IEntityComponent component in _components)
             {
                 component.LateTick(deltaTime);
             }
@@ -86,7 +86,7 @@ namespace Leaosoft
             OnLateTick(deltaTime);
         }
 
-        public void RegisterComponents(params EntityComponent[] components)
+        public void RegisterComponents(params IEntityComponent[] components)
         {
             _components.AddRange(components);
         }

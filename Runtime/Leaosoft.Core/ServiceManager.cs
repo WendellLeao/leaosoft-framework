@@ -12,9 +12,9 @@ namespace Leaosoft.Core
         [SerializeField]
         private GameServicesCollection gameServicesCollection;
 
-        protected override void OnInitialize()
+        protected override void OnSetUp()
         {
-            base.OnInitialize();
+            base.OnSetUp();
             
             GameObject servicesContainer = CreateServicesContainer();
 

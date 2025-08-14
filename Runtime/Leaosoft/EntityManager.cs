@@ -6,9 +6,9 @@ namespace Leaosoft
     {
         private readonly List<TEntity> _entities = new();
 
-        public void Initialize()
+        public void SetUp()
         {
-            OnInitialize();
+            OnSetUp();
         }
 
         public void Dispose()
@@ -53,7 +53,7 @@ namespace Leaosoft
             OnLateTick(deltaTime);
         }
         
-        protected virtual void OnInitialize()
+        protected virtual void OnSetUp()
         { }
 
         protected virtual void OnDispose()

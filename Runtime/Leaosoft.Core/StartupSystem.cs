@@ -21,7 +21,7 @@ namespace Leaosoft.Core
         {
             base.OnInitialize();
 
-            serviceManager.Initialize();
+            serviceManager.SetUp();
             
             RegisterManagers(serviceManager);
             
