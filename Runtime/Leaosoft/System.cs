@@ -6,12 +6,7 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class System : MonoBehaviour
     {
-        [SerializeField]
-        private Manager[] managers;
-
         private readonly List<IEntityManager> _entityManagers = new();
-        
-        protected abstract void InitializeManagers();
         
         protected virtual void OnInitialize()
         { }
@@ -33,12 +28,13 @@ namespace Leaosoft
         protected virtual void OnLateTick(float deltaTime)
         { }
 
+        protected void RegisterManagers(params IEntityManager[] entityManagers)
+        {
+            _entityManagers.AddRange(entityManagers);
+        }
+        
         private void Awake()
         {
-            PopulateEntityManagers();
-            
-            InitializeManagers();
-            
             OnInitialize();
         }
 
@@ -85,19 +81,6 @@ namespace Leaosoft
             OnLateTick(deltaTime);
         }
         
-        private void PopulateEntityManagers()
-        {
-            foreach (Manager manager in managers)
-            {
-                if (manager is not IEntityManager entityManager)
-                {
-                    continue;
-                }
-                
-                _entityManagers.Add(entityManager);
-            }
-        }
-        
         private void DisposeAllManagers()
         {
             foreach (IEntityManager entityManager in _entityManagers)
@@ -106,21 +89,6 @@ namespace Leaosoft
             }
             
             _entityManagers.Clear();
-        }
-        
-        protected bool TryGetManager<T>(out T result) where T : Manager
-        {
-            foreach (Manager manager in managers)
-            {
-                if (manager is T casted)
-                {
-                    result = casted;
-                    return true;
-                }
-            }
-
-            result = null;
-            return false;
         }
     }
 }

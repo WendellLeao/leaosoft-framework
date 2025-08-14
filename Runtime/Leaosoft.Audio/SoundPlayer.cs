@@ -32,9 +32,6 @@ namespace Leaosoft.Audio
             base.SetUp();
         }
 
-        protected override void SetUpComponents()
-        { }
-
         protected override void OnSetUp()
         {
             base.OnSetUp();

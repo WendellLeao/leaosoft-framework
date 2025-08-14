@@ -12,20 +12,19 @@ namespace Leaosoft.Core
     /// </summary>
     public sealed class StartupSystem : System
     {
-        private CancellationTokenSource _loadSceneCts;
+        [SerializeField]
+        private ServiceManager serviceManager;
         
-        protected override void InitializeManagers()
-        {
-            if (TryGetManager(out ServiceManager serviceManager))
-            {
-                serviceManager.Initialize();
-            }
-        }
+        private CancellationTokenSource _loadSceneCts;
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
+            serviceManager.Initialize();
+            
+            RegisterManagers(serviceManager);
+            
             _loadSceneCts?.Cancel();
             _loadSceneCts = new CancellationTokenSource();
             

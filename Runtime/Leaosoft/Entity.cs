@@ -6,13 +6,12 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class Entity : MonoBehaviour
     {
-        [SerializeField]
-        private List<EntityComponent> components = new();
+        private readonly List<EntityComponent> _components = new();
         
         private bool _isEnabled;
 
         protected bool IsEnabled => _isEnabled;
-
+        
         public void SetUp()
         {
             if (_isEnabled)
@@ -21,8 +20,6 @@ namespace Leaosoft
             }
 
             _isEnabled = true;
-            
-            SetUpComponents();
             
             OnSetUp();
         }
@@ -36,7 +33,7 @@ namespace Leaosoft
 
             _isEnabled = false;
             
-            foreach (EntityComponent component in components)
+            foreach (EntityComponent component in _components)
             {
                 component.Dispose();
             }
@@ -51,7 +48,7 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (EntityComponent component in components)
+            foreach (EntityComponent component in _components)
             {
                 component.Tick(deltaTime);
             }
@@ -66,7 +63,7 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (EntityComponent component in components)
+            foreach (EntityComponent component in _components)
             {
                 component.FixedTick(fixedDeltaTime);
             }
@@ -81,7 +78,7 @@ namespace Leaosoft
                 return;
             }
 
-            foreach (EntityComponent component in components)
+            foreach (EntityComponent component in _components)
             {
                 component.LateTick(deltaTime);
             }
@@ -89,7 +86,10 @@ namespace Leaosoft
             OnLateTick(deltaTime);
         }
 
-        protected abstract void SetUpComponents();
+        public void RegisterComponents(params EntityComponent[] components)
+        {
+            _components.AddRange(components);
+        }
         
         protected virtual void OnSetUp()
         { }
@@ -105,12 +105,5 @@ namespace Leaosoft
         
         protected virtual void OnLateTick(float deltaTime)
         { }
-
-#if UNITY_EDITOR
-        public void AddComponentsForTests(params EntityComponent[] newComponents)
-        {
-            components.AddRange(newComponents);
-        }
-#endif
     }
 }

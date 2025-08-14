@@ -72,7 +72,7 @@ namespace Leaosoft
         {
             entity.Dispose();
 
-            UnRegisterEntity(entity);
+            UnregisterEntity(entity);
         }
         
         protected void RegisterEntity(TEntity entity)
@@ -80,7 +80,7 @@ namespace Leaosoft
             _entities.Add(entity);
         }
 
-        private void UnRegisterEntity(TEntity entity)
+        private void UnregisterEntity(TEntity entity)
         {
             _entities.Remove(entity);
         }
