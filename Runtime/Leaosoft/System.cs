@@ -6,7 +6,7 @@ namespace Leaosoft
     [DisallowMultipleComponent]
     public abstract class System : MonoBehaviour
     {
-        private readonly List<IEntityManager> _entityManagers = new();
+        private readonly List<Manager> _managers = new();
         
         protected virtual void OnInitialize()
         { }
@@ -28,9 +28,9 @@ namespace Leaosoft
         protected virtual void OnLateTick(float deltaTime)
         { }
 
-        protected void RegisterManagers(params IEntityManager[] entityManagers)
+        protected void RegisterManagers(params Manager[] managers)
         {
-            _entityManagers.AddRange(entityManagers);
+            _managers.AddRange(managers);
         }
         
         private void Awake()
@@ -49,9 +49,9 @@ namespace Leaosoft
         {
             float deltaTime = Time.deltaTime;
             
-            foreach (IEntityManager entityManager in _entityManagers)
+            foreach (Manager manager in _managers)
             {
-                entityManager.Tick(deltaTime);
+                manager.Tick(deltaTime);
             }
             
             OnTick(deltaTime);
@@ -61,9 +61,9 @@ namespace Leaosoft
         {
             float fixedDeltaTime = Time.fixedDeltaTime;
             
-            foreach (IEntityManager entityManager in _entityManagers)
+            foreach (Manager manager in _managers)
             {
-                entityManager.FixedTick(fixedDeltaTime);
+                manager.FixedTick(fixedDeltaTime);
             }
             
             OnFixedTick(fixedDeltaTime);
@@ -73,9 +73,9 @@ namespace Leaosoft
         {
             float deltaTime = Time.deltaTime;
             
-            foreach (IEntityManager entityManager in _entityManagers)
+            foreach (Manager manager in _managers)
             {
-                entityManager.LateTick(deltaTime);
+                manager.LateTick(deltaTime);
             }
             
             OnLateTick(deltaTime);
@@ -83,12 +83,12 @@ namespace Leaosoft
         
         private void DisposeAllManagers()
         {
-            foreach (IEntityManager entityManager in _entityManagers)
+            foreach (Manager manager in _managers)
             {
-                entityManager.Dispose();
+                manager.Dispose();
             }
             
-            _entityManagers.Clear();
+            _managers.Clear();
         }
     }
 }

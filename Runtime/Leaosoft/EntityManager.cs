@@ -6,67 +6,47 @@ namespace Leaosoft
     {
         private readonly List<TEntity> _entities = new();
 
-        public void SetUp()
+        protected override void OnDispose()
         {
-            OnSetUp();
-        }
-
-        public void Dispose()
-        {
+            base.OnDispose();
+            
             for (int i = _entities.Count - 1; i >= 0; i--)
             {
                 TEntity entity = _entities[i];
                 
                 DisposeEntity(entity);
             }
-            
-            OnDispose();
         }
 
-        public void Tick(float deltaTime)
+        protected override void OnTick(float deltaTime)
         {
+            base.OnTick(deltaTime);
+            
             foreach (TEntity entity in _entities)
             {
                 entity.Tick(deltaTime);
             }
-            
-            OnTick(deltaTime);
         }
 
-        public void FixedTick(float fixedDeltaTime)
+        protected override void OnFixedTick(float fixedDeltaTime)
         {
+            base.OnFixedTick(fixedDeltaTime);
+            
             foreach (TEntity entity in _entities)
             {
                 entity.FixedTick(fixedDeltaTime);
             }
-            
-            OnFixedTick(fixedDeltaTime);
         }
 
-        public void LateTick(float deltaTime)
+        protected override void OnLateTick(float deltaTime)
         {
+            base.OnLateTick(deltaTime);
+            
             foreach (TEntity entity in _entities)
             {
                 entity.LateTick(deltaTime);
             }
-            
-            OnLateTick(deltaTime);
         }
-        
-        protected virtual void OnSetUp()
-        { }
-
-        protected virtual void OnDispose()
-        { }
-
-        protected virtual void OnTick(float deltaTime)
-        { }
-
-        protected virtual void OnFixedTick(float fixedDeltaTime)
-        { }
-        
-        protected virtual void OnLateTick(float deltaTime)
-        { }
         
         protected virtual void DisposeEntity(TEntity entity)
         {
