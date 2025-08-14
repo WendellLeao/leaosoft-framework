@@ -8,17 +8,7 @@ namespace Leaosoft
 
         protected bool IsEnabled => _isEnabled;
 
-        public void Initialize()
-        {
-            OnInitialize();
-        }
-
-        public void Dispose()
-        {
-            OnDispose();
-        }
-
-        public void Begin()
+        public void SetUp()
         {
             if (_isEnabled)
             {
@@ -27,10 +17,10 @@ namespace Leaosoft
 
             _isEnabled = true;
 
-            OnBegin();
+            OnSetUp();
         }
 
-        public void Stop()
+        public void Dispose()
         {
             if (!_isEnabled)
             {
@@ -39,7 +29,7 @@ namespace Leaosoft
 
             _isEnabled = false;
 
-            OnStop();
+            OnDispose();
         }
 
         public void Tick(float deltaTime)
@@ -71,17 +61,11 @@ namespace Leaosoft
 
             OnLateTick(deltaTime);
         }
-
-        protected virtual void OnInitialize()
+        
+        protected virtual void OnSetUp()
         { }
 
         protected virtual void OnDispose()
-        { }
-        
-        protected virtual void OnBegin()
-        { }
-
-        protected virtual void OnStop()
         { }
 
         protected virtual void OnTick(float deltaTime)

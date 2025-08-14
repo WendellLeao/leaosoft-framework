@@ -77,7 +77,7 @@ namespace Leaosoft.Audio
         {
             soundPlayer.OnClipFinished += StopSoundPlayer;
 
-            soundPlayer.Begin(audioData, position);
+            soundPlayer.SetUp(audioData, position);
             
             _allActiveSoundPlayers.Add(soundPlayer);
         }
@@ -86,7 +86,7 @@ namespace Leaosoft.Audio
         {
             soundPlayer.OnClipFinished -= StopSoundPlayer;
             
-            soundPlayer.Stop();
+            soundPlayer.Dispose();
             
             _allActiveSoundPlayers.Remove(soundPlayer);
         }

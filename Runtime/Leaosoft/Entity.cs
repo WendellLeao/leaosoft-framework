@@ -13,25 +13,7 @@ namespace Leaosoft
 
         protected bool IsEnabled => _isEnabled;
 
-        public void Initialize()
-        {
-            InitializeComponents();
-            
-            OnInitialize();
-        }
-
-        public void Dispose()
-        {
-            foreach (EntityComponent component in components)
-            {
-                component.Stop();
-                component.Dispose();
-            }
-            
-            OnDispose();
-        }
-        
-        public void Begin()
+        public void SetUp()
         {
             if (_isEnabled)
             {
@@ -39,16 +21,13 @@ namespace Leaosoft
             }
 
             _isEnabled = true;
-
-            foreach (EntityComponent component in components)
-            {
-                component.Begin();
-            }
             
-            OnBegin();
+            SetUpComponents();
+            
+            OnSetUp();
         }
 
-        public void Stop()
+        public void Dispose()
         {
             if (!_isEnabled)
             {
@@ -56,13 +35,13 @@ namespace Leaosoft
             }
 
             _isEnabled = false;
-
+            
             foreach (EntityComponent component in components)
             {
-                component.Stop();
+                component.Dispose();
             }
             
-            OnStop();
+            OnDispose();
         }
 
         public void Tick(float deltaTime)
@@ -110,18 +89,12 @@ namespace Leaosoft
             OnLateTick(deltaTime);
         }
 
-        protected abstract void InitializeComponents();
+        protected abstract void SetUpComponents();
         
-        protected virtual void OnInitialize()
+        protected virtual void OnSetUp()
         { }
 
         protected virtual void OnDispose()
-        { }
-        
-        protected virtual void OnBegin()
-        { }
-
-        protected virtual void OnStop()
         { }
 
         protected virtual void OnTick(float deltaTime)

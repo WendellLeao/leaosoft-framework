@@ -24,20 +24,20 @@ namespace Leaosoft.Audio
         
         public string PoolId { get; set; }
 
-        public void Begin(AudioData audioData, Vector3 position)
+        public void SetUp(AudioData audioData, Vector3 position)
         {
             _audioData = audioData;
             _targetPosition = position;
             
-            base.Begin();
+            base.SetUp();
         }
 
-        protected override void InitializeComponents()
+        protected override void SetUpComponents()
         { }
 
-        protected override void OnBegin()
+        protected override void OnSetUp()
         {
-            base.OnBegin();
+            base.OnSetUp();
             
             SetupAudioSource(_audioData);
             
@@ -48,9 +48,9 @@ namespace Leaosoft.Audio
             PlayAudioSource();
         }
 
-        protected override void OnStop()
+        protected override void OnDispose()
         {
-            base.OnStop();
+            base.OnDispose();
             
             IPoolingService poolingService = ServiceLocator.GetService<IPoolingService>();
 

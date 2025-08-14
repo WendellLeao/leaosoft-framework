@@ -63,13 +63,6 @@ namespace Leaosoft.Pooling
 			ServiceLocator.UnregisterService<IPoolingService>();
 		}
 
-		protected override void OnDispose()
-		{
-			base.OnDispose();
-
-			ClearAllPools();
-		}
-
 		private IPooledObject CreateObject(GameObject prefab, string poolId)
 		{
 			GameObject newGameObject = Instantiate(prefab);
@@ -93,24 +86,7 @@ namespace Leaosoft.Pooling
 
 		private void OnDestroyPooledObject(IPooledObject pooledObject)
 		{
-			if (pooledObject == null || !pooledObject.gameObject)
-			{
-				return;
-			}
-			
 			Destroy(pooledObject.gameObject);
-		}
-		
-		private void ClearAllPools()
-		{
-			foreach (KeyValuePair<string, IObjectPool<IPooledObject>> keyValuePair in _poolsDictionary)
-			{
-				IObjectPool<IPooledObject> value = keyValuePair.Value;
-				
-				value.Clear();
-			}
-
-			_poolsDictionary.Clear();
 		}
 		
 		private IObjectPool<IPooledObject> GetOrCreatePool(string poolId)

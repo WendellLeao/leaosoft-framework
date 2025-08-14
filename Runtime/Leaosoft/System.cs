@@ -16,6 +16,11 @@ namespace Leaosoft
         protected virtual void OnInitialize()
         { }
 
+        protected virtual void OnApplicationQuit()
+        {
+            DisposeAllManagers();
+        }
+        
         protected virtual void OnDispose()
         { }
 
@@ -39,10 +44,7 @@ namespace Leaosoft
 
         private void OnDestroy()
         {
-            foreach (IEntityManager entityManager in _entityManagers)
-            {
-                entityManager.Dispose();
-            }
+            DisposeAllManagers();
             
             OnDispose();
         }
@@ -94,6 +96,16 @@ namespace Leaosoft
                 
                 _entityManagers.Add(entityManager);
             }
+        }
+        
+        private void DisposeAllManagers()
+        {
+            foreach (IEntityManager entityManager in _entityManagers)
+            {
+                entityManager.Dispose();
+            }
+            
+            _entityManagers.Clear();
         }
         
         protected bool TryGetManager<T>(out T result) where T : Manager

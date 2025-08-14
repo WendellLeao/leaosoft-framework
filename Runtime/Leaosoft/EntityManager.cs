@@ -70,7 +70,6 @@ namespace Leaosoft
         
         protected virtual void DisposeEntity(TEntity entity)
         {
-            entity.Stop();
             entity.Dispose();
 
             UnRegisterEntity(entity);
