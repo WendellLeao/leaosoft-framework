@@ -1,5 +1,7 @@
 # Leaosoft Framework
 
+> **⚠️ Obsolete.** This package is no longer maintained. Use [WendellLeao/unity-starter-kit](https://github.com/WendellLeao/unity-starter-kit) instead: it covers everything this framework offers, but as a modular set of standalone packages instead of a single framework locked into a fixed architecture.
+
 A framework with many useful services and ready-to-use modular tools to make game development easier.
 
 ## Requirements
